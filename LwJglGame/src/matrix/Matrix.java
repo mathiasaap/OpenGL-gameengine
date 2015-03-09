@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
+import shaders.TerrainShader;
 
 public class Matrix {
 	
@@ -27,7 +28,6 @@ public class Matrix {
 		Matrix4f.rotate((float) Math.toRadians(rotY),new Vector3f(0,1,0), matrix,matrix);
 		Matrix4f.rotate((float) Math.toRadians(rotZ),new Vector3f(0,0,1), matrix,matrix);
 		Matrix4f.scale(new Vector3f(scale,scale,scale), matrix, matrix);*/
-		
 		
 		
 	return matrix;	
@@ -60,7 +60,16 @@ public class Matrix {
 		meshShader.useProgram();
 		meshShader.loadProjectionMatrix(calcProjectionMatrix());
 		meshShader.unbindShader();
-		System.out.println("Uploaded projection matrix");
+		System.out.println("Uploaded projection matrix to mesh shader");
+		
+	}
+	
+	public static void uploadProjectionMatrix(TerrainShader terrainShader)
+	{
+		terrainShader.useProgram();
+		terrainShader.loadProjectionMatrix(calcProjectionMatrix());
+		terrainShader.unbindShader();
+		System.out.println("Uploaded projection matrix to terrain shader");
 		
 	}
 	

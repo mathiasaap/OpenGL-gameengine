@@ -1,0 +1,80 @@
+package terrain;
+
+import rendering.LoadMesh;
+import textures.MeshTexture;
+import mesh.Mesh;
+
+public class Terrain {
+
+	private static final float SIZE = 1200;
+	private static final int VERTICES_W = 256;
+	private static final int VERTICES_L = 256;
+	private Mesh mesh;
+	private MeshTexture tex;
+	private LoadMesh loadmesh;
+	private float xPos,zPos;
+	
+	
+	public Terrain(MeshTexture tex, int x, int z, LoadMesh meshLdr)
+	{
+		this.tex=tex;
+		this.xPos= x*SIZE;
+		this.zPos= z*SIZE;
+	}
+	
+	
+	private Mesh generateTerrain()
+	{
+		int TOTAL_VERTS = VERTICES_W*VERTICES_L;
+		int TOTAL_POLYS = (VERTICES_W-1)*(VERTICES_L-1)*2;
+		float[] arrayVertices=new float[TOTAL_VERTS*3];
+		float[] arrayUV=new float[TOTAL_VERTS*2];
+		float[] arrayNormals=new float[TOTAL_VERTS*3];
+		int[] arrayIndices=new int[3*TOTAL_POLYS];
+		
+		
+		//Generate vertex coords, normals and UV coords
+		for(int i =0; i<VERTICES_L;++i)
+		{
+			for(int j = 0; j<VERTICES_W;++j)
+			{
+				arrayVertices[3*(j+i*VERTICES_W)]=0;
+				arrayVertices[3*(j+i*VERTICES_W)+1]=0;
+				arrayVertices[3*(j+i*VERTICES_W)+2]=0;
+				
+				arrayNormals[3*(j+i*VERTICES_W)]=0;
+				arrayNormals[3*(j+i*VERTICES_W)+1]=0;
+				arrayNormals[3*(j+i*VERTICES_W)+2]=0;
+				
+				arrayVertices[2*(j+i*VERTICES_W)]=0;
+				arrayVertices[2*(j+i*VERTICES_W)+1]=0;
+
+			}
+			
+		}
+		
+		
+		
+		//Generate indices
+		for(int i =0; i<VERTICES_L-1;++i)
+		{
+			for(int j = 0; j<VERTICES_W-1;++j)
+			{
+
+
+			}
+			
+		}
+		
+		
+		
+		
+		return loadmesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
+	}
+	
+	public void cleanup()
+	{
+		loadmesh.destroy();
+		
+	}
+}

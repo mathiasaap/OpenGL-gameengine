@@ -1,0 +1,16 @@
+package rendering;
+
+import shaders.MeshShader;
+import shaders.TerrainShader;
+
+public class Renderer {
+
+	private MeshShader meshShader= new MeshShader("res/shaders/vsMesh.glsl","res/shaders/fsMesh.glsl");
+	private TerrainShader terrainShader= new TerrainShader("res/shaders/vsTerrain.glsl","res/shaders/fsTerrain.glsl");
+	
+	private RenderMesh renderMesh = new RenderMesh(meshShader);
+	private RenderTerrain renderterrain;
+	
+	
+	
+}

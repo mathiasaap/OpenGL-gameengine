@@ -1,0 +1,42 @@
+package rendering;
+
+import java.util.List;
+
+import matrix.Matrix;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+
+import shaders.MeshShader;
+import shaders.TerrainShader;
+import terrain.Terrain;
+
+public class RenderTerrain {
+	
+	public RenderTerrain(TerrainShader terrainShader)
+	{
+		Matrix.uploadProjectionMatrix(terrainShader);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		
+	}
+	
+	public void draw(List<Terrain> terrains)
+	{
+		for(Terrain terrain: terrains){
+			GL30.glBindVertexArray(terrain.getTerrain().getMesh().getMesh().getVAO());
+			GL20.glEnableVertexAttribArray(0);
+			GL20.glEnableVertexAttribArray(1);
+			GL20.glEnableVertexAttribArray(2);
+			shader.uploadSpecular(mesh.getTex().getShine(),mesh.getTex().getReflectivity());
+			GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,mesh.getTex().getTexId());
+			
+		}
+		
+	}
+	public void prepareScene()
+	{}
+
+}

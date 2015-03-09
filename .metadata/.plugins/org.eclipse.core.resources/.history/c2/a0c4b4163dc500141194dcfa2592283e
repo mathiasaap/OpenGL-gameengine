@@ -1,0 +1,13 @@
+package rendering;
+
+public class RenderTerrain {
+	
+	
+	
+	public void render(List<Terrain> terrains)
+	{
+		
+		
+	}
+
+}
