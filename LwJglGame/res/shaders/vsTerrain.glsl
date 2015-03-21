@@ -19,7 +19,7 @@ void main()
 {
 vec4 modelPosition = model * vec4(position, 1.0);
 gl_Position= projection*view*modelPosition;
-texToFrag=texture;
+texToFrag=texture*150;
 
 absNormal = (model*vec4(normal,0)).xyz;
 toLight= lightPos-(modelPosition).xyz;

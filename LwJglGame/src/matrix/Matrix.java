@@ -13,7 +13,7 @@ public class Matrix {
 	
 	private static final float FOV=70;
 	private static final float NEARF=0.2f;
-	private static final float FARF=200.0f;
+	private static final float FARF=1000.0f;
 	
 	public static Matrix4f transformationMatrix(Vector3f translate, float rotX, float rotY, float rotZ, float scale){
 		Matrix4f matrix = new Matrix4f();

@@ -3,6 +3,7 @@ package terrain;
 import org.lwjgl.util.vector.Vector3f;
 
 import rendering.LoadMesh;
+import simplexnoise.SimplexNoise;
 import textures.MeshTexture;
 import mesh.Mesh;
 import mesh.MeshInstance;
@@ -10,25 +11,60 @@ import mesh.TexMesh;
 
 public class Terrain {
 
-	private static final float SIZE = 400;
-	private static final int VERTICES_W = 256;
-	private static final int VERTICES_L = 256;
+	private static final float SIZE = 2048;
+	private static final int VERTICES_W = 1024;
+	private static final int VERTICES_L = 1024;
 	private Mesh mesh;
 	private MeshTexture tex;
 	private MeshInstance terrainIns;
-	private float xPos,zPos;
-	
+	//private float xPos,zPos;
+	SimplexNoise snoise= new SimplexNoise(0.8,8);
+	private double heightmap[][];
+	private final double terrainDistConst=05;
 	
 	public Terrain(MeshTexture tex, int x, int z, LoadMesh meshLdr)
 	{
 		this.tex=tex;
-		this.xPos= x*SIZE;
-		this.zPos= z*SIZE;
+		/*this.xPos= x*SIZE;
+		this.zPos= z*SIZE;*/
+		heightmap=new double[VERTICES_L][VERTICES_W];
+		generateHeightmap();
+		
 		this.mesh=generateTerrain(meshLdr);
-		terrainIns = new MeshInstance(new TexMesh(mesh,tex), new Vector3f(-100,0,-100),0,0,0,1f);
+		terrainIns = new MeshInstance(new TexMesh(mesh,tex), new Vector3f(0,0,0),0,0,0,1f);
+		
+	}
+	private void generateHeightmap()
+	{
+		for(int i=0;i <VERTICES_L; i++)
+		{
+			for(int j=0;j<VERTICES_W;j++)
+			{
+				heightmap[i][j]=snoise.getNoise(i*terrainDistConst, j*terrainDistConst);
+				if(heightmap[i][j]<0)
+					heightmap[i][j]=0;
+			}
+			
+		}
 		
 	}
 	
+	private Vector3f terrainNormal(int x, int y)
+	{
+		float L = (float) heightmap[x>0?x-1:x][y];
+		float R = (float) heightmap[x<VERTICES_L-1?x+1:x][y];
+		float D = (float) heightmap[x][y>0?y-1:y];
+		float U = (float) heightmap[x][y<VERTICES_W-1?y+1:y];
+		return (Vector3f)(new Vector3f(L-R,2f,D-U)).normalise();
+		
+		
+	}
+	
+	
+	public double[][] getHeightmap()
+	{
+		return heightmap;
+	}
 	
 	private Mesh generateTerrain(LoadMesh loadmesh)
 	{
@@ -45,16 +81,17 @@ public class Terrain {
 		{
 			for(int j = 0; j<VERTICES_W;++j)
 			{
-				arrayVertices[3*(j+i*VERTICES_W)]=(float)(j/(VERTICES_W-1))*SIZE;
-				arrayVertices[3*(j+i*VERTICES_W)+1]= -2;
-				arrayVertices[3*(j+i*VERTICES_W)+2]=(float)(i/(VERTICES_L-1))*SIZE;;
+				arrayVertices[3*(j+i*VERTICES_W)]=(float)(j/((float)VERTICES_W-1))*SIZE;
+				arrayVertices[3*(j+i*VERTICES_W)+1]= (float) heightmap[i][j];
+				arrayVertices[3*(j+i*VERTICES_W)+2]=(float)(i/((float)VERTICES_L-1))*SIZE;;
 				
-				arrayNormals[3*(j+i*VERTICES_W)]=0;
-				arrayNormals[3*(j+i*VERTICES_W)+1]=1;
-				arrayNormals[3*(j+i*VERTICES_W)+2]=0;
+				Vector3f tNorm=terrainNormal(i,j);
+				arrayNormals[3*(j+i*VERTICES_W)]=tNorm.x;
+				arrayNormals[3*(j+i*VERTICES_W)+1]=tNorm.y;
+				arrayNormals[3*(j+i*VERTICES_W)+2]=tNorm.z;
 				
-				arrayUV[2*(j+i*VERTICES_W)]=(float)(j/(VERTICES_W-1));
-				arrayUV[2*(j+i*VERTICES_W)+1]=(float)(i/(VERTICES_L-1));
+				arrayUV[2*(j+i*VERTICES_W)]=(float)(j/((float)VERTICES_W-1));
+				arrayUV[2*(j+i*VERTICES_W)+1]=(float)(i/((float)VERTICES_L-1));
 
 			}
 			
@@ -81,7 +118,7 @@ public class Terrain {
 			}
 			
 		}
-		
+
 		
 		
 		
@@ -93,6 +130,17 @@ public class Terrain {
 		
 		return terrainIns;
 	}
-	
+	public float getSIZE()
+	{
+		return SIZE;
+	}
+	public int getW()
+	{
+		return VERTICES_W;
+	}
+	public int getL()
+	{
+		return VERTICES_L;
+	}
 
 }

@@ -14,7 +14,6 @@ public class DisplayWindow {
 	public static void create()
 	{
 		ContextAttribs attributes = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
-		
 		try {
 			Display.setTitle("LWJGL");
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
@@ -37,6 +36,13 @@ public class DisplayWindow {
 	{
 		Display.destroy();
 	}
+	public static int getWidth() {
+		return WIDTH;
+	}
+	public static int getHeight() {
+		return HEIGHT;
+	}
+	
 	
 
 }

@@ -2,6 +2,7 @@ package matrix;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
@@ -19,40 +20,7 @@ public Camera() {
 	
 }
 
-public void move()
-{
-if(Keyboard.isKeyDown(Keyboard.KEY_W))
-	{
-		position.z-=0.5f;
-		cameraIsChanged();
-	}
-	if(Keyboard.isKeyDown(Keyboard.KEY_D))
-	{
-		position.x+=0.5f;
-		cameraIsChanged();
-	}
-if(Keyboard.isKeyDown(Keyboard.KEY_S))
-	{
-		position.z+=0.5f;
-		cameraIsChanged();
-	}
-if(Keyboard.isKeyDown(Keyboard.KEY_A))
-	{
-		position.x-=0.5f;
-		cameraIsChanged();
-	}
-if(Keyboard.isKeyDown(Keyboard.KEY_Z))
-{
-	position.y-=0.5f;
-	cameraIsChanged();
-}
-if(Keyboard.isKeyDown(Keyboard.KEY_X))
-{
-	position.y+=0.5f;
-	cameraIsChanged();
-}
 
-}
 
 
 private Matrix4f setupViewMatrix()
@@ -88,6 +56,12 @@ public void cameraIsChanged()
 public Vector3f getPosition() {
 	return position;
 }
+public void setLookat(Vector2f lookat)
+{
+	pitch=lookat.x;
+	yaw=lookat.y;
+}
+
 public float getPitch() {
 	return pitch;
 }
@@ -96,6 +70,10 @@ public float getYaw() {
 }
 public float getRoll() {
 	return roll;
+}
+public void setPosition(Vector3f position)
+{
+this.position=position;
 }
 
 
