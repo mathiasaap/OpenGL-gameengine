@@ -18,15 +18,19 @@ public class TerrainCollision {
 		Vector3f position=player.getPosition();
 		for(Terrain terrain:terrains)
 		{
+			double gridSize=(float)(terrain.getSIZE()/(float)(terrain.getVertices()-1));
 			Vector3f terrainPos= terrain.getTerrain().getPosition();
-			int xVertLoc=(int) ((position.x+terrainPos.x)*terrain.getW()/terrain.getSIZE());
-			int zVertLoc=(int) ((position.z+terrainPos.z)*terrain.getL()/terrain.getSIZE());
+			/*int xVertLoc=(int) ((position.x+terrainPos.x)*gridSize);
+			int zVertLoc=(int) ((position.z+terrainPos.z)*gridSize);*/
+			
+			int xVertLoc= (int) Math.floor(position.x+terrainPos.x/gridSize);
+			int zVertLoc= (int) Math.floor(position.z+terrainPos.z/gridSize);
 			double[][] heightmap=terrain.getHeightmap();
 			//System.out.println(heightmap[xVertLoc][zVertLoc]+"   "+ (position.y-player.getHeadHeight()));
-			if(xVertLoc>=0&&xVertLoc<terrain.getW()&&zVertLoc>=0&&zVertLoc<terrain.getL()){
-			while(position.y-player.getHeadHeight()<heightmap[xVertLoc][zVertLoc])
+			if(xVertLoc>=0&&xVertLoc<terrain.getVertices()&&zVertLoc>=0&&zVertLoc<terrain.getVertices()){
+			if(position.y-player.getHeadHeight()<heightmap[xVertLoc][zVertLoc])
 			{
-				position.y+=0.001;
+				position.y=(float) (heightmap[xVertLoc][zVertLoc]+player.getHeadHeight());
 				player.stopFalling();
 			}}
 			//System.out.println(xVertLoc+ "   "+zVertLoc);
@@ -40,14 +44,15 @@ public class TerrainCollision {
 		Vector3f position=enemy.getPosition();
 		for(Terrain terrain:terrains)
 		{
+			double gridSize=terrain.getVertices()/terrain.getSIZE();
 			Vector3f terrainPos= terrain.getTerrain().getPosition();
-			int xVertLoc=(int) ((position.x+terrainPos.x)*terrain.getW()/terrain.getSIZE());
-			int zVertLoc=(int) ((position.z+terrainPos.z)*terrain.getL()/terrain.getSIZE());
+			int xVertLoc=(int) ((position.x+terrainPos.x)*gridSize);
+			int zVertLoc=(int) ((position.z+terrainPos.z)*gridSize);
 			double[][] heightmap=terrain.getHeightmap();
-			if(xVertLoc>=0&&xVertLoc<terrain.getW()&&zVertLoc>=0&&zVertLoc<terrain.getL()){
-			while(position.y-enemy.getHeadHeight()<heightmap[xVertLoc][zVertLoc])
+			if(xVertLoc>=0&&xVertLoc<terrain.getVertices()&&zVertLoc>=0&&zVertLoc<terrain.getVertices()){
+			if(position.y-enemy.getHeadHeight()<heightmap[xVertLoc][zVertLoc])
 			{
-				position.y+=0.001;
+				position.y=(float) (heightmap[xVertLoc][zVertLoc]+enemy.getHeadHeight());
 				enemy.stopFalling();
 			}}
 			//System.out.println(xVertLoc+ "   "+zVertLoc);

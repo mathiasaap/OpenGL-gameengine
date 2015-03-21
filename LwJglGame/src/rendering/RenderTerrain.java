@@ -40,8 +40,8 @@ public class RenderTerrain {
 			Matrix4f transformation = Matrix.transformationMatrix(terrain.getTerrain().getPosition(), terrain.getTerrain().getRotX(), terrain.getTerrain().getRotY(), terrain.getTerrain().getRotZ(), terrain.getTerrain().getScale());
 			shader.loadTranformationMatrix(transformation);	
 			
-			GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
-			//GL11.glDrawElements(GL11.GL_LINE_STRIP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+			//GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+			GL11.glDrawElements(GL11.GL_LINE_STRIP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
 
 			
 			GL20.glDisableVertexAttribArray(0);
