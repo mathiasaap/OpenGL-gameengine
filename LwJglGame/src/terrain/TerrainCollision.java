@@ -18,13 +18,13 @@ public class TerrainCollision {
 		Vector3f position=player.getPosition();
 		for(Terrain terrain:terrains)
 		{
-			double gridSize=(float)(terrain.getSIZE()/(float)(terrain.getVertices()-1));
+			double gridSize=getGridSize(terrain);
 			Vector3f terrainPos= terrain.getTerrain().getPosition();
 			/*int xVertLoc=(int) ((position.x+terrainPos.x)*gridSize);
 			int zVertLoc=(int) ((position.z+terrainPos.z)*gridSize);*/
 			
-			int xVertLoc= (int) Math.floor(position.x+terrainPos.x/gridSize);
-			int zVertLoc= (int) Math.floor(position.z+terrainPos.z/gridSize);
+			int zVertLoc= (int) Math.floor((position.x+terrainPos.x)/gridSize);
+			int xVertLoc= (int) Math.floor((position.z+terrainPos.z)/gridSize);
 			double[][] heightmap=terrain.getHeightmap();
 			//System.out.println(heightmap[xVertLoc][zVertLoc]+"   "+ (position.y-player.getHeadHeight()));
 			if(xVertLoc>=0&&xVertLoc<terrain.getVertices()&&zVertLoc>=0&&zVertLoc<terrain.getVertices()){
@@ -44,10 +44,10 @@ public class TerrainCollision {
 		Vector3f position=enemy.getPosition();
 		for(Terrain terrain:terrains)
 		{
-			double gridSize=terrain.getVertices()/terrain.getSIZE();
+			double gridSize=getGridSize(terrain);
 			Vector3f terrainPos= terrain.getTerrain().getPosition();
-			int xVertLoc=(int) ((position.x+terrainPos.x)*gridSize);
-			int zVertLoc=(int) ((position.z+terrainPos.z)*gridSize);
+			int zVertLoc= (int) Math.floor((position.x+terrainPos.x)/gridSize);
+			int xVertLoc= (int) Math.floor((position.z+terrainPos.z)/gridSize);
 			double[][] heightmap=terrain.getHeightmap();
 			if(xVertLoc>=0&&xVertLoc<terrain.getVertices()&&zVertLoc>=0&&zVertLoc<terrain.getVertices()){
 			if(position.y-enemy.getHeadHeight()<heightmap[xVertLoc][zVertLoc])
@@ -58,6 +58,11 @@ public class TerrainCollision {
 			//System.out.println(xVertLoc+ "   "+zVertLoc);
 		}
 		
+	}
+	
+	private double getGridSize(Terrain terrain)
+	{
+	return (float)(terrain.getSIZE()/(float)(terrain.getVertices()-1));	
 	}
 	
 	

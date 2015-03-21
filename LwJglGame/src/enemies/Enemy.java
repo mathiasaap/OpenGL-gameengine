@@ -57,7 +57,7 @@ public class Enemy {
 	{
 		Vector2f enemy2player = new Vector2f(player.getPosition().x-position.x,player.getPosition().z-position.z);
 		double len=Math.sqrt((enemy2player.x*enemy2player.x+enemy2player.y*enemy2player.y));
-		System.out.println(len);
+		//System.out.println(len);
 		enemy2player.x/=len;
 		enemy2player.y/=len;
 		return enemy2player;

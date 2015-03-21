@@ -30,8 +30,8 @@ public class Render {
 	public void prepareScene()
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		//GL11.glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
-		GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
+		//GL11.glClearColor(0.2f, 0.3f, 0.9f, 1.0f);
+		//GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
 	}
 	public void draw(MeshInstance insMesh, MeshShader meshShader)
 	{
