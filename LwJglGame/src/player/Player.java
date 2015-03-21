@@ -46,7 +46,7 @@ public class Player {
 	position.y+=velocity.y;
 	camera.setLookat(lookat);
 	camera.cameraIsChanged();
-	
+	//System.out.println(position.y);
 	}
 	
 	public Vector3f getPosition()

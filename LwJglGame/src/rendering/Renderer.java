@@ -43,7 +43,6 @@ public class Renderer {
 	{
 		prepareScene();
 		
-		renderTerrain.prepareScene();
 		terrainShader.useProgram();
 		terrainShader.uploadLight(light);
 		renderTerrain.draw(terrains);

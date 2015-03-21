@@ -19,10 +19,11 @@ public class SimplexNoise {
 		};
 	private static int[] p;
 	
-	
+	private int nOctaves;
 	public SimplexNoise(double persistence, int nOctaves)
 	{
 		p= new int[512];
+		this.nOctaves=nOctaves;
 		for(int i=0;i<512;i++)
 			p[i]=permutation[i&0xff];
 		
@@ -43,7 +44,7 @@ public class SimplexNoise {
 			res+=Octave.noise(x,y);
 		}
 		
-		return res;
+		return (res*res*res);
 	}
 	
 	

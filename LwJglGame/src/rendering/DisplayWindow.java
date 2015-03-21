@@ -8,8 +8,8 @@ import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayWindow {
 	
-	private static final int WIDTH=800, HEIGHT=600;
-	private static int MAX_FPS=30;
+	private static final int WIDTH=1200, HEIGHT=900;
+	private static int MAX_FPS=60;
 	
 	public static void create()
 	{

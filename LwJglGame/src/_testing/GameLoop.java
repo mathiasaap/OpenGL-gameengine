@@ -30,6 +30,8 @@ import simplexnoise.SimplexNoise;
 import terrain.Terrain;
 import terrain.TerrainCollision;
 import textures.MeshTexture;
+import textures.TerrainMultiTexture;
+import textures.TerrainTexture;
 
 public class GameLoop {
 
@@ -50,12 +52,14 @@ public class GameLoop {
 		
 		
 		MeshTexture tex= new MeshTexture(loader.loadTexture("sample_pic"));
-		MeshTexture grass= new MeshTexture(loader.loadTexture("grass"));
+		TerrainTexture grass= new TerrainTexture(loader.loadTexture("grass"));
+		TerrainTexture rock= new TerrainTexture(loader.loadTexture("mountain"));
+		TerrainTexture snow= new TerrainTexture(loader.loadTexture("snow"));
 		tex.setShine(3);
 		tex.setReflectivity(2);
-		grass.setShine(3);
-		grass.setReflectivity(2);
-		Terrain terrain= new Terrain(grass,0,0,loader);		
+		
+		
+		Terrain terrain= new Terrain(new TerrainMultiTexture(grass,rock, snow),0,0,loader);		
 		terrains.add(terrain);
 
 				OBJLoader objloader = new OBJLoader();
@@ -76,7 +80,7 @@ public class GameLoop {
 		*/
 				
 		Mesh shrekmodel= objloader.loadObj("shrek", loader);
-		TexMesh shrekMesh = new TexMesh(shrekmodel,grass);
+		TexMesh shrekMesh = new TexMesh(shrekmodel,tex);
 		
 		MeshInstance shrekMeshIns = new MeshInstance(shrekMesh, new Vector3f(0,0,0),0,0,0,1);
 		

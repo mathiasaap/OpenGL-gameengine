@@ -111,6 +111,11 @@ public abstract class AbstractShader {
 	{
 		GL20.glUniform1f(location, data);
 	}
+	protected void uploadInt(int location, int data)
+	{
+		GL20.glUniform1i(location, data);
+	}
+	
 	protected void uploadVec3f(int location, Vector3f data)
 	{
 		GL20.glUniform3f(location, data.x,data.y,data.z);

@@ -14,6 +14,10 @@ public class TerrainShader extends AbstractShader{
 	private int reflectivity;
 	private int shine;
 	
+	private int grass;
+	private int rock;
+	private int snow;
+	
 
 	public TerrainShader(String vs, String fs) {
 		super(vs, fs);
@@ -38,13 +42,26 @@ public class TerrainShader extends AbstractShader{
 		lightColor=super.getUniformLocation("lightCol");
 		reflectivity=super.getUniformLocation("reflectivity");
 		shine=super.getUniformLocation("shine");
+		grass=super.getUniformLocation("GrassTexture");
+		rock=super.getUniformLocation("RockTexture");
+		snow=super.getUniformLocation("SnowTexture");
+		bindTexId(grass,rock,snow);
 		
 	}
 	public void loadTranformationMatrix(Matrix4f matrix)
 	{
 		super.uploadMat4f(transformation, matrix);
+		
 	}
 
+	public void bindTexId(int grass, int rock, int snow)
+	{
+		super.uploadInt(grass, 0);
+		super.uploadInt(rock, 1);
+		super.uploadInt(snow, 2);
+		System.out.println(grass + "   " +  rock+ "  "+snow+ " " +"uploaded id to textures");
+	}
+	
 	public void loadProjectionMatrix(Matrix4f matrix)
 	{
 		

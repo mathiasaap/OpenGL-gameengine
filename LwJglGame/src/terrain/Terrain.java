@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 import rendering.LoadMesh;
 import simplexnoise.SimplexNoise;
 import textures.MeshTexture;
+import textures.TerrainMultiTexture;
 import mesh.Mesh;
 import mesh.MeshInstance;
 import mesh.TexMesh;
@@ -12,26 +13,65 @@ import mesh.TexMesh;
 public class Terrain {
 
 	private static final float SIZE = 2048;
-	private static final int VERTICES = 256;
+	private static final int VERTICES = 512;
 
+	
+	
+	
 	private Mesh mesh;
-	private MeshTexture tex;
+	private Vector3f position;
+	private float rotX, rotY, rotZ,scale;
+	
+	public Vector3f getPosition() {
+		return position;
+	}
+	public float getRotX() {
+		return rotX;
+	}
+	public float getScale() {
+		return scale;
+	}
+	public float getRotY() {
+		return rotY;
+	}
+	public float getRotZ() {
+		return rotZ;
+	}
+	//private MeshTexture tex;
+	private TerrainMultiTexture multiTex;
+	public float getHeightMultiplicator() {
+		return heightMultiplicator;
+	}
+	public void setHeightMultiplicator(float heightMultiplicator) {
+		this.heightMultiplicator = heightMultiplicator;
+	}
+	public Mesh getMesh() {
+		return mesh;
+	}
+	public TerrainMultiTexture getMultiTex() {
+		return multiTex;
+	}
 	private MeshInstance terrainIns;
 	//private float xPos,zPos;
-	SimplexNoise snoise= new SimplexNoise(0.8,6);
+	SimplexNoise snoise= new SimplexNoise(0.7,6);
 	private double heightmap[][];
-	private final double terrainDistConst=0.1;
+	private float heightMultiplicator=8;
+	private final double terrainDistConst=(double)(64.0/VERTICES);
 	
-	public Terrain(MeshTexture tex, int x, int z, LoadMesh meshLdr)
+	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)
 	{
-		this.tex=tex;
+		this.multiTex=tex;
+		this.position=new Vector3f(0,0,0);
+		this.rotX=this.rotY=this.rotZ=this.scale=0;
+		
+		
 		/*this.xPos= x*SIZE;
 		this.zPos= z*SIZE;*/
 		heightmap=new double[VERTICES][VERTICES];
 		generateHeightmap();
 		
 		this.mesh=generateTerrain(meshLdr);
-		terrainIns = new MeshInstance(new TexMesh(mesh,tex), new Vector3f(0,0,0),0,0,0,1f);
+		terrainIns = new MeshInstance(new TexMesh(mesh,new MeshTexture(tex.getGrass().getTexID())), new Vector3f(0,0,0),0,0,0,1f);
 		
 	}
 	private void generateHeightmap()
@@ -40,9 +80,9 @@ public class Terrain {
 		{
 			for(int j=0;j<VERTICES;j++)
 			{
-				heightmap[i][j]=snoise.getNoise(i*terrainDistConst, j*terrainDistConst)*50;
-				if(heightmap[i][j]<0)
-					heightmap[i][j]=0;
+				heightmap[i][j]=snoise.getNoise(i*terrainDistConst, j*terrainDistConst)*heightMultiplicator;
+				/*if(heightmap[i][j]<0)
+					heightmap[i][j]=0;*/
 			}
 			
 		}

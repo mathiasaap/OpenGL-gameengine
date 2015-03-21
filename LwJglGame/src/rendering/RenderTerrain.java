@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
 import shaders.TerrainShader;
@@ -27,20 +28,29 @@ public class RenderTerrain {
 	public void draw(List<Terrain> terrains)
 	{
 		for(Terrain terrain: terrains){
-			GL30.glBindVertexArray(terrain.getTerrain().getMesh().getMesh().getVAO());
+			GL30.glBindVertexArray(terrain.getMesh().getVAO());
 			GL20.glEnableVertexAttribArray(0);
 			GL20.glEnableVertexAttribArray(1);
 			GL20.glEnableVertexAttribArray(2);
 			
-			shader.uploadSpecular(terrain.getTerrain().getMesh().getTex().getShine(),terrain.getTerrain().getMesh().getTex().getReflectivity());
+			//shader.uploadSpecular(terrain.getTerrain().getMesh().getTex().getShine(),terrain.getTerrain().getMesh().getTex().getReflectivity());
+			shader.uploadSpecular(3,2);
+			/*GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getTerrain().getMesh().getTex().getTexId());*/
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getTerrain().getMesh().getTex().getTexId());
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getGrass().getTexID());
+			GL13.glActiveTexture(GL13.GL_TEXTURE1);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getRock().getTexID());
+			GL13.glActiveTexture(GL13.GL_TEXTURE2);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getSnow().getTexID());
 			
+
 			
-			Matrix4f transformation = Matrix.transformationMatrix(terrain.getTerrain().getPosition(), terrain.getTerrain().getRotX(), terrain.getTerrain().getRotY(), terrain.getTerrain().getRotZ(), terrain.getTerrain().getScale());
+			//Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), terrain.getRotX(), terrain.getRotY(), terrain.getRotZ(), terrain.getScale());
+			Matrix4f transformation = Matrix.transformationMatrix(new Vector3f(0f,0f,0f), (float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
 			shader.loadTranformationMatrix(transformation);	
 			
-			GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+			GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
 			//GL11.glDrawElements(GL11.GL_LINES,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
 			//GL11.glDrawElements(GL11.GL_LINE_LOOP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
 
@@ -53,7 +63,4 @@ public class RenderTerrain {
 		}
 		
 	}
-	public void prepareScene()
-	{}
-
 }
