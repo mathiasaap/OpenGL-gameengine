@@ -37,6 +37,14 @@ public class LoadMesh {
 	GL30.glBindVertexArray(0);	
 	}
 	
+	public Mesh loadNewMesh(float[] pos)
+	{
+		int VAO = createVAO();
+		storeAttrib(0,pos,2);
+		unbind();
+		return new Mesh(pos.length/2,VAO);
+	}
+	
 	public Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV, float[] normals)
 	{
 		int VAO = createVAO();

@@ -2,6 +2,7 @@ package matrix;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
@@ -31,6 +32,15 @@ public class Matrix {
 		
 		
 	return matrix;	
+	}
+	
+	public static Matrix4f transformationMatrix(Vector2f translate, Vector2f scale)
+	{
+		Matrix4f mat= new Matrix4f();
+		mat.setIdentity();
+		mat.translate(translate,mat,mat);
+		mat.scale(new Vector3f(scale.x,scale.y,1.0f),mat,mat);
+		return mat;
 	}
 	
 	private static Matrix4f calcProjectionMatrix()

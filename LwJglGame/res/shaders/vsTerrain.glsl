@@ -25,32 +25,32 @@ height=modelPosition.y;
 
 float grassComp=0.0f,rockComp=0.0f, snowComp=0.0f;
 
-if(height>850&&height<900)
+if(height>700&&height<950)
 {
-	snowComp=(height-850.0f)/50.0f;
+	snowComp=(height-700.0f)/250.0f;
 	rockComp=1.0f-snowComp;
 }
-else if(height>120&&height<180)
+else if(height>50&&height<140)
 {
-	rockComp=(height-120.0f)/60.0f;
+	rockComp=(height-50.0f)/90.0f;
 	grassComp=1.0f-rockComp;
 }
-else if(height<-180&&height>-200)
+else if(height<-60&&height>-150)
 {
-	grassComp=(height+180.0f)/(-20.0f);
-	rockComp=1.0f-grassComp;
+	rockComp=(height+60.0f)/(-90.0f);
+	grassComp=1.0f-rockComp;
 }
 else
 {
-	if(height>900)
+	if(height>950)
 	{
 		snowComp=1.0f;
 	}
-	else if(height>180)
+	else if(height>140)
 	{
 		rockComp=1.0f;
 	}
-	else if(height>-180)
+	else if(height>-60)
 	{
 		grassComp=1.0f;
 	}
@@ -62,7 +62,7 @@ else
 
 multitextureComponents= vec3(grassComp,rockComp,snowComp);
 
-texToFrag=texture*100;
+texToFrag=texture;
 
 absNormal = (model*vec4(normal,0)).xyz;
 toLight= lightPos-(modelPosition).xyz;

@@ -2,6 +2,7 @@ package shaders;
 
 import lighting.Light;
 
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
 
 public class TerrainShader extends AbstractShader{
@@ -35,6 +36,9 @@ public class TerrainShader extends AbstractShader{
 
 	@Override
 	protected void updateUniformLocation() {
+		grass=super.getUniformLocation("GrassTexture");
+		rock=super.getUniformLocation("RockTexture");
+		snow=super.getUniformLocation("SnowTexture");
 		transformation= super.getUniformLocation("model");
 		projectionMatrix= super.getUniformLocation("projection");
 		viewMatrix= super.getUniformLocation("view");
@@ -42,10 +46,9 @@ public class TerrainShader extends AbstractShader{
 		lightColor=super.getUniformLocation("lightCol");
 		reflectivity=super.getUniformLocation("reflectivity");
 		shine=super.getUniformLocation("shine");
-		grass=super.getUniformLocation("GrassTexture");
-		rock=super.getUniformLocation("RockTexture");
-		snow=super.getUniformLocation("SnowTexture");
-		bindTexId(grass,rock,snow);
+		System.out.println(shine);
+
+
 		
 	}
 	public void loadTranformationMatrix(Matrix4f matrix)
@@ -54,8 +57,9 @@ public class TerrainShader extends AbstractShader{
 		
 	}
 
-	public void bindTexId(int grass, int rock, int snow)
+	public void bindTexId()
 	{
+		super.useProgram();
 		super.uploadInt(grass, 0);
 		super.uploadInt(rock, 1);
 		super.uploadInt(snow, 2);

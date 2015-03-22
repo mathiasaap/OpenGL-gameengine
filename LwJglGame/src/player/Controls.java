@@ -7,17 +7,20 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import overlays.Sniper;
 import rendering.DisplayWindow;
 
 public class Controls {
 
 	State state = State.PLAYING;
 	private Player player;
+	private Sniper sniper;
 	private long time= System.currentTimeMillis();
 	private float speed=(float) 50.0;
-	public Controls(Player player)
+	public Controls(Player player,Sniper sniper)
 	{
 		this.player=player;
+		this.sniper=sniper;
 		/*try {
 			Mouse.setNativeCursor(new Cursor(0, 0, 0, 0, 0, null, null));
 		} catch (LWJGLException e) {
@@ -68,6 +71,10 @@ public class Controls {
 	if(Keyboard.isKeyDown(Keyboard.KEY_X))
 	{
 		position.y+=speed*deltaTime;
+	}
+	if(Mouse.isButtonDown(0))
+	{
+		sniper.shoot();
 	}
 		
 	}

@@ -33,6 +33,7 @@ public class Renderer {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		this.meshShader=meshShader;
 		this.terrainShader=terrainShader;
+		terrainShader.bindTexId();
 		renderMesh= new RenderMesh(meshShader);
 		renderTerrain= new RenderTerrain(terrainShader);
 		

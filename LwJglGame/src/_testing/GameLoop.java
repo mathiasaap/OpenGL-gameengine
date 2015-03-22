@@ -13,8 +13,10 @@ import mesh.TexMesh;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import overlays.Sniper;
 import enemies.Enemy;
 import enemies.Shrek;
 import player.Controls;
@@ -22,6 +24,7 @@ import player.Player;
 import rendering.DisplayWindow;
 import rendering.LoadMesh;
 import rendering.RenderMesh;
+import rendering.RenderOverlay;
 import rendering.RenderTerrain;
 import rendering.Renderer;
 import shaders.MeshShader;
@@ -30,6 +33,7 @@ import simplexnoise.SimplexNoise;
 import terrain.Terrain;
 import terrain.TerrainCollision;
 import textures.MeshTexture;
+import textures.OverlayTexture;
 import textures.TerrainMultiTexture;
 import textures.TerrainTexture;
 
@@ -46,14 +50,20 @@ public class GameLoop {
 		//RenderTerrain terrainRenderer = new RenderTerrain(terrainShader);
 		TerrainCollision terrainCollision=new TerrainCollision();
 		Renderer mainRenderer = new Renderer(meshShader,terrainShader);
+		RenderOverlay renderOverlay = new RenderOverlay(loader);
+		
+		
 		Player player= new Player(new Vector3f(0f,0f,0f));
-		Controls controls= new Controls(player);
+		Sniper sniper=new Sniper(loader);
+		Controls controls= new Controls(player,sniper);
 		Light light = new Light(new Vector3f(100,2000,100),new Vector3f(1,1,1));
 		
+		List<OverlayTexture> oTextures= new ArrayList<>();
+		//oTextures.add(new OverlayTexture(loader.loadTexture("1"),new Vector2f(0.598f,-0.420f),new Vector2f(1.598f,1.420f)));
 		
 		MeshTexture tex= new MeshTexture(loader.loadTexture("sample_pic"));
 		TerrainTexture grass= new TerrainTexture(loader.loadTexture("grass"));
-		TerrainTexture rock= new TerrainTexture(loader.loadTexture("mountain"));
+		TerrainTexture rock= new TerrainTexture(loader.loadTexture("rock"));
 		TerrainTexture snow= new TerrainTexture(loader.loadTexture("snow"));
 		tex.setShine(3);
 		tex.setReflectivity(2);
@@ -112,14 +122,13 @@ public class GameLoop {
 			mainRenderer.putInstance(mIns6);*/
 			
 			
-			mainRenderer.putInstance(shrek.getEnemyMeshInstance());
-			
-			
+			//mainRenderer.putInstance(shrek.getEnemyMeshInstance());
+			oTextures.add(sniper.getFrame());
 			//mainRenderer.putInstance(terrain.getTerrain());
 			mainRenderer.putTerrain(terrain);
 			
 			mainRenderer.render(light, player.getCamera(meshShader, terrainShader));
-
+			renderOverlay.draw(oTextures);
 			
 			DisplayWindow.update();/*
 			System.out.println(1000000000/(System.nanoTime()-timeClock));

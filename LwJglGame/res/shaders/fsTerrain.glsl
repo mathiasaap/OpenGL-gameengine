@@ -33,34 +33,12 @@ float shineFactor = pow(specularity, shine);
 vec3 specularProduct = shineFactor*lightCol*reflectivity;
 
 
-vec4 texColor= texture(GrassTexture,texToFrag)*multitextureComponents.x +texture(RockTexture,texToFrag)*multitextureComponents.y+texture(SnowTexture,texToFrag)*multitextureComponents.z ;
+vec4 texColor= texture(GrassTexture,texToFrag*100)*multitextureComponents.x +texture(RockTexture,texToFrag*20)*multitextureComponents.y+texture(SnowTexture,texToFrag*100)*multitextureComponents.z ;
 
 
-
-//out_color=vec4(specularProduct,1)* vec4(diffuse,1) * texture(texSampler,texToFrag);
-//out_color=vec4(diffuse,1) * texture(texSampler,texToFrag);
-/*
-if(height>900){
-out_color=vec4(1.0,0.0,0.0,1.0);
-}
-else if(height>150)
-{
-out_color=vec4(1.0,0.0,1.0,1.0);
-}
-else if(height<-80)
-{
-out_color=vec4(0.5,0.6,1.0,1.0);
-}
-else
-{
-//out_color=vec4(diffuse,1) * texture(texSampler,texToFrag);
 out_color=vec4(diffuse,1) *texColor;
-//out_color=vec4(1,0,0,1);
-}*/
 
-//out_color=vec4(diffuse,1) *texColor;
-
-out_color=vec4(diffuse,1) *texture(RockTexture,texToFrag);
+//out_color=vec4(diffuse,1) *texture(RockTexture,texToFrag);
 //out_color= vec4(diffuse,1f) * vec4(0.7f,0.85f,0.8f,1.0f);
 //out_color=texture(texSampler,texToFrag);
 //out_color=vec4(0.9f,0.1f,0.2f,1.0f);
