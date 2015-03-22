@@ -30,6 +30,7 @@ public class TerrainCollision {
 	public void playerCollission(List<Terrain> terrains, Player player)
 	{
 		Vector3f position=player.getPosition();
+		//System.out.println(position.y);
 		for(Terrain terrain:terrains)
 		{
 			

@@ -12,9 +12,10 @@ public class Matrix {
 	
 	
 	
-	private static final float FOV=70;
-	private static final float NEARF=0.2f;
-	private static final float FARF=3000.0f;
+	private static final float FOV_WALKING=70;
+	private static final float RUNNING=120;
+	private static final float NEARF=0.1f;
+	private static final float FARF=10000.0f;
 	
 	public static Matrix4f transformationMatrix(Vector3f translate, float rotX, float rotY, float rotZ, float scale){
 		Matrix4f matrix = new Matrix4f();
@@ -42,8 +43,11 @@ public class Matrix {
 		mat.scale(new Vector3f(scale.x,scale.y,1.0f),mat,mat);
 		return mat;
 	}
-	
-	private static Matrix4f calcProjectionMatrix()
+	public static Matrix4f calcProjectionMatrix()
+	{
+		return calcProjectionMatrix(FOV_WALKING);
+	}
+	public static Matrix4f calcProjectionMatrix(float FOV)
 	{
 		Matrix4f pMat= new Matrix4f();
 		
@@ -65,19 +69,27 @@ public class Matrix {
 		return pMat;
 	}
 	
-	public static void uploadProjectionMatrix(MeshShader meshShader)
+	public static void uploadProjectionMatrix(MeshShader meshShader){
+		uploadProjectionMatrix(meshShader,FOV_WALKING);
+	}
+	
+	public static void uploadProjectionMatrix(MeshShader meshShader, float FOV)
 	{
 		meshShader.useProgram();
-		meshShader.loadProjectionMatrix(calcProjectionMatrix());
+		meshShader.loadProjectionMatrix(calcProjectionMatrix(FOV));
 		meshShader.unbindShader();
 		System.out.println("Uploaded projection matrix to mesh shader");
 		
 	}
-	
 	public static void uploadProjectionMatrix(TerrainShader terrainShader)
 	{
+		uploadProjectionMatrix(terrainShader,FOV_WALKING);
+	}
+	
+	public static void uploadProjectionMatrix(TerrainShader terrainShader,float FOV)
+	{
 		terrainShader.useProgram();
-		terrainShader.loadProjectionMatrix(calcProjectionMatrix());
+		terrainShader.loadProjectionMatrix(calcProjectionMatrix(FOV));
 		terrainShader.unbindShader();
 		System.out.println("Uploaded projection matrix to terrain shader");
 		

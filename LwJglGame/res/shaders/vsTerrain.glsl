@@ -25,9 +25,9 @@ height=modelPosition.y;
 
 float grassComp=0.0f,rockComp=0.0f, snowComp=0.0f;
 
-if(height>700&&height<950)
+if(height>1000&&height<1300)
 {
-	snowComp=(height-700.0f)/250.0f;
+	snowComp=(height-1000.0f)/300.0f;
 	rockComp=1.0f-snowComp;
 }
 else if(height>50&&height<140)
@@ -42,7 +42,7 @@ else if(height<-60&&height>-150)
 }
 else
 {
-	if(height>950)
+	if(height>1300)
 	{
 		snowComp=1.0f;
 	}

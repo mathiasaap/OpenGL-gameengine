@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
+import player.Controls;
 import lighting.Light;
 import matrix.Camera;
 import mesh.MeshInstance;
@@ -23,6 +24,7 @@ public class Renderer {
 
 	private RenderMesh renderMesh;
 	private RenderTerrain renderTerrain;
+	private Controls control= new Controls();
 	
 	private Map<TexMesh, List<MeshInstance>> meshInstances = new HashMap<>();
 	private List<Terrain> terrains = new ArrayList<>();
@@ -39,6 +41,10 @@ public class Renderer {
 		
 		
 	}
+	public void setController(Controls control)
+	{
+		this.control=control;
+	}
 	
 	public void render(Light light, Camera cam)
 	{
@@ -46,7 +52,7 @@ public class Renderer {
 		
 		terrainShader.useProgram();
 		terrainShader.uploadLight(light);
-		renderTerrain.draw(terrains);
+		renderTerrain.draw(terrains,control);
 		terrainShader.unbindShader();
 		terrains.clear();
 		

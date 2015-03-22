@@ -3,13 +3,16 @@ package _testing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import lighting.Light;
 import matrix.Camera;
+import matrix.Matrix;
 import mesh.Mesh;
 import mesh.MeshInstance;
 import mesh.OBJLoader;
 import mesh.TexMesh;
+import misc.RayCasting;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -43,6 +46,8 @@ public class GameLoop {
 	
 	public static void main(String[] args) {
 		long timeClock= System.nanoTime();
+		long FPSCounterRefresh= System.currentTimeMillis();
+		
 		DisplayWindow.create();
 		LoadMesh loader= new LoadMesh();
 		MeshShader meshShader = new MeshShader("res/shaders/vsMesh.glsl","res/shaders/fsMesh.glsl");
@@ -52,11 +57,13 @@ public class GameLoop {
 		Renderer mainRenderer = new Renderer(meshShader,terrainShader);
 		RenderOverlay renderOverlay = new RenderOverlay(loader);
 		
-		
+		List<Enemy> enemies = new ArrayList<>();
 		Player player= new Player(new Vector3f(0f,0f,0f));
 		Sniper sniper=new Sniper(loader);
-		Controls controls= new Controls(player,sniper);
-		Light light = new Light(new Vector3f(100,2000,100),new Vector3f(1,1,1));
+		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader);
+		mainRenderer.setController(controls);
+		Light light = new Light(new Vector3f(100,100000,-1000),new Vector3f(1,1,1));
+		RayCasting mouseRay= new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		
 		List<OverlayTexture> oTextures= new ArrayList<>();
 		//oTextures.add(new OverlayTexture(loader.loadTexture("1"),new Vector2f(0.598f,-0.420f),new Vector2f(1.598f,1.420f)));
@@ -73,8 +80,10 @@ public class GameLoop {
 		terrains.add(terrain);
 
 				OBJLoader objloader = new OBJLoader();
-		/*Mesh m2= objloader.loadObj("monkey", loader);
-		Mesh m3= objloader.loadObj("batman", loader);
+		Mesh m2= objloader.loadObj("monkey", loader);
+		TexMesh m2mesh = new TexMesh(m2,tex);
+		MeshInstance mIns2 = new MeshInstance(m2mesh, new Vector3f(0,0,0),0,0,0,1);
+		/*Mesh m3= objloader.loadObj("batman", loader);
 		Mesh m4= objloader.loadObj("Avent", loader);
 		
 		TexMesh m2mesh = new TexMesh(m2,tex);
@@ -93,14 +102,20 @@ public class GameLoop {
 		TexMesh shrekMesh = new TexMesh(shrekmodel,tex);
 		
 		MeshInstance shrekMeshIns = new MeshInstance(shrekMesh, new Vector3f(0,0,0),0,0,0,1);
+		Random random= new Random();
+		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
+		for(int i=0;i <30; i++)
+		{
+			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
+			enemies.add(new Shrek(new Vector3f(random.nextInt(2000),random.nextInt(600),random.nextInt(2000)),player,enIns));
+			
+		}
+		//enemies.add(shrek);
 		
-		
-		float argument=0;
 		while(!Display.isCloseRequested())
 		{
-			argument+=0.005;
+			timeClock=System.nanoTime();
 			/*
 			mIns2.rotate(0.0f, 1f, 0f);
 			mIns4.rotate(0.0f, -1.5f, 0f);
@@ -112,20 +127,35 @@ public class GameLoop {
 			//light.setColor(new Vector3f(1f,1f-0.3f*(float)(Math.sin(argument)),1f-0.2f*(float)(Math.cos(argument))));
 			controls.playing();
 			player.move();
-			shrek.move();
+			//shrek.move();
+			mouseRay.update();
+			//System.out.println(mouseRay.getRay());
+			/*Vector3f mouseray=mouseRay.getRay();
+			mIns2.move(mouseray.x, mouseray.y, mouseray.z);*/
 			terrainCollision.playerCollission(terrains, player);
-			terrainCollision.enemyCollission(terrains, shrek);
+			//terrainCollision.enemyCollission(terrains, shrek);
+			//wSystem.out.println(shrek.getAlive());
 			/*mainRenderer.putInstance(mIns2);
 			mainRenderer.putInstance(mIns3);
 			mainRenderer.putInstance(mIns4);
 			mainRenderer.putInstance(mIns5);
 			mainRenderer.putInstance(mIns6);*/
-			
+			for(Enemy enem: enemies)
+			{
+				enem.move();
+
+				terrainCollision.enemyCollission(terrains, enem);
+				if(enem.getAlive())
+					mainRenderer.putInstance(enem.getEnemyMeshInstance());
+				
+			}
 			
 			//mainRenderer.putInstance(shrek.getEnemyMeshInstance());
 			oTextures.add(sniper.getFrame());
 			//mainRenderer.putInstance(terrain.getTerrain());
+			
 			mainRenderer.putTerrain(terrain);
+			mainRenderer.putInstance(mIns2);
 			
 			mainRenderer.render(light, player.getCamera(meshShader, terrainShader));
 			renderOverlay.draw(oTextures);
@@ -133,8 +163,10 @@ public class GameLoop {
 			DisplayWindow.update();/*
 			System.out.println(1000000000/(System.nanoTime()-timeClock));
 			timeClock=System.nanoTime();*/
-			if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-				System.gc();
+			long deltaTime=System.nanoTime()-timeClock;
+			if(deltaTime>0&&(System.currentTimeMillis()-FPSCounterRefresh)>400){
+			Display.setTitle("MLGSIM9000  "+1000.0/(float)(deltaTime/1000000f)+ " FPS");
+			FPSCounterRefresh=System.currentTimeMillis();
 			}
 		}
 		meshShader.destroy();

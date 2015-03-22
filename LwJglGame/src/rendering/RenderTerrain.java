@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import player.Controls;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import terrain.Terrain;
@@ -26,7 +27,7 @@ public class RenderTerrain {
 	
 	}
 	
-	public void draw(List<Terrain> terrains)
+	public void draw(List<Terrain> terrains,Controls control)
 	{
 		
 		for(Terrain terrain: terrains){
@@ -54,8 +55,15 @@ public class RenderTerrain {
 			Matrix4f transformation = Matrix.transformationMatrix(new Vector3f(0f,0f,0f), (float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
 			shader.loadTranformationMatrix(transformation);	
 			
-			GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+			if(control.getF1()){
+				GL11.glDrawElements(GL11.GL_LINE_STRIP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+			}
+			else{
+				GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+			}
+			//GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
 			//GL11.glDrawElements(GL11.GL_LINES,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+			
 			//GL11.glDrawElements(GL11.GL_LINE_LOOP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
 
 			

@@ -1,5 +1,10 @@
 package player;
 
+import java.util.List;
+
+import matrix.Matrix;
+import misc.RayCasting;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Keyboard;
@@ -7,20 +12,44 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import enemies.Enemy;
 import overlays.Sniper;
 import rendering.DisplayWindow;
+import shaders.MeshShader;
+import shaders.TerrainShader;
 
 public class Controls {
 
 	State state = State.PLAYING;
 	private Player player;
 	private Sniper sniper;
+	
+	private MeshShader meshShader;
+	private TerrainShader terrainShader;
+	
+	private List<Enemy> enemies;
+	private RayCasting mousecast;
 	private long time= System.currentTimeMillis();
 	private float speed=(float) 50.0;
-	public Controls(Player player,Sniper sniper)
+	
+	private boolean F1=false,F1Int=false;
+	
+	public boolean getF1()
+	{
+		return F1;
+	}
+	public Controls()
+	{
+		
+	}
+	public Controls(Player player,Sniper sniper,List<Enemy> enemies, MeshShader meshShader, TerrainShader terrainShader)
 	{
 		this.player=player;
 		this.sniper=sniper;
+		this.enemies=enemies;
+		this.meshShader=meshShader;
+		this.terrainShader=terrainShader;
+		mousecast=new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		/*try {
 			Mouse.setNativeCursor(new Cursor(0, 0, 0, 0, 0, null, null));
 		} catch (LWJGLException e) {
@@ -37,27 +66,101 @@ public class Controls {
 		Vector2f lookat=player.getLookat();
 		Vector3f position = player.getPosition();
 		rotateCamera(lookat);
+		boolean runningSpeed=false;
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)&&Keyboard.isKeyDown(Keyboard.KEY_E))
+		{
+			speed=2000;
+			if(!meshShader.getPlayerRunning())
+			{
+				meshShader.setPlayerRunning(true);
+				Matrix.uploadProjectionMatrix(meshShader, 120);
+			}
+			if(!terrainShader.getPlayerRunning())
+			{
+				terrainShader.setPlayerRunning(true);
+				Matrix.uploadProjectionMatrix(terrainShader, 120);
+			}
+			
+		}
+		else if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+		{
+			speed=200;
+			if(meshShader.getPlayerRunning())
+			{
+				meshShader.setPlayerRunning(false);
+				Matrix.uploadProjectionMatrix(meshShader, 70);
+			}
+			if(terrainShader.getPlayerRunning())
+			{
+				terrainShader.setPlayerRunning(false);
+				Matrix.uploadProjectionMatrix(terrainShader, 70);
+			}
+			
+			
+		}
+		else
+		{
+			speed=50;
+			if(meshShader.getPlayerRunning())
+			{
+				meshShader.setPlayerRunning(false);
+				Matrix.uploadProjectionMatrix(meshShader, 70);
+			}
+			if(terrainShader.getPlayerRunning())
+			{
+				terrainShader.setPlayerRunning(false);
+				Matrix.uploadProjectionMatrix(terrainShader, 70);
+			}
+		}
+		
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_F1))
+		{
+			if(!F1Int)
+			{
+				F1Int=true;
+				F1=!F1;
+				System.out.println("F1");
+			}
+		}
+		else
+		{
+			F1Int=false;
+		}
+		
+		
+		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W))
 		{
 			position.z-=Math.cos(Math.toRadians(lookat.y))*speed*deltaTime;
 			position.x+=Math.sin(Math.toRadians(lookat.y))*speed*deltaTime;
+			sniper.walk();
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_D))
 		{
 			position.x+=Math.cos(Math.toRadians(lookat.y))*speed*deltaTime;
 			position.z+=Math.sin(Math.toRadians(lookat.y))*speed*deltaTime;
+			sniper.walk();
 			
 		}
 	if(Keyboard.isKeyDown(Keyboard.KEY_S))
 		{
 		position.z+=Math.cos(Math.toRadians(lookat.y))*speed*deltaTime;
 		position.x-=Math.sin(Math.toRadians(lookat.y))*speed*deltaTime;
+		sniper.walk();
 		}
 	if(Keyboard.isKeyDown(Keyboard.KEY_A))
 		{
 		position.x-=Math.cos(Math.toRadians(lookat.y))*speed*deltaTime;
 		position.z-=Math.sin(Math.toRadians(lookat.y))*speed*deltaTime;
+		sniper.walk();
 		}
+	
+	if(Keyboard.isKeyDown(Keyboard.KEY_R))
+	{
+		sniper.reload();
+	}
 	
 	if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
 	{
@@ -74,6 +177,13 @@ public class Controls {
 	}
 	if(Mouse.isButtonDown(0))
 	{
+		mousecast.update();
+		Vector3f ray=mousecast.getRay();
+		for(Enemy enemy:enemies)
+		{
+			enemy.bulletCollision(player.getPosition(), ray);
+				
+		}
 		sniper.shoot();
 	}
 		

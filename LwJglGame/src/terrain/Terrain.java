@@ -12,8 +12,9 @@ import mesh.TexMesh;
 
 public class Terrain {
 
-	private static final float SIZE = 2048;
-	private static final int VERTICES = 512;
+	//private static final float SIZE = 2048;
+	private static final float SIZE = 4096;
+	private static final int VERTICES = 1024;
 
 	
 	
@@ -55,7 +56,8 @@ public class Terrain {
 	//private float xPos,zPos;
 	SimplexNoise snoise= new SimplexNoise(0.7,6);
 	private double heightmap[][];
-	private float heightMultiplicator=8;
+	//private float heightMultiplicator=8;
+	private float heightMultiplicator=12;
 	private final double terrainDistConst=(double)(64.0/VERTICES);
 	
 	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)

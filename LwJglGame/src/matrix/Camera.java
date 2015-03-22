@@ -23,7 +23,7 @@ public Camera() {
 
 
 
-private Matrix4f setupViewMatrix()
+public Matrix4f setupViewMatrix()
 {
 	Matrix4f viewMatrix= new Matrix4f();
 	viewMatrix.setIdentity();

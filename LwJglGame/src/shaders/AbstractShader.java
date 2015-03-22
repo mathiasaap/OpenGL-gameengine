@@ -13,6 +13,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 public abstract class AbstractShader {
 
+	private boolean playerRunning=false;
+	
+	private float currentFOV=70;
+	private float goalFOV=70;
 	private int shaderId;
 	private int vsId, fsId;
 	
@@ -34,6 +38,14 @@ public abstract class AbstractShader {
 		destroy();
 	}*/
 	
+	public boolean getPlayerRunning()
+	{
+		return playerRunning;
+	}
+	public void setPlayerRunning(boolean playerRunning)
+	{
+		this.playerRunning=playerRunning;
+	}
 	public void destroy()
 	{
 		unbindShader();

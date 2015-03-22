@@ -17,7 +17,9 @@ public class Enemy {
 	protected float headHeight;
 	protected long time= System.currentTimeMillis();
 	protected float speed=20;
+	protected float hitRadius;
 	TerrainCollision terrainCollision = new TerrainCollision();
+	
 	
 	public Enemy(Vector3f position, Player player, MeshInstance mInstance)
 	{
@@ -31,6 +33,7 @@ public class Enemy {
 	
 	public void move()
 	{
+		if(alive){
 		double deltaTime= (System.currentTimeMillis()-time)/1000.0;
 		time=System.currentTimeMillis();
 		Vector2f enemy2player=getPlayerVec();
@@ -39,12 +42,47 @@ public class Enemy {
 		position.z+=enemy2player.y*speed*deltaTime;
 		position.y+=velocity.y;
 		mInstance.setPosition(position);
+		}
+	}
+	
+	public boolean bulletCollision(Vector3f x1, Vector3f direction)
+	{
+		if(alive){
+		Vector3f x0=position;
+		x0.y+=0.5*headHeight;
+		Vector3f dist= Vector3f.sub(x1, x0, null);
 		
+		float length= dist.length();
+		if(length>5000)
+		{
+			return false;
+		}
+		Vector3f crossVec=Vector3f.cross(direction, dist, null);
+		float top=crossVec.length();
+		float bottom=direction.length();
+		float d= top/bottom;
+		//System.out.println(d);
+		if(d<=hitRadius)
+		{
+			die();
+			return false;
+		}
+		}
+		return false;
 	}
 	
 	public void stopFalling()
 	{
 		velocity.y=0;
+	}
+	protected void die() {
+		System.out.println("dead");
+		alive=false;
+	}
+	
+	public boolean getAlive()
+	{
+		return alive;
 	}
 	
 	

@@ -10,7 +10,9 @@ import textures.OverlayTexture;
 
 public class Sniper {
 
-	private List<OverlayTexture> frames= new ArrayList<>();
+	private List<OverlayTexture> shootFrames= new ArrayList<>();
+	private List<OverlayTexture> walkFrames= new ArrayList<>();
+	private List<OverlayTexture> reloadFrames= new ArrayList<>();
 	private LoadMesh loader;
 	private Vector2f pos= new Vector2f(0.598f,-0.420f);
 	private Vector2f scale= new Vector2f(1.598f,1.420f);
@@ -30,7 +32,17 @@ public class Sniper {
 	{
 		for(int i=1;i<18;i++)
 		{
-			frames.add(new OverlayTexture(loader.loadTexture("/sniper/shoot/"+i),pos,scale));
+			shootFrames.add(new OverlayTexture(loader.loadTexture("/sniper/shoot/"+i),pos,scale));
+		}
+		
+		for(int i=1;i<19;i++)
+		{
+			walkFrames.add(new OverlayTexture(loader.loadTexture("/sniper/walk/"+i),pos,scale));
+		}
+		
+		for(int i=1;i<26;i++)
+		{
+			reloadFrames.add(new OverlayTexture(loader.loadTexture("/sniper/reload/"+i),pos,scale));
 		}
 	}
 	
@@ -38,6 +50,31 @@ public class Sniper {
 	{
 		animationClock=System.currentTimeMillis();
 		state=STATE.SHOOT;
+	}
+	public void reload()
+	{
+		animationClock=System.currentTimeMillis();
+		state=STATE.RELOAD;
+	}
+	
+	public void walk()
+	{
+		
+		if(state==STATE.WALKING)
+		{
+			if((System.currentTimeMillis()-animationClock)>17*frameTime)
+			{
+				animationClock=System.currentTimeMillis();
+			}
+			
+		}
+		
+		else if(state!=STATE.SHOOT&&state!=STATE.RELOAD)
+		{
+			animationClock=System.currentTimeMillis();
+			state=STATE.WALKING;
+			
+		}
 	}
 	
 	public OverlayTexture getFrame()
@@ -50,10 +87,21 @@ public class Sniper {
 				state=STATE.STILL;
 			}
 			return getShootFrame();
-			
+		case RELOAD:
+			if(deltaTime>26*frameTime)
+			{
+				state=STATE.STILL;
+			}
+			return getReloadFrame(deltaTime);
+		case WALKING:
+			if(deltaTime>19*frameTime)
+			{
+				state=STATE.STILL;
+			}
+			return getWalkFrame(deltaTime);
 		
 		}
-		return frames.get(0);
+		return shootFrames.get(0);
 		
 	}
 	private OverlayTexture getShootFrame()
@@ -61,22 +109,48 @@ public class Sniper {
 		long deltaTime=System.currentTimeMillis()-animationClock;
 		for(int i=0;i<7;i++){
 		if(deltaTime<frameTime*(i+1)){
-			return frames.get(i);
+			return shootFrames.get(i);
 		}
 			
 		}
 		
 		if(deltaTime<(20*frameTime)){
-			return frames.get(7);
+			return shootFrames.get(7);
 		}
 		
 		for(int i=0;i<8;i++){
 			if(deltaTime-(20*frameTime)<(frameTime*(i+1))){
-				return frames.get(i+8);
+				return shootFrames.get(i+8);
 			}
 				
 			}
-		return frames.get(0);
+		return shootFrames.get(0);
+	}
+	
+	private OverlayTexture getWalkFrame(long deltaTime)
+	{
+		for(int i=0;i<18;i++){
+			if(deltaTime<frameTime*(i+1)){
+				return walkFrames.get(i);
+			}
+				
+			}
+		return shootFrames.get(0);
+		
+	}
+	
+	private OverlayTexture getReloadFrame(long deltaTime)
+	{
+		for(int i=0;i<25;i++){
+			if(deltaTime<frameTime*(i+1)){
+				return reloadFrames.get(i);
+			}
+				
+			}
+		return shootFrames.get(0);
+		
+		
+		
 	}
 	
 }
