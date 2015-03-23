@@ -106,7 +106,7 @@ public class GameLoop {
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		for(int i=0;i <100; i++)
+		for(int i=0;i <500; i++)
 		{
 			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
 			enemies.add(new Shrek(new Vector3f(random.nextInt(4000),random.nextInt(600),random.nextInt(4000)),player,enIns));
@@ -117,6 +117,7 @@ public class GameLoop {
 		while(!Display.isCloseRequested())
 		{
 			timeClock=System.nanoTime();
+			//System.out.println(enemies.size());
 			/*
 			mIns2.rotate(0.0f, 1f, 0f);
 			mIns4.rotate(0.0f, -1.5f, 0f);

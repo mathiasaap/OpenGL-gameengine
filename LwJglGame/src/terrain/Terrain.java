@@ -14,7 +14,8 @@ public class Terrain {
 
 	//private static final float SIZE = 2048;
 	private static final float SIZE = 4096;
-	private static final int VERTICES = 1024;
+	//private static final int VERTICES = 1024;
+	private static final int VERTICES = 128;
 
 	
 	
