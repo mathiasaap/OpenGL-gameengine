@@ -227,7 +227,6 @@ public class Controls {
 					enemy.bulletCollision(player.getPosition(), ray);
 						
 				}
-				System.out.println("shooting");
 				shot=2;
 			}
 		}

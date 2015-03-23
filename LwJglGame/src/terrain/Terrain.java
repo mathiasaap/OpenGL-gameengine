@@ -70,9 +70,12 @@ public class Terrain {
 		/*this.xPos= x*SIZE;
 		this.zPos= z*SIZE;*/
 		heightmap=new double[VERTICES][VERTICES];
+		long generationTime= System.currentTimeMillis();
 		generateHeightmap();
-		
+		System.out.println("Time to generate heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
+		generationTime=System.currentTimeMillis();
 		this.mesh=generateTerrain(meshLdr);
+		System.out.println("Time to generate terrain mesh from heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
 		terrainIns = new MeshInstance(new TexMesh(mesh,new MeshTexture(tex.getGrass().getTexID())), new Vector3f(0,0,0),0,0,0,1f);
 		
 	}

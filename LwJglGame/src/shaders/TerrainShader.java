@@ -46,7 +46,6 @@ public class TerrainShader extends AbstractShader{
 		lightColor=super.getUniformLocation("lightCol");
 		reflectivity=super.getUniformLocation("reflectivity");
 		shine=super.getUniformLocation("shine");
-		System.out.println(shine);
 
 
 		
@@ -63,7 +62,6 @@ public class TerrainShader extends AbstractShader{
 		super.uploadInt(grass, 0);
 		super.uploadInt(rock, 1);
 		super.uploadInt(snow, 2);
-		System.out.println(grass + "   " +  rock+ "  "+snow+ " " +"uploaded id to textures");
 	}
 	
 	public void loadProjectionMatrix(Matrix4f matrix)

@@ -65,7 +65,6 @@ public class Matrix {
 		pMat.m23=-1;
 		pMat.m32= -2*FARF*NEARF/len;
 		pMat.m33=0;
-		System.out.println(aspectRatio);
 		return pMat;
 	}
 	

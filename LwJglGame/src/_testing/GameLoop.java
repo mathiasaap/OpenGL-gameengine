@@ -2,6 +2,7 @@ package _testing;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -105,10 +106,10 @@ public class GameLoop {
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		for(int i=0;i <30; i++)
+		for(int i=0;i <100; i++)
 		{
 			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
-			enemies.add(new Shrek(new Vector3f(random.nextInt(2000),random.nextInt(600),random.nextInt(2000)),player,enIns));
+			enemies.add(new Shrek(new Vector3f(random.nextInt(4000),random.nextInt(600),random.nextInt(4000)),player,enIns));
 			
 		}
 		//enemies.add(shrek);
@@ -140,16 +141,19 @@ public class GameLoop {
 			mainRenderer.putInstance(mIns4);
 			mainRenderer.putInstance(mIns5);
 			mainRenderer.putInstance(mIns6);*/
-			for(Enemy enem: enemies)
+			for(Iterator<Enemy> enemy=enemies.iterator();enemy.hasNext();)
 			{
+				Enemy enem =enemy.next();
 				enem.move();
 
 				terrainCollision.enemyCollission(terrains, enem);
-				if(enem.getAlive())
-					mainRenderer.putInstance(enem.getEnemyMeshInstance());
+				mainRenderer.putInstance(enem.getEnemyMeshInstance());
+				if(!enem.getAlive())
+					enemy.remove();
+					
+	
 				
 			}
-			
 			//mainRenderer.putInstance(shrek.getEnemyMeshInstance());
 			oTextures.add(sniper.getFrame());
 			//mainRenderer.putInstance(terrain.getTerrain());
