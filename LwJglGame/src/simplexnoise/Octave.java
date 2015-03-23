@@ -28,6 +28,8 @@ public class Octave {
 		return (grad[0]*x+grad[1]*y);
 	}
 	
+	
+	//Litt copypaste ja
 	public static double noise(double xin, double yin)
 	{
 		 xin/=freq;
@@ -47,7 +49,7 @@ public class Octave {
 		 double x0 = xin-X0; 
 		 double y0 = yin-Y0;
 		 
-		 int i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
+		 int i1, j1; 
 		 if(x0>y0) 
 		 {
 			 i1=1; j1=0;
@@ -58,9 +60,9 @@ public class Octave {
 		 }
 		 
 		 
-		 double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
+		 double x1 = x0 - i1 + G2; 
 		 double y1 = y0 - j1 + G2;
-		 double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
+		 double x2 = x0 - 1.0 + 2.0 * G2; 
 		 double y2 = y0 - 1.0 + 2.0 * G2;
 		 
 		 int ii = i & 255;

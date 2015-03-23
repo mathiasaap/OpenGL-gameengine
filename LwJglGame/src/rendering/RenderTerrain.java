@@ -52,11 +52,11 @@ public class RenderTerrain {
 
 			
 			//Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), terrain.getRotX(), terrain.getRotY(), terrain.getRotZ(), terrain.getScale());
-			Matrix4f transformation = Matrix.transformationMatrix(new Vector3f(0f,0f,0f), (float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
+			Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), (float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
 			shader.loadTranformationMatrix(transformation);	
 			
 			if(control.getF1()){
-				GL11.glDrawElements(GL11.GL_LINE_STRIP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+				GL11.glDrawElements(GL11.GL_LINE_STRIP,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
 			}
 			else{
 				GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);

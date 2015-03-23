@@ -80,24 +80,8 @@ public class GameLoop {
 		Terrain terrain= new Terrain(new TerrainMultiTexture(grass,rock, snow),0,0,loader);		
 		terrains.add(terrain);
 
-				OBJLoader objloader = new OBJLoader();
-		/*Mesh m2= objloader.loadObj("monkey", loader);
-		TexMesh m2mesh = new TexMesh(m2,tex);
-		MeshInstance mIns2 = new MeshInstance(m2mesh, new Vector3f(0,0,0),0,0,0,1);
-		Mesh m3= objloader.loadObj("batman", loader);
-		Mesh m4= objloader.loadObj("Avent", loader);
-		
-		TexMesh m2mesh = new TexMesh(m2,tex);
-		TexMesh m3mesh = new TexMesh(m3,tex);
-		TexMesh m4mesh = new TexMesh(m4,tex);
-		
-		MeshInstance mIns2 = new MeshInstance(m2mesh, new Vector3f(0,0,-2.5f),0,0,0,1);
-		MeshInstance mIns3 = new MeshInstance(m3mesh, new Vector3f(2f,0,0),0,0,0,1);
-		MeshInstance mIns4 = new MeshInstance(m4mesh, new Vector3f(-4f,3f,0),0,0,0,1);
-		MeshInstance mIns5 = new MeshInstance(m4mesh, new Vector3f(-4f,0f,0),0,0,0,1);
-		MeshInstance mIns6 = new MeshInstance(m4mesh, new Vector3f(-4f,-3f,0),0,0,0,1);
-		MeshInstance mIns7 = new MeshInstance(m4mesh, new Vector3f(-4f,-6f,0),0,0,0,1);
-		*/
+		OBJLoader objloader = new OBJLoader();
+
 				
 		Mesh shrekmodel= objloader.loadObj("shrek", loader);
 		TexMesh shrekMesh = new TexMesh(shrekmodel,tex);
@@ -106,7 +90,7 @@ public class GameLoop {
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		for(int i=0;i <500; i++)
+		for(int i=0;i <20; i++)
 		{
 			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
 			enemies.add(new Shrek(new Vector3f(random.nextInt(4000),random.nextInt(600),random.nextInt(4000)),player,enIns));

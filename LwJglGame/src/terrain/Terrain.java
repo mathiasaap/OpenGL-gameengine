@@ -10,13 +10,14 @@ import mesh.Mesh;
 import mesh.MeshInstance;
 import mesh.TexMesh;
 
-public class Terrain {
+public class Terrain implements Runnable{
 
 	//private static final float SIZE = 2048;
-	private static final float SIZE = 4096;
+	private static final float SIZE = 8*4096;
 	//private static final int VERTICES = 1024;
-	private static final int VERTICES = 128;
-
+	private static final int VERTICES = 256;
+	private float heightMultiplicator=12;
+	private final double terrainDistConst=(double)(64.0/VERTICES)*(SIZE/4096.0);
 	
 	
 	
@@ -58,18 +59,14 @@ public class Terrain {
 	SimplexNoise snoise= new SimplexNoise(0.7,6);
 	private double heightmap[][];
 	//private float heightMultiplicator=8;
-	private float heightMultiplicator=12;
-	private final double terrainDistConst=(double)(64.0/VERTICES);
+	
 	
 	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)
 	{
 		this.multiTex=tex;
-		this.position=new Vector3f(0,0,0);
+		this.position=new Vector3f(x,0,z);
 		this.rotX=this.rotY=this.rotZ=this.scale=0;
 		
-		
-		/*this.xPos= x*SIZE;
-		this.zPos= z*SIZE;*/
 		heightmap=new double[VERTICES][VERTICES];
 		long generationTime= System.currentTimeMillis();
 		generateHeightmap();
@@ -77,7 +74,6 @@ public class Terrain {
 		generationTime=System.currentTimeMillis();
 		this.mesh=generateTerrain(meshLdr);
 		System.out.println("Time to generate terrain mesh from heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
-		terrainIns = new MeshInstance(new TexMesh(mesh,new MeshTexture(tex.getGrass().getTexID())), new Vector3f(0,0,0),0,0,0,1f);
 		
 	}
 	private void generateHeightmap()
@@ -101,6 +97,8 @@ public class Terrain {
 		float R = (float) heightmap[x<VERTICES-1?x+1:x][y];
 		float D = (float) heightmap[x][y>0?y-1:y];
 		float U = (float) heightmap[x][y<VERTICES-1?y+1:y];
+		
+		
 		return (Vector3f)(new Vector3f(L-R,2f,D-U)).normalise();
 		
 		
@@ -130,6 +128,7 @@ public class Terrain {
 				arrayVertices[3*(j+i*VERTICES)]=(float)(j/((float)VERTICES-1))*SIZE;
 				arrayVertices[3*(j+i*VERTICES)+1]= (float) heightmap[i][j];
 				arrayVertices[3*(j+i*VERTICES)+2]=(float)(i/((float)VERTICES-1))*SIZE;;
+				
 				
 				Vector3f tNorm=terrainNormal(i,j);
 				arrayNormals[3*(j+i*VERTICES)]=tNorm.x;
@@ -170,12 +169,7 @@ public class Terrain {
 		
 		return loadmesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
 	}
-	
-	public MeshInstance getTerrain()
-	{
-		
-		return terrainIns;
-	}
+
 	public float getSIZE()
 	{
 		return SIZE;
@@ -183,6 +177,11 @@ public class Terrain {
 	public int getVertices()
 	{
 		return VERTICES;
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
