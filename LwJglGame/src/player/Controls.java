@@ -26,6 +26,8 @@ public class Controls {
 	
 	private MeshShader meshShader;
 	private TerrainShader terrainShader;
+	private short shot=0;
+	private long shotTime=System.currentTimeMillis();
 	
 	private List<Enemy> enemies;
 	private RayCasting mousecast;
@@ -33,10 +35,15 @@ public class Controls {
 	private float speed=(float) 50.0;
 	
 	private boolean F1=false,F1Int=false;
+	private boolean F2=false,F2Int=false;
 	
 	public boolean getF1()
 	{
 		return F1;
+	}
+	public boolean getF2()
+	{
+		return F2;
 	}
 	public Controls()
 	{
@@ -67,6 +74,7 @@ public class Controls {
 		Vector3f position = player.getPosition();
 		rotateCamera(lookat);
 		boolean runningSpeed=false;
+		updateShoot();
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)&&Keyboard.isKeyDown(Keyboard.KEY_E))
 		{
@@ -129,6 +137,19 @@ public class Controls {
 			F1Int=false;
 		}
 		
+		if(Keyboard.isKeyDown(Keyboard.KEY_F2))
+		{
+			if(!F2Int)
+			{
+				F2Int=true;
+				F2=!F2;
+				System.out.println("F2");
+			}
+		}
+		else
+		{
+			F2Int=false;
+		}
 		
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W))
@@ -177,15 +198,47 @@ public class Controls {
 	}
 	if(Mouse.isButtonDown(0))
 	{
-		mousecast.update();
+		if(shot==0){
+		/*mousecast.update();
 		Vector3f ray=mousecast.getRay();
 		for(Enemy enemy:enemies)
 		{
 			enemy.bulletCollision(player.getPosition(), ray);
 				
-		}
+		}*/
+		shotTime=System.currentTimeMillis();
+		shot=1;
 		sniper.shoot();
+	}}
+		
 	}
+	
+	public void updateShoot()
+	{
+		if(shot==1)
+		{	
+			if((System.currentTimeMillis()-shotTime)>sniper.getFrameTime()*10)
+			{
+				
+				mousecast.update();
+				Vector3f ray=mousecast.getRay();
+				for(Enemy enemy:enemies)
+				{
+					enemy.bulletCollision(player.getPosition(), ray);
+						
+				}
+				System.out.println("shooting");
+				shot=2;
+			}
+		}
+		else if(shot==2)
+		{
+			if((System.currentTimeMillis()-shotTime)>sniper.getFrameTime()*40)
+			{
+				shot=0;
+				
+			}
+		}
 		
 	}
 	

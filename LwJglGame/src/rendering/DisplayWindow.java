@@ -15,9 +15,26 @@ public class DisplayWindow {
 	{
 		ContextAttribs attributes = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
 		try {
+			
+			DisplayMode displayMode = null;
+	        DisplayMode[] modes = Display.getAvailableDisplayModes();
+
+	         for (int i = 0; i < modes.length; i++)
+	         {
+	             if (modes[i].getWidth() == WIDTH
+	             && modes[i].getHeight() == HEIGHT
+	             && modes[i].isFullscreenCapable())
+	               {
+	                    displayMode = modes[i];
+	       	         Display.setDisplayMode(displayMode);
+	                    
+	               }
+	         }
+
 			Display.setTitle("LWJGL");
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.create(new PixelFormat(),attributes);
+	        
 		} catch (LWJGLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -27,6 +27,10 @@ public class Sniper {
 		this.loader=loader;
 		loadTextures();
 	}
+	public int getFrameTime()
+	{
+		return frameTime;
+	}
 	
 	private void loadTextures()
 	{

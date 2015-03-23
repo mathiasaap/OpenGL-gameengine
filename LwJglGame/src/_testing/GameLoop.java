@@ -58,7 +58,7 @@ public class GameLoop {
 		RenderOverlay renderOverlay = new RenderOverlay(loader);
 		
 		List<Enemy> enemies = new ArrayList<>();
-		Player player= new Player(new Vector3f(0f,0f,0f));
+		Player player= new Player(new Vector3f(1687f,10000f,2459f));
 		Sniper sniper=new Sniper(loader);
 		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader);
 		mainRenderer.setController(controls);
@@ -80,10 +80,10 @@ public class GameLoop {
 		terrains.add(terrain);
 
 				OBJLoader objloader = new OBJLoader();
-		Mesh m2= objloader.loadObj("monkey", loader);
+		/*Mesh m2= objloader.loadObj("monkey", loader);
 		TexMesh m2mesh = new TexMesh(m2,tex);
 		MeshInstance mIns2 = new MeshInstance(m2mesh, new Vector3f(0,0,0),0,0,0,1);
-		/*Mesh m3= objloader.loadObj("batman", loader);
+		Mesh m3= objloader.loadObj("batman", loader);
 		Mesh m4= objloader.loadObj("Avent", loader);
 		
 		TexMesh m2mesh = new TexMesh(m2,tex);
@@ -155,7 +155,7 @@ public class GameLoop {
 			//mainRenderer.putInstance(terrain.getTerrain());
 			
 			mainRenderer.putTerrain(terrain);
-			mainRenderer.putInstance(mIns2);
+			//mainRenderer.putInstance(mIns2);
 			
 			mainRenderer.render(light, player.getCamera(meshShader, terrainShader));
 			renderOverlay.draw(oTextures);

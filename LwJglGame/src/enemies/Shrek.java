@@ -12,7 +12,7 @@ public class Shrek extends Enemy{
 	public Shrek(Vector3f position, Player player, MeshInstance mInstance) {
 		super(position, player,mInstance);
 		// TODO Auto-generated constructor stub
-		super.headHeight=4;
+		super.headHeight=3;
 		super.hitRadius=10;
 		
 	}

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import player.Controls;
@@ -21,7 +23,7 @@ public class Renderer {
 	private MeshShader meshShader;
 	private TerrainShader terrainShader;
 	
-
+	boolean fullscreen=false;
 	private RenderMesh renderMesh;
 	private RenderTerrain renderTerrain;
 	private Controls control= new Controls();
@@ -48,6 +50,35 @@ public class Renderer {
 	
 	public void render(Light light, Camera cam)
 	{
+		if(control.getF2())
+		{
+			if(!fullscreen)
+			{
+				fullscreen=true;
+				try {
+					Display.setFullscreen(true);
+					System.out.println("fullscreen");
+				} catch (LWJGLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		else{
+			if(fullscreen)
+			{
+				fullscreen=false;
+				try {
+					Display.setFullscreen(false);
+				} catch (LWJGLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+		
 		prepareScene();
 		
 		terrainShader.useProgram();

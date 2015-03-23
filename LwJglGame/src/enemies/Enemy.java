@@ -48,8 +48,8 @@ public class Enemy {
 	public boolean bulletCollision(Vector3f x1, Vector3f direction)
 	{
 		if(alive){
-		Vector3f x0=position;
-		x0.y+=0.5*headHeight;
+		Vector3f x0=new Vector3f(position.x,position.y+5*headHeight,position.z);
+		//x0.y+=5*headHeight;
 		Vector3f dist= Vector3f.sub(x1, x0, null);
 		
 		float length= dist.length();
@@ -76,7 +76,6 @@ public class Enemy {
 		velocity.y=0;
 	}
 	protected void die() {
-		System.out.println("dead");
 		alive=false;
 	}
 	
