@@ -113,10 +113,12 @@ public class GameLoop {
 			int currentTerrainZ=(int) Maths.floor(playerPos.z/Terrain.SIZE);
 			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
 			
-			if(!terrainList.containsKey(new Key2D(currentTerrainX,currentTerrainZ)))
+			for(int i=-2;i<3;i++)
+				for(int j=-2;j<3;j++)
+			if(!terrainList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
 			{
-				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX,currentTerrainZ,loader);
-				terrainList.put( new Key2D(currentTerrainX,currentTerrainZ), ter);
+				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j,loader);
+				terrainList.put( new Key2D(currentTerrainX+i,currentTerrainZ+j), ter);
 				terrains.add(ter);
 			}
 			
