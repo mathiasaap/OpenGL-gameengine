@@ -32,8 +32,8 @@ float specularity = max(dot(reflectedDir,unitNormal),0);
 float shineFactor = pow(specularity, shine);
 vec3 specularProduct = shineFactor*lightCol*reflectivity;
 
-
-vec4 texColor= texture(GrassTexture,texToFrag*130)*multitextureComponents.x +texture(RockTexture,texToFrag*30)*multitextureComponents.y+texture(SnowTexture,texToFrag*130)*multitextureComponents.z ;
+//4096:130:30:130
+vec4 texColor= texture(GrassTexture,texToFrag*33)*multitextureComponents.x +texture(RockTexture,texToFrag*8)*multitextureComponents.y+texture(SnowTexture,texToFrag*33)*multitextureComponents.z ;
 
 
 out_color=vec4(diffuse,1) *texColor;

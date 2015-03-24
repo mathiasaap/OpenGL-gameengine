@@ -13,11 +13,11 @@ import mesh.TexMesh;
 public class Terrain implements Runnable{
 
 	//private static final float SIZE = 2048;
-	private static final float SIZE = 8*4096;
+	public static final float SIZE = 1024;
 	//private static final int VERTICES = 1024;
-	private static final int VERTICES = 256;
+	private static final int VERTICES = 64;
 	private float heightMultiplicator=12;
-	private final double terrainDistConst=(double)(64.0/VERTICES)*(SIZE/4096.0);
+	private final double terrainDistConst=(double)((SIZE*64.0)/(VERTICES*4096.0));
 	
 	
 	
@@ -59,13 +59,15 @@ public class Terrain implements Runnable{
 	SimplexNoise snoise= new SimplexNoise(0.7,6);
 	private double heightmap[][];
 	//private float heightMultiplicator=8;
-	
+	int terrainGridX,terrainGridZ;
 	
 	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)
 	{
 		this.multiTex=tex;
-		this.position=new Vector3f(x,0,z);
+		this.position=new Vector3f(x*SIZE,0,z*SIZE);
 		this.rotX=this.rotY=this.rotZ=this.scale=0;
+		terrainGridX=(short) x;
+		terrainGridZ=(short) z;
 		
 		heightmap=new double[VERTICES][VERTICES];
 		long generationTime= System.currentTimeMillis();
@@ -82,7 +84,7 @@ public class Terrain implements Runnable{
 		{
 			for(int j=0;j<VERTICES;j++)
 			{
-				heightmap[i][j]=snoise.getNoise(i*terrainDistConst, j*terrainDistConst)*heightMultiplicator;
+				heightmap[i][j]=snoise.getNoise(((i+terrainGridZ*(VERTICES-1))*terrainDistConst), (j+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator;
 				/*if(heightmap[i][j]<0)
 					heightmap[i][j]=0;*/
 			}
@@ -93,12 +95,18 @@ public class Terrain implements Runnable{
 	
 	private Vector3f terrainNormal(int x, int y)
 	{
-		float L = (float) heightmap[x>0?x-1:x][y];
+		/*float L = (float) heightmap[x>0?x-1:x][y];
 		float R = (float) heightmap[x<VERTICES-1?x+1:x][y];
 		float D = (float) heightmap[x][y>0?y-1:y];
-		float U = (float) heightmap[x][y<VERTICES-1?y+1:y];
+		float U = (float) heightmap[x][y<VERTICES-1?y+1:y];*/
 		
+		//If point needed for calculation is outside heightmap, calculate it with simplex noise
+		float L = (float) ((float) x>0?heightmap[x-1][y]:   			snoise.getNoise((((x-1)+terrainGridZ*(VERTICES-1))*terrainDistConst), (y+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
+		float R = (float) ((float) x<(VERTICES-1)?heightmap[x+1][y]:    snoise.getNoise((((x+1)+terrainGridZ*(VERTICES-1))*terrainDistConst), (y+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
+		float D = (float) ((float) y>0?heightmap[x][y-1]:   			snoise.getNoise(((x+terrainGridZ*(VERTICES-1))*terrainDistConst), ((y-1)+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
+		float U = (float) ((float) y<(VERTICES-1)?heightmap[x][y+1]:    snoise.getNoise(((x+terrainGridZ*(VERTICES-1))*terrainDistConst), ((y+1)+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
 		
+		//snoise.getNoise(((i+terrainGridZ*(VERTICES-1))*terrainDistConst), (j+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator;
 		return (Vector3f)(new Vector3f(L-R,2f,D-U)).normalise();
 		
 		

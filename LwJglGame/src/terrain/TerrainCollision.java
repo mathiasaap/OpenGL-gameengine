@@ -90,8 +90,8 @@ public class TerrainCollision {
 
 		Vector3f terrainPos= terrain.getPosition();
 		float res=(float)Integer.MIN_VALUE;
-		float worldX=position.z-terrainPos.x;
-		float worldZ=position.x-terrainPos.z;
+		float worldX=position.z-terrainPos.z;
+		float worldZ=position.x-terrainPos.x;
 
 		float vertexXCoords = (float) ((worldX%gridSize)/gridSize);
 		float vertexZCoords = (float) ((worldZ%gridSize)/gridSize);

@@ -2,8 +2,10 @@ package _testing;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import lighting.Light;
@@ -13,6 +15,8 @@ import mesh.Mesh;
 import mesh.MeshInstance;
 import mesh.OBJLoader;
 import mesh.TexMesh;
+import misc.Key2D;
+import misc.Maths;
 import misc.RayCasting;
 
 import org.lwjgl.input.Keyboard;
@@ -41,12 +45,14 @@ import textures.OverlayTexture;
 import textures.TerrainMultiTexture;
 import textures.TerrainTexture;
 
+
+
 public class GameLoop {
 
 	private static List<Terrain> terrains= new ArrayList<>();
 	
 	public static void main(String[] args) {
-		long timeClock= System.nanoTime();
+		long timeClock= System.currentTimeMillis();
 		long FPSCounterRefresh= System.currentTimeMillis();
 		
 		DisplayWindow.create();
@@ -63,7 +69,7 @@ public class GameLoop {
 		Sniper sniper=new Sniper(loader);
 		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader);
 		mainRenderer.setController(controls);
-		Light light = new Light(new Vector3f(100,100000,-1000),new Vector3f(1,1,1));
+		Light light = new Light(new Vector3f(100,1000,-1000),new Vector3f(1,1,1));
 		RayCasting mouseRay= new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		
 		List<OverlayTexture> oTextures= new ArrayList<>();
@@ -77,9 +83,11 @@ public class GameLoop {
 		tex.setReflectivity(2);
 		
 		
-		Terrain terrain= new Terrain(new TerrainMultiTexture(grass,rock, snow),0,0,loader);		
-		terrains.add(terrain);
+	//	Terrain terrain= new Terrain(new TerrainMultiTexture(grass,rock, snow),0,0,loader);		
+		//terrains.add(terrain);
 
+		Map<Key2D,Terrain> terrainList=new HashMap<>();
+		//terrainList.put(new Key2D(0,0), terrain);
 		OBJLoader objloader = new OBJLoader();
 
 				
@@ -96,36 +104,29 @@ public class GameLoop {
 			enemies.add(new Shrek(new Vector3f(random.nextInt(4000),random.nextInt(600),random.nextInt(4000)),player,enIns));
 			
 		}
-		//enemies.add(shrek);
 		
 		while(!Display.isCloseRequested())
 		{
-			timeClock=System.nanoTime();
-			//System.out.println(enemies.size());
-			/*
-			mIns2.rotate(0.0f, 1f, 0f);
-			mIns4.rotate(0.0f, -1.5f, 0f);
-			mIns5.rotate(0.0f, -1.7f, 0f);
-			mIns6.rotate(0.0f, -1.9f, 0f);
-			mIns7.rotate(0.0f, -2.1f, 0f);
-			mIns3.setPosition(new Vector3f(2f,(float)((Math.sin(16*argument)-Math.sin(15*argument))*3),0f));
-			*/
-			//light.setColor(new Vector3f(1f,1f-0.3f*(float)(Math.sin(argument)),1f-0.2f*(float)(Math.cos(argument))));
+			timeClock=System.currentTimeMillis();
+			Vector3f playerPos=player.getPosition();
+			int currentTerrainX=(int) Maths.floor(playerPos.x/Terrain.SIZE);
+			int currentTerrainZ=(int) Maths.floor(playerPos.z/Terrain.SIZE);
+			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
+			
+			if(!terrainList.containsKey(new Key2D(currentTerrainX,currentTerrainZ)))
+			{
+				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX,currentTerrainZ,loader);
+				terrainList.put( new Key2D(currentTerrainX,currentTerrainZ), ter);
+				terrains.add(ter);
+			}
+			
 			controls.playing();
 			player.move();
-			//shrek.move();
+
 			mouseRay.update();
-			//System.out.println(mouseRay.getRay());
-			/*Vector3f mouseray=mouseRay.getRay();
-			mIns2.move(mouseray.x, mouseray.y, mouseray.z);*/
+
 			terrainCollision.playerCollission(terrains, player);
-			//terrainCollision.enemyCollission(terrains, shrek);
-			//wSystem.out.println(shrek.getAlive());
-			/*mainRenderer.putInstance(mIns2);
-			mainRenderer.putInstance(mIns3);
-			mainRenderer.putInstance(mIns4);
-			mainRenderer.putInstance(mIns5);
-			mainRenderer.putInstance(mIns6);*/
+
 			for(Iterator<Enemy> enemy=enemies.iterator();enemy.hasNext();)
 			{
 				Enemy enem =enemy.next();
@@ -139,22 +140,25 @@ public class GameLoop {
 	
 				
 			}
-			//mainRenderer.putInstance(shrek.getEnemyMeshInstance());
+
 			oTextures.add(sniper.getFrame());
-			//mainRenderer.putInstance(terrain.getTerrain());
-			
-			mainRenderer.putTerrain(terrain);
-			//mainRenderer.putInstance(mIns2);
+
+			for(Key2D terrainKey:terrainList.keySet())
+			{
+				if(Vector3f.sub(terrainList.get(terrainKey).getPosition(), player.getPosition(), null).length()<15000)
+				mainRenderer.putTerrain(terrainList.get(terrainKey));
+			}
+			//mainRenderer.putTerrain(terrain);
+
 			
 			mainRenderer.render(light, player.getCamera(meshShader, terrainShader));
 			renderOverlay.draw(oTextures);
 			
-			DisplayWindow.update();/*
-			System.out.println(1000000000/(System.nanoTime()-timeClock));
-			timeClock=System.nanoTime();*/
-			long deltaTime=System.nanoTime()-timeClock;
+			DisplayWindow.update();
+
+			long deltaTime=System.currentTimeMillis()-timeClock;
 			if(deltaTime>0&&(System.currentTimeMillis()-FPSCounterRefresh)>400){
-			Display.setTitle("MLGSIM9000  "+1000.0/(float)(deltaTime/1000000f)+ " FPS");
+			Display.setTitle("MLGSIM9000  "+1000/deltaTime+ " FPS");
 			FPSCounterRefresh=System.currentTimeMillis();
 			}
 		}
