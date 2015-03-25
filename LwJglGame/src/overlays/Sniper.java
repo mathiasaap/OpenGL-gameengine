@@ -86,7 +86,7 @@ public class Sniper {
 		long deltaTime=System.currentTimeMillis()-animationClock;
 		switch(state){
 		case SHOOT:
-			if(deltaTime>28*frameTime)
+			if(deltaTime>25*frameTime)
 			{
 				state=STATE.STILL;
 			}
@@ -118,12 +118,12 @@ public class Sniper {
 			
 		}
 		
-		if(deltaTime<(20*frameTime)){
+		if(deltaTime<(14*frameTime)){
 			return shootFrames.get(7);
 		}
 		
 		for(int i=0;i<8;i++){
-			if(deltaTime-(20*frameTime)<(frameTime*(i+1))){
+			if(deltaTime-(14*frameTime)<(frameTime*(i+1))){
 				return shootFrames.get(i+8);
 			}
 				

@@ -122,7 +122,7 @@ public class Controls {
 			}
 		}
 		
-		
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_F1))
 		{
 			if(!F1Int)
@@ -217,7 +217,7 @@ public class Controls {
 	{
 		if(shot==1)
 		{	
-			if((System.currentTimeMillis()-shotTime)>sniper.getFrameTime()*10)
+			if((System.currentTimeMillis()-shotTime)>sniper.getFrameTime()*8)
 			{
 				
 				mousecast.update();
@@ -232,7 +232,7 @@ public class Controls {
 		}
 		else if(shot==2)
 		{
-			if((System.currentTimeMillis()-shotTime)>sniper.getFrameTime()*40)
+			if((System.currentTimeMillis()-shotTime)>sniper.getFrameTime()*25)
 			{
 				shot=0;
 				

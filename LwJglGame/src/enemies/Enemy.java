@@ -8,7 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 import player.Player;
 import terrain.TerrainCollision;
 
-public class Enemy {
+public abstract class Enemy {
 
 	protected Vector3f position,velocity;
 	protected Player player;
@@ -42,7 +42,18 @@ public class Enemy {
 		position.z+=enemy2player.y*speed*deltaTime;
 		position.y+=velocity.y;
 		mInstance.setPosition(position);
+		mInstance.setRotY((float)(Math.toDegrees(Math.asin(enemy2player.x/enemy2player.length()))));
+		/*
+		if((enemy2player.x)>(enemy2player.y))
+			mInstance.setRotY((float)Math.toDegrees(Math.atan(enemy2player.x/enemy2player.y)));
+		else
+			mInstance.setRotY((float)(180-Math.toDegrees(Math.atan(enemy2player.x/enemy2player.y))));
+		*/
+		
+		
 		}
+		
+		
 	}
 	
 	public boolean bulletCollision(Vector3f x1, Vector3f direction)
