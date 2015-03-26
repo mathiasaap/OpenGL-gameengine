@@ -20,7 +20,9 @@ public class Terrain{
 	private float heightMultiplicator=12;
 	private final double terrainDistConst=(double)((SIZE*64.0)/(VERTICES*4096.0));
 	
+	private boolean hasHeightmap,readyToDraw,readyToUpload;
 	
+	LoadMesh meshLdr;
 	
 	private Mesh mesh;
 	private Vector3f position;
@@ -37,22 +39,26 @@ public class Terrain{
 	
 	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)
 	{
+		hasHeightmap=false;
+		readyToDraw=false;
+		readyToUpload=false;
 		this.multiTex=tex;
 		this.position=new Vector3f(x*SIZE,0,z*SIZE);
 		this.rotX=this.rotY=this.rotZ=this.scale=0;
 		terrainGridX= x;
 		terrainGridZ= z;
+		this.meshLdr=meshLdr;
 		
 		heightmap=new double[VERTICES][VERTICES];
-		long generationTime= System.currentTimeMillis();
-		generateHeightmap();
-		System.out.println("Time to generate heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
-		generationTime=System.currentTimeMillis();
-		this.mesh=generateTerrain(meshLdr);
-		System.out.println("Time to generate terrain mesh from heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
+		//long generationTime= System.currentTimeMillis();
+		//generateHeightmap();
+		//System.out.println("Time to generate heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
+		//generationTime=System.currentTimeMillis();
+		//this.mesh=generateTerrain(meshLdr);
+	//	System.out.println("Time to generate terrain mesh from heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
 		
 	}
-	private void generateHeightmap()
+	public synchronized void generateHeightmap()
 	{
 		for(int i=0;i <VERTICES; i++)
 		{
@@ -62,8 +68,10 @@ public class Terrain{
 			}
 			
 		}
-		
+		hasHeightmap=true;
 	}
+	public Terrain()
+	{}
 	
 	private Vector3f terrainNormal(int x, int y)
 	{
@@ -83,7 +91,7 @@ public class Terrain{
 
 	
 	
-	private Mesh generateTerrain(LoadMesh loadmesh)
+	public synchronized void generateTerrain()
 	{
 		int TOTAL_VERTS = VERTICES*VERTICES;
 		int TOTAL_POLYS = (VERTICES-1)*(VERTICES-1)*2;
@@ -137,8 +145,8 @@ public class Terrain{
 			
 		}
 
-		
-		return loadmesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
+		readyToUpload=true;
+		//return loadmesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
 	}
 
 	public float getSIZE()
@@ -182,6 +190,24 @@ public class Terrain{
 	}
 	public TerrainMultiTexture getMultiTex() {
 		return multiTex;
+	}
+	public synchronized boolean isHasHeightmap() {
+		return hasHeightmap;
+	}
+	public synchronized void setHasHeightmap(boolean hasHeightmap) {
+		this.hasHeightmap = hasHeightmap;
+	}
+	public synchronized boolean isReadyToDraw() {
+		return readyToDraw;
+	}
+	public synchronized void setReadyToDraw(boolean hasMesh) {
+		this.readyToDraw = hasMesh;
+	}
+	public synchronized boolean isReadyToUpload() {
+		return readyToUpload;
+	}
+	public synchronized void setReadyToUpload(boolean readyToUpload) {
+		this.readyToUpload = readyToUpload;
 	}
 
 

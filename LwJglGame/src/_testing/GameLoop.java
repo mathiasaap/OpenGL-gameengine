@@ -122,13 +122,13 @@ public class GameLoop {
 				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j,loader);
 				terrainList.put( new Key2D(currentTerrainX+i,currentTerrainZ+j), ter);
 				terrains.add(ter);
+				terrainHandler.addTerrainToQueue(ter);
 			}
 			
 			controls.playing();
 			player.move();
 
 			mouseRay.update();
-
 			terrainCollision.playerCollission(terrains, player);
 
 			for(Iterator<Enemy> enemy=enemies.iterator();enemy.hasNext();)
