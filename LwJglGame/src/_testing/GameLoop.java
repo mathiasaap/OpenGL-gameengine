@@ -40,6 +40,7 @@ import shaders.TerrainShader;
 import simplexnoise.SimplexNoise;
 import terrain.Terrain;
 import terrain.TerrainCollision;
+import terrain.TerrainHandlingThread;
 import textures.MeshTexture;
 import textures.OverlayTexture;
 import textures.TerrainMultiTexture;
@@ -81,6 +82,7 @@ public class GameLoop {
 		TerrainTexture snow= new TerrainTexture(loader.loadTexture("snow"));
 		tex.setShine(3);
 		tex.setReflectivity(2);
+		TerrainHandlingThread terrainHandler= new TerrainHandlingThread();
 		
 		
 	//	Terrain terrain= new Terrain(new TerrainMultiTexture(grass,rock, snow),0,0,loader);		
@@ -164,6 +166,7 @@ public class GameLoop {
 			FPSCounterRefresh=System.currentTimeMillis();
 			}
 		}
+		terrainHandler.cleanup();
 		meshShader.destroy();
 		loader.destroy();
 		DisplayWindow.destroy();

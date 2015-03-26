@@ -10,7 +10,7 @@ import mesh.Mesh;
 import mesh.MeshInstance;
 import mesh.TexMesh;
 
-public class Terrain implements Runnable{
+public class Terrain{
 
 	//private static final float SIZE = 2048;
 	public static final float SIZE = 1024;
@@ -25,40 +25,15 @@ public class Terrain implements Runnable{
 	private Mesh mesh;
 	private Vector3f position;
 	private float rotX, rotY, rotZ,scale;
-	
-	public Vector3f getPosition() {
-		return position;
-	}
-	public float getRotX() {
-		return rotX;
-	}
-	public float getScale() {
-		return scale;
-	}
-	public float getRotY() {
-		return rotY;
-	}
-	public float getRotZ() {
-		return rotZ;
-	}
-	//private MeshTexture tex;
+	int terrainGridX,terrainGridZ;
+
+
 	private TerrainMultiTexture multiTex;
-	public float getHeightMultiplicator() {
-		return heightMultiplicator;
-	}
-	public void setHeightMultiplicator(float heightMultiplicator) {
-		this.heightMultiplicator = heightMultiplicator;
-	}
-	public Mesh getMesh() {
-		return mesh;
-	}
-	public TerrainMultiTexture getMultiTex() {
-		return multiTex;
-	}
-	SimplexNoise snoise= new SimplexNoise(0.7,6);
+	
+	private SimplexNoise snoise= new SimplexNoise(0.7,6);
 	private double heightmap[][];
 	//private float heightMultiplicator=8;
-	int terrainGridX,terrainGridZ;
+	
 	
 	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)
 	{
@@ -105,10 +80,8 @@ public class Terrain implements Runnable{
 	}
 	
 	
-	public double[][] getHeightmap()
-	{
-		return heightmap;
-	}
+
+	
 	
 	private Mesh generateTerrain(LoadMesh loadmesh)
 	{
@@ -165,8 +138,6 @@ public class Terrain implements Runnable{
 		}
 
 		
-		
-		
 		return loadmesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
 	}
 
@@ -178,10 +149,39 @@ public class Terrain implements Runnable{
 	{
 		return VERTICES;
 	}
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
+
+	public double[][] getHeightmap()
+	{
+		return heightmap;
+	}
+	
+	public Vector3f getPosition() {
+		return position;
+	}
+	public float getRotX() {
+		return rotX;
+	}
+	public float getScale() {
+		return scale;
+	}
+	public float getRotY() {
+		return rotY;
+	}
+	public float getRotZ() {
+		return rotZ;
+	}
+	
+	public float getHeightMultiplicator() {
+		return heightMultiplicator;
+	}
+	public void setHeightMultiplicator(float heightMultiplicator) {
+		this.heightMultiplicator = heightMultiplicator;
+	}
+	public Mesh getMesh() {
+		return mesh;
+	}
+	public TerrainMultiTexture getMultiTex() {
+		return multiTex;
 	}
 
 
