@@ -145,6 +145,15 @@ public class GameLoop {
 				int enemCurrentTerrainX=(int) Maths.floor(enem.getPosition().x/Terrain.SIZE);
 				int enemCurrentTerrainZ=(int) Maths.floor(enem.getPosition().z/Terrain.SIZE);
 
+				if(!terrainMonitorList.containsKey(new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ)))
+				{
+					Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),enemCurrentTerrainX,enemCurrentTerrainZ,loader);
+					TerrainMonitor monTer= new TerrainMonitor(ter);
+					monTer.setLockedByGenThread(true);
+					terrainMonitorList.put( new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ),monTer);
+					terrainHandler.addTerrainToQueue(monTer);
+					
+				}
 				if(!terrainMonitorList.get(new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ)).isLockedByGenThread()){
 					terrainCollision.enemyCollission(terrainMonitorList.get(new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ)).getTerrain(), enem);
 				}
