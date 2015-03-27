@@ -8,25 +8,25 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TerrainHandlingThread implements Runnable{
 	
-	private Queue<Terrain> terrainsToHandle;
+	private Queue<TerrainMonitor> terrainsToHandle;
 	Thread thread = new Thread(this,"terrainHandler");
 	private AtomicBoolean threadRunning= new AtomicBoolean();
 	public TerrainHandlingThread()
 	{
 		threadRunning.set(true);
 		
-		terrainsToHandle= new LinkedBlockingQueue<Terrain>();
+		terrainsToHandle= new LinkedBlockingQueue<TerrainMonitor>();
 		//terrainsToHandle.
 		System.out.println("thread start");
 		thread.start();
 		
 	}
 	
-	public void addTerrainToQueue(Terrain terrain)
+	public void addTerrainToQueue(TerrainMonitor terrainMonitor)
 	{
-		if(!terrainsToHandle.contains(terrain))
+		if(!terrainsToHandle.contains(terrainMonitor))
 		{
-			terrainsToHandle.offer(terrain);
+			terrainsToHandle.offer(terrainMonitor);
 		}
 	}
 
@@ -37,21 +37,31 @@ public class TerrainHandlingThread implements Runnable{
 	while(threadRunning.get()){	
 		
 		while(!terrainsToHandle.isEmpty()){
-		Terrain nextTerrainToHandle = terrainsToHandle.poll();
-		System.out.println(nextTerrainToHandle.terrainGridX);
+		TerrainMonitor nextTerrainToHandle = terrainsToHandle.poll();
+		//System.out.println(nextTerrainToHandle.getTerrain().terrainGridX);
 		//System.out.println("From thread: "+thread.getName());
-		if(!nextTerrainToHandle.isHasHeightmap()){
-			nextTerrainToHandle.generateHeightmap();
-			}
-		if(!nextTerrainToHandle.isReadyToUpload())
-			nextTerrainToHandle.generateTerrain();
+
 		
+		if(!nextTerrainToHandle.isReadyToUpload()){
+			if(!nextTerrainToHandle.isHasHeightmap()){
+				long generationTime= System.currentTimeMillis();
+				nextTerrainToHandle.getTerrain().generateHeightmap();
+				nextTerrainToHandle.setHasHeightmap(true);
+				System.out.println("Time to generate heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
+				}
+			
+			long generationTime=System.currentTimeMillis();
+			nextTerrainToHandle.getTerrain().generateTerrain();
+			nextTerrainToHandle.setReadyToUpload(true);
+			System.out.println("Time to generate terrain mesh from heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
+		}
+		nextTerrainToHandle.setLockedByGenThread(false);
 		
 		}
 		
 		try 
 		{
-			Thread.sleep(500);
+			Thread.sleep(100);
 		} catch (InterruptedException e) 
 			{
 			// TODO Auto-generated catch block

@@ -41,6 +41,7 @@ import simplexnoise.SimplexNoise;
 import terrain.Terrain;
 import terrain.TerrainCollision;
 import terrain.TerrainHandlingThread;
+import terrain.TerrainMonitor;
 import textures.MeshTexture;
 import textures.OverlayTexture;
 import textures.TerrainMultiTexture;
@@ -50,7 +51,6 @@ import textures.TerrainTexture;
 
 public class GameLoop {
 
-	private static List<Terrain> terrains= new ArrayList<>();
 	
 	public static void main(String[] args) {
 		long timeClock= System.currentTimeMillis();
@@ -88,7 +88,8 @@ public class GameLoop {
 	//	Terrain terrain= new Terrain(new TerrainMultiTexture(grass,rock, snow),0,0,loader);		
 		//terrains.add(terrain);
 
-		Map<Key2D,Terrain> terrainList=new HashMap<>();
+		//Map<Key2D,Terrain> terrainList=new HashMap<>();
+		Map<Key2D,TerrainMonitor> terrainMonitorList=new HashMap<>();
 		//terrainList.put(new Key2D(0,0), terrain);
 		OBJLoader objloader = new OBJLoader();
 
@@ -115,28 +116,38 @@ public class GameLoop {
 			int currentTerrainZ=(int) Maths.floor(playerPos.z/Terrain.SIZE);
 			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
 			
+
+			
 			for(int i=-2;i<3;i++)
 				for(int j=-2;j<3;j++)
-			if(!terrainList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
+			if(!terrainMonitorList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
 			{
 				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j,loader);
-				terrainList.put( new Key2D(currentTerrainX+i,currentTerrainZ+j), ter);
-				terrains.add(ter);
-				terrainHandler.addTerrainToQueue(ter);
+				TerrainMonitor monTer= new TerrainMonitor(ter);
+				monTer.setLockedByGenThread(true);
+				terrainMonitorList.put( new Key2D(currentTerrainX+i,currentTerrainZ+j),monTer);
+				terrainHandler.addTerrainToQueue(monTer);
 			}
+					
+					
 			
 			controls.playing();
 			player.move();
 
 			mouseRay.update();
-			terrainCollision.playerCollission(terrains, player);
+			if(!terrainMonitorList.get(new Key2D(currentTerrainX,currentTerrainZ)).isLockedByGenThread())
+			terrainCollision.playerCollission(terrainMonitorList.get(new Key2D(currentTerrainX,currentTerrainZ)).getTerrain(), player);
 
 			for(Iterator<Enemy> enemy=enemies.iterator();enemy.hasNext();)
 			{
 				Enemy enem =enemy.next();
 				enem.move();
+				int enemCurrentTerrainX=(int) Maths.floor(enem.getPosition().x/Terrain.SIZE);
+				int enemCurrentTerrainZ=(int) Maths.floor(enem.getPosition().z/Terrain.SIZE);
 
-				terrainCollision.enemyCollission(terrains, enem);
+				if(!terrainMonitorList.get(new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ)).isLockedByGenThread()){
+					terrainCollision.enemyCollission(terrainMonitorList.get(new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ)).getTerrain(), enem);
+				}
 				mainRenderer.putInstance(enem.getEnemyMeshInstance());
 				if(!enem.getAlive())
 					enemy.remove();
@@ -147,10 +158,19 @@ public class GameLoop {
 
 			oTextures.add(sniper.getFrame());
 
-			for(Key2D terrainKey:terrainList.keySet())
+			for(Key2D terrainMonitorKey:terrainMonitorList.keySet())
 			{
-				if(Vector3f.sub(terrainList.get(terrainKey).getPosition(), player.getPosition(), null).length()<15000)
-				mainRenderer.putTerrain(terrainList.get(terrainKey));
+				if(!terrainMonitorList.get(terrainMonitorKey).isLockedByGenThread()){
+					if(terrainMonitorList.get(terrainMonitorKey).isReadyToUpload())
+					{
+						terrainMonitorList.get(terrainMonitorKey).getTerrain().uploadMesh();
+						terrainMonitorList.get(terrainMonitorKey).setReadyToUpload(false);
+						
+					}
+				
+				if(Vector3f.sub(terrainMonitorList.get(terrainMonitorKey).getTerrain().getPosition(), player.getPosition(), null).length()<15000)
+				mainRenderer.putTerrain(terrainMonitorList.get(terrainMonitorKey).getTerrain());
+				}
 			}
 			//mainRenderer.putTerrain(terrain);
 

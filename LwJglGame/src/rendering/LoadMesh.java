@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import mesh.Mesh;
@@ -22,6 +24,8 @@ public class LoadMesh {
 	private Stack<Integer> VaoStack = new Stack<>();
 	private Stack<Integer> VboStack = new Stack<>();
 	private Stack<Integer> TexStack = new Stack<>();
+	private List<Integer> VaoList= new ArrayList<>();
+	
 	
 	
 	private int createVAO()
@@ -34,7 +38,8 @@ public class LoadMesh {
 	
 	private void unbind()
 	{
-	GL30.glBindVertexArray(0);	
+	
+	GL30.glBindVertexArray(0);
 	}
 	
 	public Mesh loadNewMesh(float[] pos)

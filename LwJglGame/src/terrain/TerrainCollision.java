@@ -27,12 +27,10 @@ public class TerrainCollision {
 		
 	}
 	
-	public void playerCollission(List<Terrain> terrains, Player player)
+	public void playerCollission(Terrain terrain, Player player)
 	{
 		Vector3f position=player.getPosition();
 		//System.out.println(position.y);
-		for(Terrain terrain:terrains)
-		{
 			
 			float gridSize=getGridSize(terrain);
 			int zVertLoc= (int) Math.floor((position.x-terrain.getPosition().x)/gridSize);
@@ -50,7 +48,7 @@ public class TerrainCollision {
 					position.y=(float) (terrainPositionHeight+player.getHeadHeight());
 					player.stopFalling();
 				}}
-				}
+
 			
 			
 			//System.out.println(xVertLoc+ "   "+zVertLoc);
@@ -61,11 +59,10 @@ public class TerrainCollision {
 	
 
 	
-	public void enemyCollission(List<Terrain> terrains, Enemy enemy)
+	public void enemyCollission(Terrain terrain, Enemy enemy)
 	{
 		Vector3f position=enemy.getPosition();
-		for(Terrain terrain:terrains)
-		{
+
 			float gridSize=getGridSize(terrain);
 			int zVertLoc= (int) Math.floor((position.x-terrain.getPosition().x)/gridSize);
 			int xVertLoc= (int) Math.floor((position.z-terrain.getPosition().z)/gridSize);
@@ -80,7 +77,7 @@ public class TerrainCollision {
 				position.y=(float) (terrainPositionHeight+enemy.getHeadHeight());
 				enemy.stopFalling();
 			}}
-			}
+			
 		}
 		
 	

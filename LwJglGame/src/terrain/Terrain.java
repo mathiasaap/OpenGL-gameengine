@@ -20,7 +20,7 @@ public class Terrain{
 	private float heightMultiplicator=12;
 	private final double terrainDistConst=(double)((SIZE*64.0)/(VERTICES*4096.0));
 	
-	private boolean hasHeightmap,readyToDraw,readyToUpload;
+	
 	
 	LoadMesh meshLdr;
 	
@@ -39,9 +39,7 @@ public class Terrain{
 	
 	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)
 	{
-		hasHeightmap=false;
-		readyToDraw=false;
-		readyToUpload=false;
+
 		this.multiTex=tex;
 		this.position=new Vector3f(x*SIZE,0,z*SIZE);
 		this.rotX=this.rotY=this.rotZ=this.scale=0;
@@ -68,11 +66,8 @@ public class Terrain{
 			}
 			
 		}
-		hasHeightmap=true;
 	}
-	public Terrain()
-	{}
-	
+
 	private Vector3f terrainNormal(int x, int y)
 	{
 		
@@ -87,18 +82,19 @@ public class Terrain{
 		
 	}
 	
-	
-
-	
+	private float[] arrayVertices;
+	private float[] arrayUV;
+	private float[] arrayNormals;
+	private int[] arrayIndices;
 	
 	public synchronized void generateTerrain()
 	{
 		int TOTAL_VERTS = VERTICES*VERTICES;
 		int TOTAL_POLYS = (VERTICES-1)*(VERTICES-1)*2;
-		float[] arrayVertices=new float[TOTAL_VERTS*3];
-		float[] arrayUV=new float[TOTAL_VERTS*2];
-		float[] arrayNormals=new float[TOTAL_VERTS*3];
-		int[] arrayIndices=new int[3*TOTAL_POLYS];
+		arrayVertices=new float[TOTAL_VERTS*3];
+		arrayUV=new float[TOTAL_VERTS*2];
+		arrayNormals=new float[TOTAL_VERTS*3];
+		arrayIndices=new int[3*TOTAL_POLYS];
 		
 		
 		//Generate vertex coords, normals and UV coords
@@ -145,10 +141,17 @@ public class Terrain{
 			
 		}
 
-		readyToUpload=true;
 		//return loadmesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
 	}
 
+	public void uploadMesh()
+	{
+		
+		mesh=meshLdr.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
+		arrayVertices=arrayUV=arrayNormals=null;
+		arrayIndices=null;
+	}
+	
 	public float getSIZE()
 	{
 		return SIZE;
@@ -191,24 +194,7 @@ public class Terrain{
 	public TerrainMultiTexture getMultiTex() {
 		return multiTex;
 	}
-	public synchronized boolean isHasHeightmap() {
-		return hasHeightmap;
-	}
-	public synchronized void setHasHeightmap(boolean hasHeightmap) {
-		this.hasHeightmap = hasHeightmap;
-	}
-	public synchronized boolean isReadyToDraw() {
-		return readyToDraw;
-	}
-	public synchronized void setReadyToDraw(boolean hasMesh) {
-		this.readyToDraw = hasMesh;
-	}
-	public synchronized boolean isReadyToUpload() {
-		return readyToUpload;
-	}
-	public synchronized void setReadyToUpload(boolean readyToUpload) {
-		this.readyToUpload = readyToUpload;
-	}
+	
 
 
 }

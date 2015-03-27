@@ -22,7 +22,7 @@ public class Octave {
 		amp=Math.pow(persistence, totalOct-octNum);
 	}
 
-	private static double dot(int[] grad, double x, double y)
+	private synchronized  static double dot(int[] grad, double x, double y)
 	{
 		
 		return (grad[0]*x+grad[1]*y);
@@ -30,7 +30,7 @@ public class Octave {
 	
 	
 	//Litt copypaste ja
-	public static double noise(double xin, double yin)
+	public synchronized static  double noise(double xin, double yin)
 	{
 		 xin/=freq;
 		 yin=(yin/freq)*amp;
@@ -99,7 +99,7 @@ public class Octave {
 	
 	
 
-	private static int floor(double x)
+	private synchronized static int floor(double x)
 	{
 		return x>0?(int)x:((int)x-1);
 	}
