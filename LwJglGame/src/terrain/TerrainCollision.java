@@ -42,12 +42,13 @@ public class TerrainCollision {
 				
 				
 				
-				if(xVertLoc>=0&&xVertLoc<terrain.getVertices()&&zVertLoc>=0&&zVertLoc<terrain.getVertices()){
+			//	if(xVertLoc>=0&&xVertLoc<terrain.getVertices()&&zVertLoc>=0&&zVertLoc<terrain.getVertices()){
 				if(position.y-player.getHeadHeight()<terrainPositionHeight)
 				{
 					position.y=(float) (terrainPositionHeight+player.getHeadHeight());
 					player.stopFalling();
-				}}
+				}
+				//}
 
 			
 			
@@ -71,12 +72,13 @@ public class TerrainCollision {
 			float terrainPositionHeight=process(terrain,xVertLoc,zVertLoc,gridSize,position);
 			
 			
-			if(xVertLoc>=0&&xVertLoc<terrain.getVertices()-1&&zVertLoc>=0&&zVertLoc<terrain.getVertices()-1){
+			//if(xVertLoc>=0&&xVertLoc<terrain.getVertices()-1&&zVertLoc>=0&&zVertLoc<terrain.getVertices()-1){
 			if(position.y-enemy.getHeadHeight()<terrainPositionHeight)
 			{
 				position.y=(float) (terrainPositionHeight+enemy.getHeadHeight());
 				enemy.stopFalling();
-			}}
+			}
+			//}
 			
 		}
 		

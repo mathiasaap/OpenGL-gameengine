@@ -32,14 +32,14 @@ public class Renderer {
 	private List<Terrain> terrains = new ArrayList<>();
 	
 	
-	public Renderer(MeshShader meshShader,TerrainShader terrainShader)
+	public Renderer(MeshShader meshShader,TerrainShader terrainShader, LoadMesh loadmesh)
 	{
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		this.meshShader=meshShader;
 		this.terrainShader=terrainShader;
 		terrainShader.bindTexId();
 		renderMesh= new RenderMesh(meshShader);
-		renderTerrain= new RenderTerrain(terrainShader);
+		renderTerrain= new RenderTerrain(terrainShader,loadmesh);
 		
 		
 	}

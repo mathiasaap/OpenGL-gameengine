@@ -15,12 +15,13 @@ public class Terrain{
 	//private static final float SIZE = 2048;
 	public static final float SIZE = 1024;
 	//private static final int VERTICES = 1024;
-	private static final int VERTICES = 64;
+	private static final int VERTICES = 16;
+	//private static final int VERTICES = 128;
 	
 	private float heightMultiplicator=12;
 	private final double terrainDistConst=(double)((SIZE*64.0)/(VERTICES*4096.0));
-	
-	
+	private TerrainLOD[] terrainLevelOfDetail= new TerrainLOD[3];
+	private short currentLOD=0; //0 is highest res, 2 is lowest
 	
 	LoadMesh meshLdr;
 	
@@ -32,7 +33,7 @@ public class Terrain{
 
 	private TerrainMultiTexture multiTex;
 	
-	private SimplexNoise snoise= new SimplexNoise(0.7,6);
+	private static SimplexNoise snoise= new SimplexNoise(0.7,6);
 	private double heightmap[][];
 	//private float heightMultiplicator=8;
 	
@@ -47,7 +48,6 @@ public class Terrain{
 		terrainGridZ= z;
 		this.meshLdr=meshLdr;
 		
-		heightmap=new double[VERTICES][VERTICES];
 		//long generationTime= System.currentTimeMillis();
 		//generateHeightmap();
 		//System.out.println("Time to generate heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
@@ -58,6 +58,8 @@ public class Terrain{
 	}
 	public synchronized void generateHeightmap()
 	{
+
+		heightmap=new double[VERTICES][VERTICES];
 		for(int i=0;i <VERTICES; i++)
 		{
 			for(int j=0;j<VERTICES;j++)

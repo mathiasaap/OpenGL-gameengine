@@ -61,7 +61,7 @@ public class Player {
 	{
 		if(velocity.y==0)
 		{
-			velocity.y=4;
+			velocity.y=17;
 		}
 	}
 	public void stopFalling()
@@ -79,7 +79,7 @@ public class Player {
 	private void gravity()
 	{
 		double deltaTime=(System.currentTimeMillis()-gravityClock)/1000.0;
-		velocity.y-=10*deltaTime;
+		velocity.y-=60*deltaTime;
 		gravityClock=System.currentTimeMillis();
 	}
 	

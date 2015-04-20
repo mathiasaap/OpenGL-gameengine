@@ -98,7 +98,7 @@ public abstract class Enemy {
 	
 	private void gravity(double deltaTime)
 	{
-		velocity.y-=10*deltaTime;
+		velocity.y-=60*deltaTime;
 	}
 	
 	private Vector2f getPlayerVec()

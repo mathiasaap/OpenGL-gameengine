@@ -62,11 +62,11 @@ public class GameLoop {
 		TerrainShader terrainShader = new TerrainShader("res/shaders/vsTerrain.glsl","res/shaders/fsTerrain.glsl");
 		//RenderTerrain terrainRenderer = new RenderTerrain(terrainShader);
 		TerrainCollision terrainCollision=new TerrainCollision();
-		Renderer mainRenderer = new Renderer(meshShader,terrainShader);
+		Renderer mainRenderer = new Renderer(meshShader,terrainShader,loader);
 		RenderOverlay renderOverlay = new RenderOverlay(loader);
 		
 		List<Enemy> enemies = new ArrayList<>();
-		Player player= new Player(new Vector3f(1687f,10000f,2459f));
+		Player player= new Player(new Vector3f(1687f,5000f,2459f));
 		Sniper sniper=new Sniper(loader);
 		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader);
 		mainRenderer.setController(controls);
@@ -118,8 +118,8 @@ public class GameLoop {
 			
 
 			
-			for(int i=-2;i<3;i++)
-				for(int j=-2;j<3;j++)
+			for(int i=-10;i<11;i++)
+				for(int j=-10;j<11;j++)
 			if(!terrainMonitorList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
 			{
 				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j,loader);
@@ -191,7 +191,7 @@ public class GameLoop {
 
 			long deltaTime=System.currentTimeMillis()-timeClock;
 			if(deltaTime>0&&(System.currentTimeMillis()-FPSCounterRefresh)>400){
-			Display.setTitle("MLGSIM9000  "+1000/deltaTime+ " FPS");
+			Display.setTitle(1000/deltaTime+ " FPS");
 			FPSCounterRefresh=System.currentTimeMillis();
 			}
 		}

@@ -16,26 +16,30 @@ import player.Controls;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import terrain.Terrain;
+import terrain.Water;
 
 public class RenderTerrain {
 	private TerrainShader shader;
-	
-	public RenderTerrain(TerrainShader terrainShader)
+	private Water water;
+	public RenderTerrain(TerrainShader terrainShader, LoadMesh loadmesh)
 	{
 		Matrix.uploadProjectionMatrix(terrainShader);
 		shader=terrainShader;
+		water=new Water(loadmesh);
 	
 	}
+	
 	
 	public void draw(List<Terrain> terrains,Controls control)
 	{
 		
+
 		for(Terrain terrain: terrains){
 			GL30.glBindVertexArray(terrain.getMesh().getVAO());
 			GL20.glEnableVertexAttribArray(0);
 			GL20.glEnableVertexAttribArray(1);
 			GL20.glEnableVertexAttribArray(2);
-			
+		
 			//shader.uploadSpecular(terrain.getTerrain().getMesh().getTex().getShine(),terrain.getTerrain().getMesh().getTex().getReflectivity());
 			shader.uploadSpecular(3,2);
 			/*GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -71,6 +75,8 @@ public class RenderTerrain {
 			GL20.glDisableVertexAttribArray(1);
 			GL20.glDisableVertexAttribArray(2);
 			GL30.glBindVertexArray(0);
+			
+			
 			
 		}
 		

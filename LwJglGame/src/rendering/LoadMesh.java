@@ -25,6 +25,9 @@ public class LoadMesh {
 	private Stack<Integer> VboStack = new Stack<>();
 	private Stack<Integer> TexStack = new Stack<>();
 	private List<Integer> VaoList= new ArrayList<>();
+	private List<Integer> VboList= new ArrayList<>();
+	private List<Integer> TexList= new ArrayList<>();
+	
 	
 	
 	
@@ -45,33 +48,42 @@ public class LoadMesh {
 	public Mesh loadNewMesh(float[] pos)
 	{
 		int VAO = createVAO();
-		storeAttrib(0,pos,2);
+		List<Integer> meshVBOs= new ArrayList<>();
+		meshVBOs.add(storeAttrib(0,pos,2));
+		
 		unbind();
-		return new Mesh(pos.length/2,VAO);
+		return new Mesh(pos.length/2,VAO,meshVBOs);
 	}
 	
 	public Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV, float[] normals)
 	{
 		int VAO = createVAO();
+
+		List<Integer> meshVBOs= new ArrayList<>();
 		loadIndicesBuffer(indices);
-		storeAttrib(0,pos,3);
-		storeAttrib(1,texUV,2);
-		storeAttrib(2,normals,3);
+		
+
+		meshVBOs.add(storeAttrib(0,pos,3));
+		meshVBOs.add(storeAttrib(1,texUV,2));
+		meshVBOs.add(storeAttrib(2,normals,3));
 		unbind();
-		return new Mesh(indices.length,VAO);
+		return new Mesh(indices.length,VAO,meshVBOs);
 	}
 	
 	
 	
-	private void storeAttrib(int attrib, float[] bfr,int cSze)
+	private int storeAttrib(int attrib, float[] bfr,int cSze)
 	{
 		int VBO= GL15.glGenBuffers();
 		VboStack.push(VBO);
+		VboList.add(VBO);
+		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,VBO);
 		FloatBuffer fbfr = floatToFloatBuffer(bfr);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, fbfr, GL15.GL_STATIC_DRAW);
 		GL20.glVertexAttribPointer(attrib,cSze,GL11.GL_FLOAT,false,0,0);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,0);
+		return VBO;
 		
 	}
 	
@@ -91,6 +103,7 @@ public class LoadMesh {
 		}
 		int texId=tex.getTextureID();
 		TexStack.push(texId);
+		TexList.add(texId);
 		return texId;
 		
 	}
@@ -99,6 +112,7 @@ public class LoadMesh {
 	{
 		int VBO =GL15.glGenBuffers();
 		VboStack.push(VBO);
+		VboList.add(VBO);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER,VBO);
 		IntBuffer ibfr= intToIntBuffer(indices);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER,ibfr,GL15.GL_STATIC_DRAW);

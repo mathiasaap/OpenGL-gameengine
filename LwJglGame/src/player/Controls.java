@@ -75,10 +75,11 @@ public class Controls {
 		rotateCamera(lookat);
 		boolean runningSpeed=false;
 		updateShoot();
+		//position.x=100;
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)&&Keyboard.isKeyDown(Keyboard.KEY_E))
 		{
-			speed=2000;
+			speed=3000;
 			if(!meshShader.getPlayerRunning())
 			{
 				meshShader.setPlayerRunning(true);
@@ -93,7 +94,7 @@ public class Controls {
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 		{
-			speed=200;
+			speed=250;
 			if(meshShader.getPlayerRunning())
 			{
 				meshShader.setPlayerRunning(false);
@@ -109,7 +110,7 @@ public class Controls {
 		}
 		else
 		{
-			speed=50;
+			speed=100;
 			if(meshShader.getPlayerRunning())
 			{
 				meshShader.setPlayerRunning(false);
