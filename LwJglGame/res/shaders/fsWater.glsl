@@ -4,15 +4,8 @@ in vec2 texToFrag;
 in vec3 absNormal;
 in vec3 toLight;
 in vec3 camVector;
-in float height;
-in vec3 multitextureComponents;
 
 out vec4 out_color;
-
-uniform sampler2D GrassTexture;
-uniform sampler2D RockTexture;
-uniform sampler2D SnowTexture;
-
 
 uniform vec3 lightCol;
 uniform float shine;
@@ -32,14 +25,10 @@ float specularity = max(dot(reflectedDir,unitNormal),0);
 float shineFactor = pow(specularity, shine);
 vec3 specularProduct = shineFactor*lightCol*reflectivity;
 
-//4096:130:30:130
-vec4 texColor= texture(GrassTexture,texToFrag*33)*multitextureComponents.x +texture(RockTexture,texToFrag*8)*multitextureComponents.y+texture(SnowTexture,texToFrag*33)*multitextureComponents.z ;
 
-
-out_color=vec4(diffuse,1) *texColor;
-
-//out_color=vec4(diffuse,1) *texture(RockTexture,texToFrag);
-//out_color= vec4(diffuse,1f) * vec4(0.7f,0.85f,0.8f,1.0f);
+out_color=vec4(specularProduct,1)* vec4(diffuse,1) * vec4(0.0f,0.0f,0.7f,0.6f);
+//out_color=vec4(0.0f,0.0f,0.5f,0.4f);
+//out_color= vec4(diffuse,1.0f) * vec4(0.0f,0.0f,0.7f,0.4f);
 //out_color=texture(texSampler,texToFrag);
 //out_color=vec4(0.9f,0.1f,0.2f,1.0f);
 }

@@ -75,7 +75,7 @@ public class Controls {
 		rotateCamera(lookat);
 		boolean runningSpeed=false;
 		updateShoot();
-		//position.x=100;
+		//position.x=100000;
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)&&Keyboard.isKeyDown(Keyboard.KEY_E))
 		{

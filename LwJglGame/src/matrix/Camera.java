@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
 import shaders.TerrainShader;
+import shaders.WaterShader;
 
 public class Camera {
 private Vector3f position;
@@ -35,7 +36,7 @@ public Matrix4f setupViewMatrix()
 	return viewMatrix;	
 }
 
-public void uploadViewMatrix(MeshShader meshShader, TerrainShader terrainShader)
+public void uploadViewMatrix(MeshShader meshShader, TerrainShader terrainShader, WaterShader waterShader)
 {
 	if(this.changed){
 	meshShader.useProgram();
@@ -44,6 +45,9 @@ public void uploadViewMatrix(MeshShader meshShader, TerrainShader terrainShader)
 	terrainShader.useProgram();
 	terrainShader.loadViewMatrix(setupViewMatrix());
 	terrainShader.unbindShader();
+	waterShader.useProgram();
+	waterShader.loadViewMatrix(setupViewMatrix());
+	waterShader.unbindShader();
 	this.changed=false;
 	}
 }

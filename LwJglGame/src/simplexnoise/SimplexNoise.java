@@ -52,7 +52,7 @@ public class SimplexNoise {
 		
 		for(Octave octave: octaves)
 		{
-			res+=Octave.noise(x,y);
+			res+=octave.noise(x,y);
 		}
 		
 		return (res*res*res);

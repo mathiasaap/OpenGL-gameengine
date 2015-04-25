@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
 import shaders.TerrainShader;
+import shaders.WaterShader;
 import terrain.TerrainCollision;
 import matrix.Camera;
 
@@ -27,10 +28,10 @@ public class Player {
 		camera= new Camera();
 		
 	}
-	public Camera getCamera(MeshShader meshShader, TerrainShader terrainShader)
+	public Camera getCamera(MeshShader meshShader, TerrainShader terrainShader, WaterShader waterShader)
 	{
 		camera.setPosition(position);
-		updateCamera(meshShader, terrainShader);
+		updateCamera(meshShader, terrainShader,waterShader);
 		return camera;
 	}
 	public Camera getCamera()
@@ -38,9 +39,9 @@ public class Player {
 		return camera;
 	}
 	
-	private void updateCamera(MeshShader meshShader, TerrainShader terrainShader)
+	private void updateCamera(MeshShader meshShader, TerrainShader terrainShader, WaterShader waterShader)
 	{
-		camera.uploadViewMatrix(meshShader, terrainShader);
+		camera.uploadViewMatrix(meshShader, terrainShader,waterShader);
 	}
 	
 	

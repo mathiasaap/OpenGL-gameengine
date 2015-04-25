@@ -20,12 +20,10 @@ import terrain.Water;
 
 public class RenderTerrain {
 	private TerrainShader shader;
-	private Water water;
 	public RenderTerrain(TerrainShader terrainShader, LoadMesh loadmesh)
 	{
 		Matrix.uploadProjectionMatrix(terrainShader);
 		shader=terrainShader;
-		water=new Water(loadmesh);
 	
 	}
 	
@@ -72,7 +70,6 @@ public class RenderTerrain {
 
 			
 			GL20.glDisableVertexAttribArray(0);
-			GL20.glDisableVertexAttribArray(1);
 			GL20.glDisableVertexAttribArray(2);
 			GL30.glBindVertexArray(0);
 			

@@ -38,6 +38,7 @@ public class Water {
 	public Water(LoadMesh loadmesh)
 	{
 		this.mesh = loadmesh.loadNewMesh(vertices, indices, UV, normals);
+		//this.mesh=loadmesh.loadNewMesh(vertices, 3);
 		
 	}
 	public Mesh getMesh()

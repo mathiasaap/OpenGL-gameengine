@@ -37,6 +37,7 @@ import rendering.RenderTerrain;
 import rendering.Renderer;
 import shaders.MeshShader;
 import shaders.TerrainShader;
+import shaders.WaterShader;
 import simplexnoise.SimplexNoise;
 import terrain.Terrain;
 import terrain.TerrainCollision;
@@ -60,9 +61,11 @@ public class GameLoop {
 		LoadMesh loader= new LoadMesh();
 		MeshShader meshShader = new MeshShader("res/shaders/vsMesh.glsl","res/shaders/fsMesh.glsl");
 		TerrainShader terrainShader = new TerrainShader("res/shaders/vsTerrain.glsl","res/shaders/fsTerrain.glsl");
+		WaterShader waterShader = new WaterShader("res/shaders/vsWater.glsl","res/shaders/fsWater.glsl");
+		
 		//RenderTerrain terrainRenderer = new RenderTerrain(terrainShader);
 		TerrainCollision terrainCollision=new TerrainCollision();
-		Renderer mainRenderer = new Renderer(meshShader,terrainShader,loader);
+		Renderer mainRenderer = new Renderer(meshShader,terrainShader, waterShader,loader);
 		RenderOverlay renderOverlay = new RenderOverlay(loader);
 		
 		List<Enemy> enemies = new ArrayList<>();
@@ -97,7 +100,7 @@ public class GameLoop {
 		Mesh shrekmodel= objloader.loadObj("shrek", loader);
 		TexMesh shrekMesh = new TexMesh(shrekmodel,tex);
 		
-		MeshInstance shrekMeshIns = new MeshInstance(shrekMesh, new Vector3f(0,0,0),0,0,0,1);
+		//MeshInstance shrekMeshIns = new MeshInstance(shrekMesh, new Vector3f(0,0,0),0,0,0,1);
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
@@ -117,9 +120,9 @@ public class GameLoop {
 			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
 			
 
-			
-			for(int i=-10;i<11;i++)
-				for(int j=-10;j<11;j++)
+			int genRad=10;//10
+			for(int i=-genRad;i<genRad+1;i++)
+				for(int j=-genRad;j<genRad+1;j++)
 			if(!terrainMonitorList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
 			{
 				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j,loader);
@@ -184,7 +187,7 @@ public class GameLoop {
 			//mainRenderer.putTerrain(terrain);
 
 			
-			mainRenderer.render(light, player.getCamera(meshShader, terrainShader));
+			mainRenderer.render(light, player.getCamera(meshShader, terrainShader,waterShader));
 			renderOverlay.draw(oTextures);
 			
 			DisplayWindow.update();

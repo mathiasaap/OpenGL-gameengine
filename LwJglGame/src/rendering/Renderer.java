@@ -16,30 +16,35 @@ import mesh.MeshInstance;
 import mesh.TexMesh;
 import shaders.MeshShader;
 import shaders.TerrainShader;
+import shaders.WaterShader;
 import terrain.Terrain;
 
 public class Renderer {
 	
 	private MeshShader meshShader;
 	private TerrainShader terrainShader;
+	private WaterShader waterShader;
 	
 	boolean fullscreen=false;
 	private RenderMesh renderMesh;
 	private RenderTerrain renderTerrain;
+	private RenderWater renderWater;
 	private Controls control= new Controls();
 	
 	private Map<TexMesh, List<MeshInstance>> meshInstances = new HashMap<>();
 	private List<Terrain> terrains = new ArrayList<>();
 	
 	
-	public Renderer(MeshShader meshShader,TerrainShader terrainShader, LoadMesh loadmesh)
+	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader, LoadMesh loadmesh)
 	{
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		this.meshShader=meshShader;
 		this.terrainShader=terrainShader;
+		this.waterShader=waterShader;
 		terrainShader.bindTexId();
 		renderMesh= new RenderMesh(meshShader);
 		renderTerrain= new RenderTerrain(terrainShader,loadmesh);
+		renderWater= new RenderWater(waterShader,loadmesh);
 		
 		
 	}
@@ -84,6 +89,12 @@ public class Renderer {
 		terrainShader.useProgram();
 		terrainShader.uploadLight(light);
 		renderTerrain.draw(terrains,control);
+		terrainShader.unbindShader();
+		
+		waterShader.useProgram();
+		waterShader.uploadLight(light);
+		if(control.getF2())
+		renderWater.draw(terrains);
 		terrainShader.unbindShader();
 		terrains.clear();
 		

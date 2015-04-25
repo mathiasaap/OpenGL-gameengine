@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
 import shaders.TerrainShader;
+import shaders.WaterShader;
 
 public class Matrix {
 	
@@ -91,6 +92,20 @@ public class Matrix {
 		terrainShader.loadProjectionMatrix(calcProjectionMatrix(FOV));
 		terrainShader.unbindShader();
 		System.out.println("Uploaded projection matrix to terrain shader");
+		
+	}
+	
+	public static void uploadProjectionMatrix(WaterShader waterShader)
+	{
+		uploadProjectionMatrix(waterShader,FOV_WALKING);
+	}
+	
+	public static void uploadProjectionMatrix(WaterShader waterShader,float FOV)
+	{
+		waterShader.useProgram();
+		waterShader.loadProjectionMatrix(calcProjectionMatrix(FOV));
+		waterShader.unbindShader();
+		System.out.println("Uploaded projection matrix to water shader");
 		
 	}
 	
