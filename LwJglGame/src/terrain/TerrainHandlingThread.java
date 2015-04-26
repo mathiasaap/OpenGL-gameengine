@@ -43,17 +43,15 @@ public class TerrainHandlingThread implements Runnable{
 
 		
 		if(!nextTerrainToHandle.isReadyToUpload()){
+			long generationTime= System.currentTimeMillis();
 			if(!nextTerrainToHandle.isHasHeightmap()){
-				long generationTime= System.currentTimeMillis();
 				nextTerrainToHandle.getTerrain().generateHeightmap();
 				nextTerrainToHandle.setHasHeightmap(true);
-				System.out.println("Time to generate heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
 				}
 			
-			long generationTime=System.currentTimeMillis();
 			nextTerrainToHandle.getTerrain().generateTerrain();
 			nextTerrainToHandle.setReadyToUpload(true);
-			System.out.println("Time to generate terrain mesh from heightmap: "+(System.currentTimeMillis()-generationTime)+"ms");
+			System.out.println("Time to generate terrain "+nextTerrainToHandle.getTerrain().terrainGridX+","+nextTerrainToHandle.getTerrain().terrainGridZ+": "+(System.currentTimeMillis()-generationTime)+"ms");
 		}
 		nextTerrainToHandle.setLockedByGenThread(false);
 		

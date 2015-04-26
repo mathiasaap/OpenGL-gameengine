@@ -8,6 +8,7 @@ import java.util.Map;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 
 import player.Controls;
 import lighting.Light;
@@ -35,7 +36,7 @@ public class Renderer {
 	private List<Terrain> terrains = new ArrayList<>();
 	
 	
-	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader, LoadMesh loadmesh)
+	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos)
 	{
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		this.meshShader=meshShader;
@@ -44,7 +45,7 @@ public class Renderer {
 		terrainShader.bindTexId();
 		renderMesh= new RenderMesh(meshShader);
 		renderTerrain= new RenderTerrain(terrainShader,loadmesh);
-		renderWater= new RenderWater(waterShader,loadmesh);
+		renderWater= new RenderWater(waterShader,loadmesh,playerPos);
 		
 		
 	}
@@ -86,10 +87,20 @@ public class Renderer {
 		
 		prepareScene();
 		
+
+		
+		
 		terrainShader.useProgram();
 		terrainShader.uploadLight(light);
 		renderTerrain.draw(terrains,control);
 		terrainShader.unbindShader();
+		
+		
+		meshShader.useProgram();
+		meshShader.uploadLight(light);
+		renderMesh.draw(meshInstances);
+		meshShader.unbindShader();
+		meshInstances.clear();
 		
 		if(control.getF2()){
 		waterShader.useProgram();
@@ -100,11 +111,7 @@ public class Renderer {
 		terrains.clear();
 		
 		
-		meshShader.useProgram();
-		meshShader.uploadLight(light);
-		renderMesh.draw(meshInstances);
-		meshShader.unbindShader();
-		meshInstances.clear();
+
 		
 	}
 	

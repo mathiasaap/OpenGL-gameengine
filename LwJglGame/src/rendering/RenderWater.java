@@ -24,11 +24,13 @@ public class RenderWater {
 	private Water water;
 	private long waterClock=System.currentTimeMillis();
 	private final double pi2SecondsPerPeriod=1.0;
-	public RenderWater(WaterShader waterShader, LoadMesh loadmesh)
+	private Vector3f playerPos;
+	public RenderWater(WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos)
 	{
 		Matrix.uploadProjectionMatrix(waterShader);
 		shader=waterShader;
 		water=new Water(loadmesh);
+		this.playerPos=playerPos;
 	
 	}
 	private int counter=0;
@@ -47,7 +49,7 @@ public class RenderWater {
 	
 	public void draw(List<Terrain> terrains)
 	{
-		long curTime=System.nanoTime();
+		//long curTime=System.nanoTime();
 		long deltaTime=System.currentTimeMillis()-waterClock;
 		waterClock=System.currentTimeMillis();
 		changeWaterLevel(deltaTime);
@@ -66,7 +68,10 @@ public class RenderWater {
 			//Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), terrain.getRotX(), terrain.getRotY(), terrain.getRotZ(), terrain.getScale());
 			Vector3f wPos=new Vector3f(terrain.getPosition().x,terrain.getPosition().y-200,terrain.getPosition().z);
 			wPos.y+=Math.sin(waterPeriod)*30;
-			Matrix4f transformation = Matrix.transformationMatrix(wPos, (float)0.0f, (float)0.0f, (float)0.0f, 0.02f+(float)terrain.getSIZE()/2);
+			float rotX=0;
+			if(playerPos.y<wPos.y)
+				rotX=(float) 180;
+			Matrix4f transformation = Matrix.transformationMatrix(wPos, (float)rotX, (float)0.0f, (float)0.0f, 0.02f+(float)terrain.getSIZE()/2);
 			shader.loadTranformationMatrix(transformation);	
 			
 		
@@ -81,7 +86,6 @@ public class RenderWater {
 		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
 		GL11.glDisable(GL11.GL_BLEND);
-		
-		System.out.println("Rendering water took "+(System.nanoTime()-curTime)/1000000.0  +" ms");
+	//	System.out.println("Rendering water took "+(System.nanoTime()-curTime)/1000000.0  +" ms");
 	}
 }

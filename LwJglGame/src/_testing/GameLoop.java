@@ -59,17 +59,18 @@ public class GameLoop {
 		
 		DisplayWindow.create();
 		LoadMesh loader= new LoadMesh();
+		Player player= new Player(new Vector3f(1687f,5000f,2459f));
 		MeshShader meshShader = new MeshShader("res/shaders/vsMesh.glsl","res/shaders/fsMesh.glsl");
 		TerrainShader terrainShader = new TerrainShader("res/shaders/vsTerrain.glsl","res/shaders/fsTerrain.glsl");
 		WaterShader waterShader = new WaterShader("res/shaders/vsWater.glsl","res/shaders/fsWater.glsl");
 		
 		//RenderTerrain terrainRenderer = new RenderTerrain(terrainShader);
 		TerrainCollision terrainCollision=new TerrainCollision();
-		Renderer mainRenderer = new Renderer(meshShader,terrainShader, waterShader,loader);
+		Renderer mainRenderer = new Renderer(meshShader,terrainShader, waterShader,loader,player.getPosition());
 		RenderOverlay renderOverlay = new RenderOverlay(loader);
 		
 		List<Enemy> enemies = new ArrayList<>();
-		Player player= new Player(new Vector3f(1687f,5000f,2459f));
+		
 		Sniper sniper=new Sniper(loader);
 		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader,waterShader);
 		mainRenderer.setController(controls);

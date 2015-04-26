@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 7 elements from project &apos;LwJglGame&apos;&#x0D;&#x0A;- Original project: &apos;LwJglGame&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     Avent.obj&#x0D;&#x0A;     batman.obj&#x0D;&#x0A;     capsule.obj&#x0D;&#x0A;     monkey.mtl&#x0D;&#x0A;     monkey.obj&#x0D;&#x0A;     obese_male.obj&#x0D;&#x0A;     sirus city.obj" description="Delete elements" element1="res/monkey.mtl" element2="res/monkey.obj" element3="res/sirus city.obj" element4="res/capsule.obj" element5="res/obese_male.obj" element6="res/batman.obj" element7="res/Avent.obj" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="7" stamp="1430082062368" subPackages="false" version="1.0"/>
+</session>
