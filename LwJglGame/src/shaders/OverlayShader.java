@@ -32,7 +32,11 @@ public class OverlayShader extends AbstractShader{
 		super.bindAttribLocation(0, "position");
 	}
 	
-
+	@Override
+	protected String getShaderType() {
+		// TODO Auto-generated method stub
+		return "Overlay";
+	}
 	
 	
 }

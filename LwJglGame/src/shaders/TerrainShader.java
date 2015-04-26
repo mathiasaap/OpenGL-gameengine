@@ -85,5 +85,9 @@ public class TerrainShader extends AbstractShader{
 		
 		super.uploadMat4f(viewMatrix, matrix);
 	}
-
+	@Override
+	protected String getShaderType() {
+		// TODO Auto-generated method stub
+		return "Terrain";
+	}
 }

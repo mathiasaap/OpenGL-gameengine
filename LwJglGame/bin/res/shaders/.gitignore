@@ -1,0 +1,7 @@
+/.DS_Store
+/fsMesh.glsl
+/fsOverlay.glsl
+/fsTerrain.glsl
+/vsMesh.glsl
+/vsOverlay.glsl
+/vsTerrain.glsl

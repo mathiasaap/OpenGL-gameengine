@@ -1,10 +1,4 @@
-/shaders/
-/rendering/
-/_testing/
-/matrix/
-/terrain/
-/simplexnoise/
-/player/
+/.DS_Store
 /1.png
 /Avent.obj
 /batman.obj
@@ -14,19 +8,12 @@
 /monkey.obj
 /mountain.jpg
 /mountain.png
-/obese_male.obj
 /rock.jpg
 /rock.png
 /sample_pic.png
 /shrek.mtl
 /shrek.obj
 /sirus city.obj
-/enemies/
-/lighting/
-/mesh/
-/misc/
-/overlays/
 /snow.jpg
 /snow.png
-/textures/
 /untitled.obj

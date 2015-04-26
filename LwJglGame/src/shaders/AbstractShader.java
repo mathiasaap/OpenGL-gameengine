@@ -81,7 +81,7 @@ public abstract class AbstractShader {
 		GL20.glUseProgram(0);
 		
 	}
-	private static int loadShader(String filename, int shaderType)
+	private int loadShader(String filename, int shaderType)
 	{
 		StringBuilder sourceCode = new StringBuilder();
 		try
@@ -112,7 +112,7 @@ public abstract class AbstractShader {
 				}
 			} catch(RuntimeException e){
 				System.out.println(GL20.glGetShaderInfoLog(sid,512));
-				System.err.println("Cannot compile shader!");
+				System.err.println("Cannot compile "+getShaderType() +" shader!");
 				System.exit(-1);
 			}
 		return sid;
@@ -145,4 +145,5 @@ public abstract class AbstractShader {
 		GL20.glUniformMatrix4(location, false, mat4);
 		//mat4.clear();
 	}
+	protected abstract String getShaderType();
 }
