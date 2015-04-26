@@ -15,7 +15,7 @@ public class Terrain{
 	//private static final float SIZE = 2048;
 	public static final float SIZE = 1024;
 	//private static final int VERTICES = 1024;
-	private static final int VERTICES = 16;
+	private static final int VERTICES = 32;
 	//private static final int VERTICES = 128;
 	
 	private float heightMultiplicator=12;
@@ -122,6 +122,28 @@ public class Terrain{
 		}
 		
 		
+//		for(int i =0; i<VERTICES;i+=2)
+//		{
+//			for(int j = 0; j<VERTICES;j+=2)
+//			{
+//				arrayVertices[3*(j+i*VERTICES)]=(float)(j/((float)VERTICES-1))*SIZE;
+//				arrayVertices[3*(j+i*VERTICES)+1]= (float) heightmap[i][j];
+//				arrayVertices[3*(j+i*VERTICES)+2]=(float)(i/((float)VERTICES-1))*SIZE;;
+//				
+//				
+//				Vector3f tNorm=terrainNormal(i,j);
+//				arrayNormals[3*(j+i*VERTICES)]=tNorm.x;
+//				arrayNormals[3*(j+i*VERTICES)+1]=tNorm.y;
+//				arrayNormals[3*(j+i*VERTICES)+2]=tNorm.z;
+//				
+//				arrayUV[2*(j+i*VERTICES)]=(float)(j/((float)VERTICES-1));
+//				arrayUV[2*(j+i*VERTICES)+1]=(float)(i/((float)VERTICES-1));
+//
+//			}
+//			
+//		}
+		
+		
 		
 		//Generate indices
 		int indexP=0;
@@ -143,6 +165,25 @@ public class Terrain{
 			
 		}
 
+//		for(int i =0; i<VERTICES-1;i+=2)
+//		{
+//			for(int j = 0; j<VERTICES-1;j+=2)
+//			{
+//				int topLeft = j+i*VERTICES;
+//				
+//				arrayIndices[indexP++]= topLeft;
+//				arrayIndices[indexP++]= topLeft+VERTICES;
+//				arrayIndices[indexP++]= topLeft+1;
+//				
+//				arrayIndices[indexP++]= topLeft+1;
+//				arrayIndices[indexP++]= topLeft+VERTICES;
+//				arrayIndices[indexP++]= topLeft+VERTICES+1;
+//				
+//			}
+//			
+//		}
+
+		
 		//return loadmesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
 	}
 

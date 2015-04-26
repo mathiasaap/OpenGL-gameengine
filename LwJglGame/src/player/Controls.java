@@ -17,6 +17,7 @@ import overlays.Sniper;
 import rendering.DisplayWindow;
 import shaders.MeshShader;
 import shaders.TerrainShader;
+import shaders.WaterShader;
 
 public class Controls {
 
@@ -26,6 +27,7 @@ public class Controls {
 	
 	private MeshShader meshShader;
 	private TerrainShader terrainShader;
+	private WaterShader waterShader;
 	private short shot=0;
 	private long shotTime=System.currentTimeMillis();
 	
@@ -49,13 +51,14 @@ public class Controls {
 	{
 		
 	}
-	public Controls(Player player,Sniper sniper,List<Enemy> enemies, MeshShader meshShader, TerrainShader terrainShader)
+	public Controls(Player player,Sniper sniper,List<Enemy> enemies, MeshShader meshShader, TerrainShader terrainShader,WaterShader waterShader)
 	{
 		this.player=player;
 		this.sniper=sniper;
 		this.enemies=enemies;
 		this.meshShader=meshShader;
 		this.terrainShader=terrainShader;
+		this.waterShader=waterShader;
 		mousecast=new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		/*try {
 			Mouse.setNativeCursor(new Cursor(0, 0, 0, 0, 0, null, null));
@@ -90,6 +93,11 @@ public class Controls {
 				terrainShader.setPlayerRunning(true);
 				Matrix.uploadProjectionMatrix(terrainShader, 120);
 			}
+			if(!waterShader.getPlayerRunning())
+			{
+				waterShader.setPlayerRunning(true);
+				Matrix.uploadProjectionMatrix(waterShader, 120);
+			}
 			
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
@@ -104,6 +112,11 @@ public class Controls {
 			{
 				terrainShader.setPlayerRunning(false);
 				Matrix.uploadProjectionMatrix(terrainShader, 70);
+			}
+			if(waterShader.getPlayerRunning())
+			{
+				waterShader.setPlayerRunning(false);
+				Matrix.uploadProjectionMatrix(waterShader, 70);
 			}
 			
 			
@@ -120,6 +133,11 @@ public class Controls {
 			{
 				terrainShader.setPlayerRunning(false);
 				Matrix.uploadProjectionMatrix(terrainShader, 70);
+			}
+			if(waterShader.getPlayerRunning())
+			{
+				waterShader.setPlayerRunning(false);
+				Matrix.uploadProjectionMatrix(waterShader, 70);
 			}
 		}
 		

@@ -26,7 +26,7 @@ float shineFactor = pow(specularity, shine);
 vec3 specularProduct = shineFactor*lightCol*reflectivity;
 
 
-out_color=vec4(specularProduct,1)* vec4(diffuse,1) * vec4(0.0f,0.0f,0.7f,0.6f);
+out_color=vec4(specularProduct,1)* vec4(diffuse,1) * vec4(28.0f/255.0f,107.0f/255f,180.0f/255.0f,0.8f);
 //out_color=vec4(0.0f,0.0f,0.5f,0.4f);
 //out_color= vec4(diffuse,1.0f) * vec4(0.0f,0.0f,0.7f,0.4f);
 //out_color=texture(texSampler,texToFrag);

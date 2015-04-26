@@ -91,11 +91,12 @@ public class Renderer {
 		renderTerrain.draw(terrains,control);
 		terrainShader.unbindShader();
 		
+		if(control.getF2()){
 		waterShader.useProgram();
 		waterShader.uploadLight(light);
-		if(control.getF2())
 		renderWater.draw(terrains);
 		terrainShader.unbindShader();
+		}
 		terrains.clear();
 		
 		
@@ -105,14 +106,13 @@ public class Renderer {
 		meshShader.unbindShader();
 		meshInstances.clear();
 		
-		
 	}
 	
 	private void prepareScene()
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		GL11.glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
-		//GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
+		//GL11.glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
+		GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
 		
 	}
 	

@@ -53,4 +53,8 @@ public class RenderOverlay {
 		GL20.glDisableVertexAttribArray(0);
 		shader.unbindShader();
 	}
+	public void cleanup()
+	{
+		shader.destroy();
+	}
 }

@@ -71,7 +71,7 @@ public class GameLoop {
 		List<Enemy> enemies = new ArrayList<>();
 		Player player= new Player(new Vector3f(1687f,5000f,2459f));
 		Sniper sniper=new Sniper(loader);
-		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader);
+		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader,waterShader);
 		mainRenderer.setController(controls);
 		Light light = new Light(new Vector3f(100,1000,-1000),new Vector3f(1,1,1));
 		RayCasting mouseRay= new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
@@ -200,6 +200,8 @@ public class GameLoop {
 		}
 		terrainHandler.cleanup();
 		meshShader.destroy();
+		waterShader.destroy();
+		renderOverlay.cleanup();
 		loader.destroy();
 		DisplayWindow.destroy();
 	}

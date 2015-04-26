@@ -39,7 +39,7 @@ public class RenderTerrain {
 			GL20.glEnableVertexAttribArray(2);
 		
 			//shader.uploadSpecular(terrain.getTerrain().getMesh().getTex().getShine(),terrain.getTerrain().getMesh().getTex().getReflectivity());
-			shader.uploadSpecular(3,2);
+			shader.uploadSpecular(3,5);
 			/*GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getTerrain().getMesh().getTex().getTexId());*/
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);

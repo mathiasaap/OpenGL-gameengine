@@ -42,14 +42,8 @@ public abstract class Enemy {
 		position.z+=enemy2player.y*speed*deltaTime;
 		position.y+=velocity.y;
 		mInstance.setPosition(position);
-		mInstance.setRotY((float)(Math.toDegrees(Math.asin(enemy2player.x/enemy2player.length()))));
-		/*
-		if((enemy2player.x)>(enemy2player.y))
-			mInstance.setRotY((float)Math.toDegrees(Math.atan(enemy2player.x/enemy2player.y)));
-		else
-			mInstance.setRotY((float)(180-Math.toDegrees(Math.atan(enemy2player.x/enemy2player.y))));
-		*/
-		
+		mInstance.setRotY((float)(Math.toDegrees(Math.atan2(enemy2player.x, enemy2player.y))));
+
 		
 		}
 		
