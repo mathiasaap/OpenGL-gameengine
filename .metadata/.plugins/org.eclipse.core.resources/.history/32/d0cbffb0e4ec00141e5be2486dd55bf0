@@ -1,7 +1,0 @@
-package rendering;
-
-import mesh.Rekt;
-
-public class RenderFramebuffer {
-private Rekt rekt;
-}
