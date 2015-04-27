@@ -8,6 +8,10 @@ public class UnderWaterPP extends AbstractShader{
 	private final static String fs ="res/shaders/fsUnderWaterPP.glsl";
 	
 	private int transformation;
+	private int timeOffsetLoc;
+	
+	private long time=System.currentTimeMillis();
+	private float timeOffset=0;
 	public UnderWaterPP() {
 		super(vs, fs);
 		// TODO Auto-generated constructor stub
@@ -17,6 +21,7 @@ public class UnderWaterPP extends AbstractShader{
 	protected void updateUniformLocation() {
 		// TODO Auto-generated method stub
 		transformation = super.getUniformLocation("model");
+		timeOffsetLoc = super.getUniformLocation("timeOffset");
 	}
 
 	public void loadTranformationMatrix(Matrix4f matrix)
@@ -30,6 +35,20 @@ public class UnderWaterPP extends AbstractShader{
 	protected void attributes() {
 		// TODO Auto-generated method stub
 		super.bindAttribLocation(0, "position");
+		
+	}
+	
+	public void updateTimeOffset()
+	{
+		float deltaTime=(float)((System.currentTimeMillis()-time)/1000.0);
+		time=System.currentTimeMillis();
+		timeOffset+=5*deltaTime;
+		/*while(timeOffset>2*Math.PI)
+		{
+			timeOffset-=2*Math.PI;
+		}*/
+		System.out.println(timeOffset);
+		uploadFloat(timeOffsetLoc,timeOffset);
 		
 	}
 	

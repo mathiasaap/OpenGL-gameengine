@@ -18,11 +18,13 @@ import matrix.Camera;
 import matrix.Matrix;
 import mesh.MeshInstance;
 import mesh.TexMesh;
+import shaders.FramebufferShader;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import shaders.UnderWaterPP;
 import shaders.WaterShader;
 import terrain.Terrain;
+import terrain.Water;
 import textures.DepthTexture;
 import textures.FBOTexture;
 import textures.OverlayTexture;
@@ -34,8 +36,10 @@ public class Renderer {
 	private TerrainShader terrainShader;
 	private WaterShader waterShader;
 	private UnderWaterPP underWaterPP;
+	private FramebufferShader fbShader;
 	
 	private int FBO;
+	private Water water;
 	
 	boolean fullscreen=false;
 	private RenderMesh renderMesh;
@@ -59,10 +63,16 @@ public class Renderer {
 		this.terrainShader=terrainShader;
 		this.waterShader=waterShader;
 		underWaterPP=new UnderWaterPP();
+		fbShader=new FramebufferShader();
+		
+		water=new Water(loadmesh);
+		underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
+		fbShader.loadTranformationMatrix(Matrix.transformationMatrix());
+		
 		terrainShader.bindTexId();
 		renderMesh= new RenderMesh(meshShader);
 		renderTerrain= new RenderTerrain(terrainShader,loadmesh);
-		renderWater= new RenderWater(waterShader,loadmesh,playerPos);
+		renderWater= new RenderWater(waterShader,loadmesh,playerPos,water);
 		renderOverlay=new RenderOverlay(loadmesh);
 		renderFramebuffer=new RenderFramebuffer(loadmesh);
 		FBO=GL30.glGenFramebuffers();
@@ -136,14 +146,23 @@ public class Renderer {
 		terrainShader.unbindShader();
 		}
 		terrains.clear();
-		renderOverlay.draw(oTextures);
+		
+		
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-		underWaterPP.useProgram();
-		underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
+		if(renderWater.isUnderWater()){
+			underWaterPP.useProgram();
+			underWaterPP.updateTimeOffset();
+		}
+		else
+		fbShader.useProgram();
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		
+		//underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
 		renderFramebuffer.draw(renderTexture);
 		underWaterPP.unbindShader();
 		
-		
+		renderOverlay.draw(oTextures);
 
 		
 	}
@@ -153,14 +172,14 @@ public class Renderer {
 		
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		//GL11.glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
-		GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
+		GL11.glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
+		//GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 		
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		//GL11.glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
-		GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
+		GL11.glClearColor(0.2f, 0.3f, 0.6f, 1.0f);
+		//GL11.glClearColor((80f/256f), (16f/256f), (0f/256f), 1.0f);
 		
 	}
 	

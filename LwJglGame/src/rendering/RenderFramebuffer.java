@@ -26,8 +26,6 @@ public void draw(FBOTexture tex)
 	GL30.glBindVertexArray(rekt.getMesh().getVAO());
 	GL20.glEnableVertexAttribArray(0);
 	
-	GL11.glDisable(GL11.GL_DEPTH_TEST);
-
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex.getId());
@@ -35,7 +33,7 @@ public void draw(FBOTexture tex)
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP,0,rekt.getMesh().getVertices());
 		
 	
-	GL11.glEnable(GL11.GL_DEPTH_TEST);
+	
 
 	GL20.glDisableVertexAttribArray(0);
 	
