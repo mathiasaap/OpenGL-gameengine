@@ -72,9 +72,10 @@ public class GameLoop {
 		List<Enemy> enemies = new ArrayList<>();
 		
 		Sniper sniper=new Sniper(loader);
-		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader,waterShader);
-		mainRenderer.setController(controls);
 		Light light = new Light(new Vector3f(100,1000,-1000),new Vector3f(1,1,1));
+		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader,waterShader,light);
+		mainRenderer.setController(controls);
+		
 		RayCasting mouseRay= new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		
 		List<OverlayTexture> oTextures= new ArrayList<>();
@@ -119,7 +120,6 @@ public class GameLoop {
 			int currentTerrainX=(int) Maths.floor(playerPos.x/Terrain.SIZE);
 			int currentTerrainZ=(int) Maths.floor(playerPos.z/Terrain.SIZE);
 			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
-			
 
 			int genRad=10;//10
 			for(int i=-genRad;i<genRad+1;i++)
@@ -187,9 +187,10 @@ public class GameLoop {
 			}
 			//mainRenderer.putTerrain(terrain);
 
-			
+			mainRenderer.putOverlays(oTextures);
 			mainRenderer.render(light, player.getCamera(meshShader, terrainShader,waterShader));
-			renderOverlay.draw(oTextures);
+			
+			//renderOverlay.draw(oTextures);
 			
 			DisplayWindow.update();
 

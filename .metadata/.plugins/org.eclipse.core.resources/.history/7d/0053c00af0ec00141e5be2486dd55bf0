@@ -1,0 +1,41 @@
+package mesh;
+
+import rendering.LoadMesh;
+
+public class RektUV {
+
+	private final Mesh mesh;
+	private static final float[] rektPos={
+			-1,1,
+			-1,-1,
+			1,1,
+			1,-1	
+	};
+	private static final float[] UV=
+		{
+		0,1,
+		0,0,
+		1,1,
+		1,0
+		
+		};
+	
+	private static final int[] IND=
+		{
+
+		0,1,2,
+		0,2,3
+		};
+	
+	public RektUV(LoadMesh loader)
+	{
+
+		mesh = loader.loadNewMesh(rektPos,IND,UV);
+	}
+	
+	public Mesh getMesh()
+	{
+		return mesh;
+	}
+	
+}

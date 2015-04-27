@@ -31,6 +31,12 @@ public class RenderWater {
 		shader=waterShader;
 		water=new Water(loadmesh);
 		this.playerPos=playerPos;
+		shader.useProgram();
+		shader.uploadSpecular(3,3);
+		shader.unbindShader();
+		
+		
+		
 	
 	}
 	private int counter=0;
@@ -57,7 +63,7 @@ public class RenderWater {
 		GL30.glBindVertexArray(water.getMesh().getVAO());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(2);
-		shader.uploadSpecular(3,3);
+//		shader.uploadSpecular(3,3);
 		for(Terrain terrain: terrains){
 
 			//shader.uploadSpecular(terrain.getTerrain().getMesh().getTex().getShine(),terrain.getTerrain().getMesh().getTex().getReflectivity());
@@ -71,7 +77,7 @@ public class RenderWater {
 			float rotX=0;
 			if(playerPos.y<wPos.y)
 				rotX=(float) 180;
-			Matrix4f transformation = Matrix.transformationMatrix(wPos, (float)rotX, (float)0.0f, (float)0.0f, 0.02f+(float)terrain.getSIZE()/2);
+			Matrix4f transformation = Matrix.transformationMatrix(wPos, (float)rotX, (float)0.0f, (float)0.0f,(float)terrain.getSIZE()/2);
 			shader.loadTranformationMatrix(transformation);	
 			
 		

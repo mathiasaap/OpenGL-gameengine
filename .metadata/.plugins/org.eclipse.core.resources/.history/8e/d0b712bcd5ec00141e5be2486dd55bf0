@@ -1,0 +1,18 @@
+package mesh;
+
+public class Rekt {
+
+	private final float[] rektPos={
+			-1,1,
+			-1,-1,
+			1,1,
+			1,-1	
+	};
+	
+	public Rekt()
+	{
+		rekt = loader.loadNewMesh(rektPos);
+		
+	}
+	
+}

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="org.lwjgl.util.vector.Vector3f"/>
 <fullyQualifiedTypeName name="matrix.Camera"/>
-<fullyQualifiedTypeName name="org.lwjgl.util.vector.Matrix4f"/>
 <fullyQualifiedTypeName name="rendering.DisplayWindow"/>
-<fullyQualifiedTypeName name="org.lwjgl.util.vector.Vector2f"/>
 <fullyQualifiedTypeName name="org.lwjgl.util.vector.Vector4f"/>
-<fullyQualifiedTypeName name="matrix.Matrix"/>
 <fullyQualifiedTypeName name="org.lwjgl.input.Mouse"/>
 <fullyQualifiedTypeName name="misc.RayCasting"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
@@ -32,4 +28,26 @@
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="shaders.WaterShader"/>
+<fullyQualifiedTypeName name="org.lwjgl.util.vector.Vector3f"/>
+<fullyQualifiedTypeName name="lighting.Light"/>
+<fullyQualifiedTypeName name="rendering.LoadMesh"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL15"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL42"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL31"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL14"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL32"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL21"/>
+<fullyQualifiedTypeName name="textures.RenderTexture"/>
+<fullyQualifiedTypeName name="java.nio.ByteBuffer"/>
+<fullyQualifiedTypeName name="textures.DepthTexture"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL13"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL30"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL20"/>
+<fullyQualifiedTypeName name="mesh.Rekt"/>
+<fullyQualifiedTypeName name="org.lwjgl.opengl.GL11"/>
+<fullyQualifiedTypeName name="textures.FBOTexture"/>
+<fullyQualifiedTypeName name="org.lwjgl.util.vector.Vector2f"/>
+<fullyQualifiedTypeName name="shaders.UnderWaterPP"/>
+<fullyQualifiedTypeName name="org.lwjgl.util.vector.Matrix4f"/>
+<fullyQualifiedTypeName name="matrix.Matrix"/>
 </qualifiedTypeNameHistroy>

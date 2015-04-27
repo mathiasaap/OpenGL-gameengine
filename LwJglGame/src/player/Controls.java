@@ -2,6 +2,7 @@ package player;
 
 import java.util.List;
 
+import lighting.Light;
 import matrix.Matrix;
 import misc.RayCasting;
 
@@ -38,6 +39,7 @@ public class Controls {
 	
 	private boolean F1=false,F1Int=false;
 	private boolean F2=false,F2Int=false;
+	private Light light;
 	
 	public boolean getF1()
 	{
@@ -49,9 +51,9 @@ public class Controls {
 	}
 	public Controls()
 	{
-		
+	
 	}
-	public Controls(Player player,Sniper sniper,List<Enemy> enemies, MeshShader meshShader, TerrainShader terrainShader,WaterShader waterShader)
+	public Controls(Player player,Sniper sniper,List<Enemy> enemies, MeshShader meshShader, TerrainShader terrainShader,WaterShader waterShader,Light light)
 	{
 		this.player=player;
 		this.sniper=sniper;
@@ -59,6 +61,7 @@ public class Controls {
 		this.meshShader=meshShader;
 		this.terrainShader=terrainShader;
 		this.waterShader=waterShader;
+		this.light=light;
 		mousecast=new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		/*try {
 			Mouse.setNativeCursor(new Cursor(0, 0, 0, 0, 0, null, null));
@@ -168,6 +171,12 @@ public class Controls {
 		else
 		{
 			F2Int=false;
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_F3))
+		{
+			light.setPosition(new Vector3f(position.x,position.y,position.z));
+			System.out.println("changed lightpos");
 		}
 		
 		

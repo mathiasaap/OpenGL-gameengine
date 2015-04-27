@@ -1,0 +1,7 @@
+package textures;
+
+import mesh.Rekt;
+
+public class RenderFramebuffer {
+private Rekt rekt;
+}

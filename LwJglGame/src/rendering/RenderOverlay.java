@@ -7,33 +7,34 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 
 import shaders.OverlayShader;
+import textures.FBOTexture;
 import textures.OverlayTexture;
 import matrix.Matrix;
 import mesh.Mesh;
+import mesh.Rekt;
 
 public class RenderOverlay {
 
-	private final Mesh rekt;
+	private Rekt rekt;
+	private Rekt rekt2;
 	private OverlayShader shader = new OverlayShader();
 	private Matrix matrix=new Matrix();
-	private final float[] rektPos={
-			-1,1,
-			-1,-1,
-			1,1,
-			1,-1	
-	};
+
 	
 	public RenderOverlay(LoadMesh loader)
 	{
-		rekt = loader.loadNewMesh(rektPos);
+
+		rekt=new Rekt(loader);
+	
 		
 	}
 	public void draw(List<OverlayTexture> overlayTextures)
 	{
 		shader.useProgram();
-		GL30.glBindVertexArray(rekt.getVAO());
+		GL30.glBindVertexArray(rekt.getMesh().getVAO());
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA,GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -44,7 +45,7 @@ public class RenderOverlay {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTexId());
 			Matrix4f mat=matrix.transformationMatrix(texture.getPos(), texture.getScale());
 			shader.loadTranformationMatrix(mat);
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP,0,rekt.getVertices());
+			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP,0,rekt.getMesh().getVertices());
 			
 		}
 		overlayTextures.clear();
@@ -53,6 +54,9 @@ public class RenderOverlay {
 		GL20.glDisableVertexAttribArray(0);
 		shader.unbindShader();
 	}
+	
+	
+	
 	public void cleanup()
 	{
 		shader.destroy();

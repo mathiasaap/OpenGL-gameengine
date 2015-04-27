@@ -1,0 +1,19 @@
+package textures;
+
+import org.lwjgl.opengl.GL11;
+
+
+public abstract class FBOTexture {
+
+	protected int id;
+	
+	protected FBOTexture()
+	{
+	id = GL11.glGenTextures();
+	GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+	GL11.glTexImage2D(GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, border, format, type, pixels);
+	}
+	
+	protected abstract 
+	
+}

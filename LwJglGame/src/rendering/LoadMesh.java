@@ -54,6 +54,21 @@ public class LoadMesh {
 		unbind();
 		return new Mesh(pos.length/2,VAO,meshVBOs);
 	}
+	
+	public Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV)
+	{
+		int VAO = createVAO();
+
+		List<Integer> meshVBOs= new ArrayList<>();
+		loadIndicesBuffer(indices);
+		
+
+		meshVBOs.add(storeAttrib(0,pos,3));
+		meshVBOs.add(storeAttrib(1,texUV,2));
+		unbind();
+		return new Mesh(indices.length,VAO,meshVBOs);
+	}
+	
 	public Mesh loadNewMesh(float[] pos, int v)
 	{
 		int VAO = createVAO();

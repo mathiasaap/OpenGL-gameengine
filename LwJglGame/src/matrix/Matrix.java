@@ -44,6 +44,16 @@ public class Matrix {
 		mat.scale(new Vector3f(scale.x,scale.y,1.0f),mat,mat);
 		return mat;
 	}
+	public static Matrix4f transformationMatrix()
+	{
+		Matrix4f mat= new Matrix4f();
+		mat.setIdentity();
+		Matrix4f.rotate((float) Math.PI, new Vector3f(0,0,1), mat, mat);
+		Matrix4f.rotate((float) Math.PI, new Vector3f(0,0,0), mat, mat);
+		return mat;
+	}
+	
+	
 	public static Matrix4f calcProjectionMatrix()
 	{
 		return calcProjectionMatrix(FOV_WALKING);
@@ -108,6 +118,7 @@ public class Matrix {
 		System.out.println("Uploaded projection matrix to water shader");
 		
 	}
+
 	
 	
 

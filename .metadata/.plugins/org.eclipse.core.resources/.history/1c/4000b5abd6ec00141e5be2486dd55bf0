@@ -1,0 +1,8 @@
+package textures;
+
+public abstract class FBOTexture {
+
+	
+	
+	
+}
