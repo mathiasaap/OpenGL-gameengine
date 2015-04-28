@@ -17,22 +17,40 @@ vec2 newCoord=vec2(tex.x,tex.y);
 
 #ifdef SHROOMS
 float blendpix=sin(0.2*(2*timeOffset+1)*tex.y)*0.01;
-newCoord.x+=blendpix;
+if(tex.x>=0.5f){
+newCoord.x+=blendpix*(1-tex.x);
+}
+else{
+newCoord.x+=blendpix*(tex.x);
+}
+
 blendpix=sin(0.2*(timeOffset+1)*tex.x)*0.01;
-newCoord.y+=blendpix;
+if(tex.y>=0.5f){
+newCoord.y+=blendpix*(1-tex.y);
+}
+else{
+newCoord.y+=blendpix*(tex.y);
+}
 #endif
 
 #ifndef SHROOMS
-float blendpix=sin(timeOffset+tex.y)*0.05;
+float blendpix=sin(timeOffset+tex.y)*0.08;
 
-//if(blendpix+tex.x>=0.0f&&blendpix+tex.x<1.0f){
-newCoord.x+=blendpix;
-//}
+if(tex.x>=0.5f){
+newCoord.x+=blendpix*(1-tex.x);
+}
+else{
+newCoord.x+=blendpix*(tex.x);
+}
+blendpix=sin(0.5*timeOffset+tex.x)*0.08;
 
-blendpix=sin(0.5*timeOffset+tex.x)*0.05;
-//if(blendpix+tex.y>=0.0f&&blendpix+tex.y<1.0f){
-newCoord.y+=blendpix;
-//}
+if(tex.y>=0.5f){
+newCoord.y+=blendpix*(1-tex.y);
+}
+else{
+newCoord.y+=blendpix*(tex.y);
+}
+
 #endif
 
 vec4 color= texture(textureSampler,newCoord);

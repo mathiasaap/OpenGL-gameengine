@@ -190,7 +190,7 @@ public class GameLoop {
 			mainRenderer.putOverlays(oTextures);
 			mainRenderer.render(light, player.getCamera(meshShader, terrainShader,waterShader));
 			
-			//renderOverlay.draw(oTextures);
+
 			
 			DisplayWindow.update();
 

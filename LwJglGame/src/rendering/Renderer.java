@@ -143,11 +143,14 @@ public class Renderer {
 		waterShader.useProgram();
 		waterShader.uploadLight(light);
 		renderWater.draw(terrains);
-		terrainShader.unbindShader();
+		waterShader.unbindShader();
 		}
 		terrains.clear();
+		//System.gc();
 		
 		
+		
+		//FRAMEBUFFER TO SCREEN START
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 		if(renderWater.isUnderWater()){
@@ -161,7 +164,7 @@ public class Renderer {
 		//underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
 		renderFramebuffer.draw(renderTexture);
 		underWaterPP.unbindShader();
-		
+		//FRAMEBUFFER TO SCREEN END
 		renderOverlay.draw(oTextures);
 
 		

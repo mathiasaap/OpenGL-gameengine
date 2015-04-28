@@ -136,10 +136,9 @@ public abstract class AbstractShader {
 	{
 		GL20.glUniform1i(location, data?1:0);
 	}
+	private FloatBuffer mat4=BufferUtils.createFloatBuffer(16);
 	protected void uploadMat4f(int location, Matrix4f data)
 	{
-
-		FloatBuffer mat4=BufferUtils.createFloatBuffer(16);
 		data.store(mat4);
 		mat4.flip();
 		GL20.glUniformMatrix4(location, false, mat4);

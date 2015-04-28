@@ -39,10 +39,8 @@ public class RenderWater {
 		
 	
 	}
-	private int counter=0;
-	
-//	double totTime=0;
-//	int iterations;
+
+
 
 	
 public boolean isUnderWater()
@@ -84,10 +82,6 @@ return underWater;
 			
 		
 			GL11.glDrawElements(GL11.GL_TRIANGLES,water.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
-
-
-			
-			
 			
 		}
 		GL20.glDisableVertexAttribArray(0);
