@@ -145,4 +145,5 @@ public abstract class AbstractShader {
 		//mat4.clear();
 	}
 	protected abstract String getShaderType();
+	public abstract void updateTick();
 }

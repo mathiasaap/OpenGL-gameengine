@@ -238,6 +238,12 @@ public class Terrain{
 		return multiTex;
 	}
 	
+	public void cleanup()
+	{
+		arrayVertices=arrayUV=arrayNormals=null;
+		arrayIndices=null;
+		heightmap=null;
+	}
 
 
 }

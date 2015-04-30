@@ -106,12 +106,14 @@ public class GameLoop {
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		for(int i=0;i <20; i++)
+		/*for(int i=0;i <20; i++)
 		{
 			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
 			enemies.add(new Shrek(new Vector3f(random.nextInt(4000),random.nextInt(600),random.nextInt(4000)),player,enIns));
 			
-		}
+		}*/
+		
+
 		
 		while(!Display.isCloseRequested())
 		{
@@ -121,13 +123,22 @@ public class GameLoop {
 			int currentTerrainZ=(int) Maths.floor(playerPos.z/Terrain.SIZE);
 			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
 
-			int genRad=10;//10
+			int genRad=12;//10
 			for(int i=-genRad;i<genRad+1;i++)
 				for(int j=-genRad;j<genRad+1;j++)
 			if(!terrainMonitorList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
 			{
 				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j,loader);
 				TerrainMonitor monTer= new TerrainMonitor(ter);
+				
+				/*for(int l=0;l <1; l++)
+				{
+					MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
+					enemies.add(new Shrek(new Vector3f(ter.getPosition().x+random.nextInt(1024),random.nextInt(600),ter.getPosition().z+random.nextInt(1024)),player,enIns));
+					
+				}*/
+				
+				
 				monTer.setLockedByGenThread(true);
 				terrainMonitorList.put( new Key2D(currentTerrainX+i,currentTerrainZ+j),monTer);
 				terrainHandler.addTerrainToQueue(monTer);

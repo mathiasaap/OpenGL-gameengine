@@ -37,6 +37,12 @@ public class OverlayShader extends AbstractShader{
 		// TODO Auto-generated method stub
 		return "Overlay";
 	}
+
+	@Override
+	public void updateTick() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

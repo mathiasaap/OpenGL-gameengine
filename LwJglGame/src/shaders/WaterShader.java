@@ -70,4 +70,10 @@ public class WaterShader extends AbstractShader {
 		// TODO Auto-generated method stub
 		return "Water";
 	}
+
+	@Override
+	public void updateTick() {
+		// TODO Auto-generated method stub
+		
+	}
 }

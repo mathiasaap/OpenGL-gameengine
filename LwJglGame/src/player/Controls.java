@@ -39,6 +39,7 @@ public class Controls {
 	
 	private boolean F1=false,F1Int=false;
 	private boolean F2=false,F2Int=false;
+	private boolean F4=false,F4Int=false;
 	private Light light;
 	
 	public boolean getF1()
@@ -48,6 +49,11 @@ public class Controls {
 	public boolean getF2()
 	{
 		return F2;
+	}
+	
+	public boolean getF4()
+	{
+		return F4;
 	}
 	public Controls()
 	{
@@ -171,6 +177,20 @@ public class Controls {
 		else
 		{
 			F2Int=false;
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_F4))
+		{
+			if(!F4Int)
+			{
+				F4Int=true;
+				F4=!F4;
+				System.out.println("F4");
+			}
+		}
+		else
+		{
+			F4Int=false;
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_F3))

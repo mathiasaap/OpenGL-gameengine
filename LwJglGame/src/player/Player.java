@@ -16,7 +16,7 @@ public class Player {
 	private Vector3f position,velocity;
 	private Vector2f lookat;
 	private boolean firstPerson=true;
-	private float headHeight=16;
+	private float headHeight=40;
 	private long gravityClock=System.currentTimeMillis();
 	private Camera camera;
 	

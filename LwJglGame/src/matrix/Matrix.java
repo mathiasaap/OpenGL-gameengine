@@ -16,7 +16,7 @@ public class Matrix {
 	private static final float FOV_WALKING=70;
 	private static final float RUNNING=120;
 	private static final float NEARF=0.1f;
-	private static final float FARF=10000.0f;
+	private static final float FARF=15000.0f;
 	
 	public static Matrix4f transformationMatrix(Vector3f translate, float rotX, float rotY, float rotZ, float scale){
 		Matrix4f matrix = new Matrix4f();

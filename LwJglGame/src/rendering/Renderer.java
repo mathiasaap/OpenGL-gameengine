@@ -18,6 +18,7 @@ import matrix.Camera;
 import matrix.Matrix;
 import mesh.MeshInstance;
 import mesh.TexMesh;
+import shaders.AbstractShader;
 import shaders.FramebufferShader;
 import shaders.MeshShader;
 import shaders.TerrainShader;
@@ -48,13 +49,14 @@ public class Renderer {
 	private RenderOverlay renderOverlay;
 	private List<OverlayTexture> oTextures;
 	private RenderFramebuffer renderFramebuffer;
+	private boolean lastF4=false;
 	
 	private Controls control= new Controls();
 	private FBOTexture renderTexture,depthBufferTexture;
 	
 	private Map<TexMesh, List<MeshInstance>> meshInstances = new HashMap<>();
 	private List<Terrain> terrains = new ArrayList<>();
-	
+	private ArrayList<AbstractShader> shaders=new ArrayList<>();
 	
 	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos)
 	{
@@ -64,6 +66,12 @@ public class Renderer {
 		this.waterShader=waterShader;
 		underWaterPP=new UnderWaterPP();
 		fbShader=new FramebufferShader();
+		
+		shaders.add(this.meshShader);
+		shaders.add(this.terrainShader);
+		shaders.add(this.waterShader);
+		shaders.add(underWaterPP);
+		shaders.add(fbShader);
 		
 		water=new Water(loadmesh);
 		underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
@@ -91,7 +99,7 @@ public class Renderer {
 	
 	public void render(Light light, Camera cam)
 	{
-		if(control.getF2())
+		/*if(control.getF2())
 		{
 			if(!fullscreen)
 			{
@@ -117,9 +125,12 @@ public class Renderer {
 				}
 			}
 			
+		}*/
+		
+		for(AbstractShader shader :shaders)
+		{
+			shader.updateTick();
 		}
-		
-		
 		prepareScene();
 		
 
@@ -130,20 +141,20 @@ public class Renderer {
 		terrainShader.useProgram();
 		terrainShader.uploadLight(light);
 		renderTerrain.draw(terrains,control);
-		terrainShader.unbindShader();
+//		terrainShader.unbindShader();
 		
 		
 		meshShader.useProgram();
 		meshShader.uploadLight(light);
 		renderMesh.draw(meshInstances);
-		meshShader.unbindShader();
+//		meshShader.unbindShader();
 		meshInstances.clear();
 		
 		if(control.getF2()){
 		waterShader.useProgram();
 		waterShader.uploadLight(light);
 		renderWater.draw(terrains);
-		waterShader.unbindShader();
+//		waterShader.unbindShader();
 		}
 		terrains.clear();
 		//System.gc();
@@ -155,15 +166,20 @@ public class Renderer {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 		if(renderWater.isUnderWater()){
 			underWaterPP.useProgram();
-			underWaterPP.updateTimeOffset();
+//			underWaterPP.updateTimeOffset();
 		}
 		else
 		fbShader.useProgram();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		
 		//underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
+		if(control.getF4()!=lastF4)
+		{
+			fbShader.setGamma(15);
+			lastF4=!lastF4;
+		}
 		renderFramebuffer.draw(renderTexture);
-		underWaterPP.unbindShader();
+//		fbShader.unbindShader();
 		//FRAMEBUFFER TO SCREEN END
 		renderOverlay.draw(oTextures);
 

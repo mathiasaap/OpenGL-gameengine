@@ -57,8 +57,10 @@ public class Sniper {
 	}
 	public void reload()
 	{
+		if(state!=STATE.RELOAD){
 		animationClock=System.currentTimeMillis();
 		state=STATE.RELOAD;
+		}
 	}
 	
 	public void walk()

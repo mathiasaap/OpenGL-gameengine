@@ -47,7 +47,7 @@ public class UnderWaterPP extends AbstractShader{
 		{
 			timeOffset-=2*Math.PI;
 		}*/
-		System.out.println(timeOffset);
+		//System.out.println(timeOffset);
 		uploadFloat(timeOffsetLoc,timeOffset);
 		
 	}
@@ -56,6 +56,13 @@ public class UnderWaterPP extends AbstractShader{
 	protected String getShaderType() {
 		// TODO Auto-generated method stub
 		return "Under water PP";
+	}
+
+	@Override
+	public void updateTick() {
+		useProgram();
+		updateTimeOffset();
+		
 	}
 	
 	

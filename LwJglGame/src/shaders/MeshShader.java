@@ -71,4 +71,10 @@ public class MeshShader extends AbstractShader {
 		// TODO Auto-generated method stub
 		return "Mesh";
 	}
+
+	@Override
+	public void updateTick() {
+		// TODO Auto-generated method stub
+		
+	}
 }

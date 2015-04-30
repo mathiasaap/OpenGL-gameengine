@@ -90,4 +90,10 @@ public class TerrainShader extends AbstractShader{
 		// TODO Auto-generated method stub
 		return "Terrain";
 	}
+
+	@Override
+	public void updateTick() {
+		// TODO Auto-generated method stub
+		
+	}
 }
