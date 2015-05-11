@@ -91,7 +91,8 @@ public class Controls {
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)&&Keyboard.isKeyDown(Keyboard.KEY_E))
 		{
-			speed=3000;
+			//speed=3000;
+			speed=30000;
 			if(!meshShader.getPlayerRunning())
 			{
 				meshShader.setPlayerRunning(true);

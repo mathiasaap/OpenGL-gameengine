@@ -23,7 +23,7 @@ public class FramebufferShader extends AbstractShader{
 		transformation = super.getUniformLocation("model");
 		gammaLoc = super.getUniformLocation("gamma");
 		
-		uploadFloat(gammaLoc, gamma);
+		uploadFloat(gammaLoc, 1);
 		System.out.println(gammaLoc);
 		unbindShader();
 	}
@@ -61,9 +61,11 @@ public class FramebufferShader extends AbstractShader{
 		// TODO Auto-generated method stub
 		useProgram();
 		float deltaTime=1+System.currentTimeMillis()-gammaClock;
-		float currentGamma=(float) Math.exp(gamma/(float)(deltaTime/1000.0));
+		float currentGamma=(float) Math.exp(gamma/(float)(deltaTime/1000.0))/2;
 
+		if(currentGamma>=1.0)
 		super.uploadFloat(gammaLoc, currentGamma);
+		
 		unbindShader();
 	}
 	

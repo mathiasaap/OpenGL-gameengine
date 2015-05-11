@@ -175,7 +175,7 @@ public class Renderer {
 		//underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
 		if(control.getF4()!=lastF4)
 		{
-			fbShader.setGamma(15);
+			fbShader.setGamma(30);
 			lastF4=!lastF4;
 		}
 		renderFramebuffer.draw(renderTexture);
