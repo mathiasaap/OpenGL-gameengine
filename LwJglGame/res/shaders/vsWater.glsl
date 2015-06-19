@@ -9,6 +9,8 @@ out vec3 absNormal;
 out vec3 toLight;
 out vec3 camVector;
 
+out vec4 clipSpace;
+
 uniform mat4 model;
 uniform mat4 projection;
 uniform mat4 view;
@@ -18,8 +20,10 @@ uniform vec3 lightPos;
 void main()
 {
 vec4 modelPosition = model * vec4(position, 1.0);
-gl_Position= projection*view*modelPosition;
-texToFrag=texture;
+clipSpace=projection*view*modelPosition;
+gl_Position= clipSpace;
+//texToFrag=texture;
+texToFrag=vec2(position.x/2.0+0.5f,position.z/2.0+0.5);
 
 absNormal = (model*vec4(normal,0)).xyz;
 toLight= lightPos-(modelPosition).xyz;

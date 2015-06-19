@@ -4,6 +4,7 @@ import lighting.Light;
 
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
 public class TerrainShader extends AbstractShader{
 	
@@ -14,6 +15,7 @@ public class TerrainShader extends AbstractShader{
 	private int lightColor;
 	private int reflectivity;
 	private int shine;
+	private int clipP;
 	
 	private int grass;
 	private int rock;
@@ -46,6 +48,7 @@ public class TerrainShader extends AbstractShader{
 		lightColor=super.getUniformLocation("lightCol");
 		reflectivity=super.getUniformLocation("reflectivity");
 		shine=super.getUniformLocation("shine");
+		clipP=super.getUniformLocation("clipP");
 
 
 		
@@ -78,6 +81,10 @@ public class TerrainShader extends AbstractShader{
 		super.uploadFloat(this.shine, shine);
 		super.uploadFloat(this.reflectivity, reflectivity);
 		
+	}
+	public void uploadClipPlane(Vector4f plane)
+	{
+		super.uploadVec4f(clipP, plane);
 	}
 	
 	public void loadViewMatrix(Matrix4f matrix)

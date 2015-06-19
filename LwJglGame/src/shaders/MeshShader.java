@@ -3,6 +3,7 @@ package shaders;
 import lighting.Light;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
 public class MeshShader extends AbstractShader {
 
@@ -13,6 +14,7 @@ public class MeshShader extends AbstractShader {
 	private int lightColor;
 	private int reflectivity;
 	private int shine;
+	private int clipP;
 	
 	public MeshShader(String vs, String fs) {
 		super(vs, fs);
@@ -37,6 +39,7 @@ public class MeshShader extends AbstractShader {
 		lightColor=super.getUniformLocation("lightCol");
 		reflectivity=super.getUniformLocation("reflectivity");
 		shine=super.getUniformLocation("shine");
+		clipP=super.getUniformLocation("clipP");
 		
 	}
 	public void loadTranformationMatrix(Matrix4f matrix)
@@ -58,6 +61,10 @@ public class MeshShader extends AbstractShader {
 		super.uploadFloat(this.shine, shine);
 		super.uploadFloat(this.reflectivity, reflectivity);
 		
+	}
+	public void uploadClipPlane(Vector4f plane)
+	{
+		super.uploadVec4f(clipP, plane);
 	}
 	
 	public void loadViewMatrix(Matrix4f matrix)

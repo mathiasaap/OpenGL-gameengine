@@ -21,9 +21,6 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 public class LoadMesh {
 
-	private Stack<Integer> VaoStack = new Stack<>();
-	private Stack<Integer> VboStack = new Stack<>();
-	private Stack<Integer> TexStack = new Stack<>();
 	private List<Integer> VaoList= new ArrayList<>();
 	private List<Integer> VboList= new ArrayList<>();
 	private List<Integer> TexList= new ArrayList<>();
@@ -35,7 +32,7 @@ public class LoadMesh {
 	{
 		int VAO = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(VAO);
-		VaoStack.push(VAO);
+		VaoList.add(VAO);
 		return VAO;
 	}
 	
@@ -52,7 +49,7 @@ public class LoadMesh {
 		meshVBOs.add(storeAttrib(0,pos,2));
 		
 		unbind();
-		return new Mesh(pos.length/2,VAO,meshVBOs);
+		return new Mesh(pos.length/2,VAO,meshVBOs,this);
 	}
 	
 	public Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV)
@@ -66,7 +63,7 @@ public class LoadMesh {
 		meshVBOs.add(storeAttrib(0,pos,3));
 		meshVBOs.add(storeAttrib(1,texUV,2));
 		unbind();
-		return new Mesh(indices.length,VAO,meshVBOs);
+		return new Mesh(indices.length,VAO,meshVBOs,this);
 	}
 	
 	public Mesh loadNewMesh(float[] pos, int v)
@@ -76,7 +73,7 @@ public class LoadMesh {
 		meshVBOs.add(storeAttrib(0,pos,v));
 		
 		unbind();
-		return new Mesh(pos.length/v,VAO,meshVBOs);
+		return new Mesh(pos.length/v,VAO,meshVBOs,this);
 	}
 	
 	public Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV, float[] normals)
@@ -91,7 +88,7 @@ public class LoadMesh {
 		meshVBOs.add(storeAttrib(1,texUV,2));
 		meshVBOs.add(storeAttrib(2,normals,3));
 		unbind();
-		return new Mesh(indices.length,VAO,meshVBOs);
+		return new Mesh(indices.length,VAO,meshVBOs,this);
 	}
 	
 	
@@ -99,7 +96,7 @@ public class LoadMesh {
 	private int storeAttrib(int attrib, float[] bfr,int cSze)
 	{
 		int VBO= GL15.glGenBuffers();
-		VboStack.push(VBO);
+		
 		VboList.add(VBO);
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,VBO);
@@ -126,7 +123,6 @@ public class LoadMesh {
 			e.printStackTrace();
 		}
 		int texId=tex.getTextureID();
-		TexStack.push(texId);
 		TexList.add(texId);
 		return texId;
 		
@@ -135,7 +131,6 @@ public class LoadMesh {
 	private void loadIndicesBuffer(int[] indices)
 	{
 		int VBO =GL15.glGenBuffers();
-		VboStack.push(VBO);
 		VboList.add(VBO);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER,VBO);
 		IntBuffer ibfr= intToIntBuffer(indices);
@@ -161,12 +156,42 @@ public class LoadMesh {
 	
 	public void destroy()
 	{
-		while(VaoStack.size()>0)
-			GL30.glDeleteVertexArrays(VaoStack.pop());
-		while(VboStack.size()>0)
-			GL15.glDeleteBuffers(VboStack.pop());
-		while(TexStack.size()>0)
-			GL11.glDeleteTextures(TexStack.pop());
+		for (int Vao : VaoList)
+		{
+			GL30.glDeleteVertexArrays(Vao);	
+		}
+		for (int Vbo : VboList)
+		{
+			GL15.glDeleteBuffers(Vbo);	
+		}
+		for (int Tex : TexList)
+		{
+			GL11.glDeleteTextures(Tex);	
+		}
+		
+		
+	}
+	
+	public void deleteVBOs(List<Integer> VBOS)
+	{
+		for(int VBO : VBOS)
+		{
+			if(VboList.contains(VBO))
+			{
+				VboList.remove((Object)VBO);
+				GL15.glDeleteBuffers(VBO);
+			}
+		}
+		
+	}
+	public void deleteVAO(int VAO)
+	{
+
+			if(VaoList.contains(VAO))
+			{
+				VaoList.remove((Object)VAO);
+				GL30.glDeleteVertexArrays(VAO);
+			}
 		
 		
 	}

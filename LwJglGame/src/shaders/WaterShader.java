@@ -14,6 +14,8 @@ public class WaterShader extends AbstractShader {
 	private int reflectivity;
 	private int shine;
 	
+	private int reflectionTexture,refractionTexture;
+	
 	public WaterShader(String vs, String fs) {
 		super(vs, fs);
 		// TODO Auto-generated constructor stub
@@ -30,6 +32,11 @@ public class WaterShader extends AbstractShader {
 
 	@Override
 	protected void updateUniformLocation() {
+		reflectionTexture=super.getUniformLocation("reflectionTexture");
+		refractionTexture=super.getUniformLocation("refractionTexture");
+		bindTexId();
+		System.out.println("Reflection loc:" +reflectionTexture);
+		
 		transformation= super.getUniformLocation("model");
 		projectionMatrix= super.getUniformLocation("projection");
 		viewMatrix= super.getUniformLocation("view");
@@ -38,6 +45,13 @@ public class WaterShader extends AbstractShader {
 		reflectivity=super.getUniformLocation("reflectivity");
 		shine=super.getUniformLocation("shine");
 		
+	}
+	
+	public void bindTexId()
+	{
+		super.useProgram();
+		super.uploadInt(reflectionTexture, 0);
+		super.uploadInt(refractionTexture, 1);
 	}
 	public void loadTranformationMatrix(Matrix4f matrix)
 	{
@@ -76,4 +90,5 @@ public class WaterShader extends AbstractShader {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

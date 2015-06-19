@@ -10,9 +10,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import player.Controls;
+import player.Player;
 import lighting.Light;
 import matrix.Camera;
 import matrix.Matrix;
@@ -51,14 +53,15 @@ public class Renderer {
 	private RenderFramebuffer renderFramebuffer;
 	private boolean lastF4=false;
 	
-	private Controls control= new Controls();
+	private Controls control;
+	private final Player player;
 	private FBOTexture renderTexture,depthBufferTexture;
 	
 	private Map<TexMesh, List<MeshInstance>> meshInstances = new HashMap<>();
 	private List<Terrain> terrains = new ArrayList<>();
 	private ArrayList<AbstractShader> shaders=new ArrayList<>();
 	
-	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos)
+	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos,Player player,Controls control)
 	{
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		this.meshShader=meshShader;
@@ -66,6 +69,8 @@ public class Renderer {
 		this.waterShader=waterShader;
 		underWaterPP=new UnderWaterPP();
 		fbShader=new FramebufferShader();
+		this.player=player;
+		this.control=control;
 		
 		shaders.add(this.meshShader);
 		shaders.add(this.terrainShader);
@@ -78,9 +83,9 @@ public class Renderer {
 		fbShader.loadTranformationMatrix(Matrix.transformationMatrix());
 		
 		terrainShader.bindTexId();
-		renderMesh= new RenderMesh(meshShader);
-		renderTerrain= new RenderTerrain(terrainShader,loadmesh);
-		renderWater= new RenderWater(waterShader,loadmesh,playerPos,water);
+		renderMesh= new RenderMesh(meshShader,meshInstances);
+		renderTerrain= new RenderTerrain(terrainShader,loadmesh,terrains,control);
+		renderWater= new RenderWater(waterShader,loadmesh,playerPos,water,terrains,player,renderMesh,renderTerrain);
 		renderOverlay=new RenderOverlay(loadmesh);
 		renderFramebuffer=new RenderFramebuffer(loadmesh);
 		FBO=GL30.glGenFramebuffers();
@@ -91,6 +96,10 @@ public class Renderer {
 
 //		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 		
+		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, renderTexture.getId(), 0);
+		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthBufferTexture.getId(), 0);
+		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 	}
 	public void setController(Controls control)
 	{
@@ -99,33 +108,6 @@ public class Renderer {
 	
 	public void render(Light light, Camera cam)
 	{
-		/*if(control.getF2())
-		{
-			if(!fullscreen)
-			{
-				fullscreen=true;
-				try {
-					Display.setFullscreen(true);
-					System.out.println("fullscreen");
-				} catch (LWJGLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		else{
-			if(fullscreen)
-			{
-				fullscreen=false;
-				try {
-					Display.setFullscreen(false);
-				} catch (LWJGLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-		}*/
 		
 		for(AbstractShader shader :shaders)
 		{
@@ -136,28 +118,28 @@ public class Renderer {
 
 		
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, renderTexture.getId(), 0);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthBufferTexture.getId(), 0);
+//		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, renderTexture.getId(), 0);
+//		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthBufferTexture.getId(), 0);
 		terrainShader.useProgram();
 		terrainShader.uploadLight(light);
-		renderTerrain.draw(terrains,control);
+		renderTerrain.draw();
 //		terrainShader.unbindShader();
 		
 		
 		meshShader.useProgram();
 		meshShader.uploadLight(light);
-		renderMesh.draw(meshInstances);
+		renderMesh.draw();
 //		meshShader.unbindShader();
-		meshInstances.clear();
+		
 		
 		if(control.getF2()){
 		waterShader.useProgram();
 		waterShader.uploadLight(light);
-		renderWater.draw(terrains);
+		renderWater.draw(FBO);
 //		waterShader.unbindShader();
 		}
 		terrains.clear();
-		//System.gc();
+		meshInstances.clear();
 		
 		
 		
@@ -179,8 +161,11 @@ public class Renderer {
 			lastF4=!lastF4;
 		}
 		renderFramebuffer.draw(renderTexture);
+		//renderFramebuffer.draw(renderWater.getReflectionFBOTex());
 //		fbShader.unbindShader();
 		//FRAMEBUFFER TO SCREEN END
+		oTextures.add(new OverlayTexture(renderWater.getReflectionId(),new Vector2f(100f,100f),new Vector2f(0.1f,0.1f)));
+		
 		renderOverlay.draw(oTextures);
 
 		

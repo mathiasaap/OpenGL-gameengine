@@ -1,5 +1,6 @@
 package rendering;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,24 +16,34 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
 import shaders.MeshShader;
 
 public class RenderMesh {
 	private MeshShader shader;
-	public RenderMesh(MeshShader meshShader)
+	private Map<TexMesh, List<MeshInstance>> meshInstances = new HashMap<>();
+	
+	public RenderMesh(MeshShader meshShader,Map<TexMesh, List<MeshInstance>> meshInstances)
 	{
 		shader=meshShader;
+		this.meshInstances=meshInstances;
 		Matrix.uploadProjectionMatrix(meshShader);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 		
 		
 	}
-	
-	
-	public void draw(Map<TexMesh, List<MeshInstance>> meshInstances)
+	public void draw(Vector4f plane)
 	{
+		shader.useProgram();
+		shader.uploadClipPlane(plane);
+		draw();
+	}
+	
+	public void draw()
+	{
+		shader.useProgram();
 		for(TexMesh mesh:meshInstances.keySet())
 		{
 			prepareMesh(mesh);

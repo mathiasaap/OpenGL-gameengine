@@ -2,19 +2,24 @@ package mesh;
 
 import java.util.List;
 
+import rendering.LoadMesh;
+
 public class Mesh {
 
 	private int vertices;
 	private int VAO;
-	List<Integer> VBOs;
+	private List<Integer> VBOs;
+	private LoadMesh loader;
+	private boolean alive=true;
 	
 	public Mesh(){}
 	
-	public Mesh(int vertices, int VAO,List<Integer> VBOs)
+	public Mesh(int vertices, int VAO,List<Integer> VBOs,LoadMesh loader)
 	{
 		this.vertices=vertices;
 		this.VAO=VAO;
 		this.VBOs=VBOs;
+		this.loader=loader;
 	}
 
 	public int getVertices() {
@@ -28,6 +33,19 @@ public class Mesh {
 	{
 		return VBOs;
 	}
+	public void deleteMe()
+	{
+		loader.deleteVAO(VAO);
+		loader.deleteVBOs(VBOs);
+		VBOs=null;
+		VAO=-1;
+		alive=false;
+	}
+	public boolean isAlive()
+	{
+		return alive;
+	}
+	
 	
 	
 	

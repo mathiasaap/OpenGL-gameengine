@@ -66,7 +66,7 @@ public class GameLoop {
 		
 		//RenderTerrain terrainRenderer = new RenderTerrain(terrainShader);
 		TerrainCollision terrainCollision=new TerrainCollision();
-		Renderer mainRenderer = new Renderer(meshShader,terrainShader, waterShader,loader,player.getPosition());
+		
 		RenderOverlay renderOverlay = new RenderOverlay(loader);
 		
 		List<Enemy> enemies = new ArrayList<>();
@@ -74,7 +74,7 @@ public class GameLoop {
 		Sniper sniper=new Sniper(loader);
 		Light light = new Light(new Vector3f(100,1000,-1000),new Vector3f(1,1,1));
 		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader,waterShader,light);
-		mainRenderer.setController(controls);
+		Renderer mainRenderer = new Renderer(meshShader , terrainShader, waterShader,loader,player.getPosition(), player,controls);
 		
 		RayCasting mouseRay= new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		
@@ -106,12 +106,12 @@ public class GameLoop {
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		/*for(int i=0;i <20; i++)
+		for(int i=0;i <20; i++)
 		{
 			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
 			enemies.add(new Shrek(new Vector3f(random.nextInt(4000),random.nextInt(600),random.nextInt(4000)),player,enIns));
 			
-		}*/
+		}
 		
 
 		
@@ -123,7 +123,7 @@ public class GameLoop {
 			int currentTerrainZ=(int) Maths.floor(playerPos.z/Terrain.SIZE);
 			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
 
-			int genRad=12;//10
+			int genRad=10;//10
 			for(int i=-genRad;i<genRad+1;i++)
 				for(int j=-genRad;j<genRad+1;j++)
 			if(!terrainMonitorList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
@@ -193,7 +193,8 @@ public class GameLoop {
 					}
 				
 				if(Vector3f.sub(terrainMonitorList.get(terrainMonitorKey).getTerrain().getPosition(), player.getPosition(), null).length()<15000)
-				mainRenderer.putTerrain(terrainMonitorList.get(terrainMonitorKey).getTerrain());
+				terrainMonitorList.get(terrainMonitorKey).getTerrain().updateCurrentLOD(player.getPosition());
+					mainRenderer.putTerrain(terrainMonitorList.get(terrainMonitorKey).getTerrain());
 				}
 			}
 			//mainRenderer.putTerrain(terrain);

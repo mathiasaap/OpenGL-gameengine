@@ -59,9 +59,10 @@ public class Water {
 		
 	}
 	public double getWaterHeight(){
-		long deltaTime=System.currentTimeMillis()-waterClock;
+		/*long deltaTime=System.currentTimeMillis()-waterClock;
 		waterClock=System.currentTimeMillis();
 		changeWaterLevel(deltaTime);
-		return Math.sin(waterPeriod)*30;
+		return Math.sin(waterPeriod)*30;*/
+		return 0;
 	}
 }

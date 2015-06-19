@@ -69,6 +69,10 @@ public void setLookat(Vector2f lookat)
 public float getPitch() {
 	return pitch;
 }
+public void invertPitch()
+{
+pitch=-pitch;	
+}
 public float getYaw() {
 	return yaw;
 }

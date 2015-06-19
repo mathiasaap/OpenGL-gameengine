@@ -8,9 +8,9 @@ import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayWindow {
 	
-	public static final int WIDTH=1200, HEIGHT=900;
-	//public static final int WIDTH=1000, HEIGHT=750;
-	private static int MAX_FPS=60;
+	//public static final int WIDTH=1200, HEIGHT=900;
+	public static final int WIDTH=1000, HEIGHT=750;
+	private static int MAX_FPS=30;
 	
 	public static void create()
 	{

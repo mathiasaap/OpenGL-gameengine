@@ -15,6 +15,7 @@ uniform mat4 model;
 uniform mat4 projection;
 uniform mat4 view;
 uniform vec3 lightPos;
+uniform vec4 clipP;
 
 
 void main()
@@ -63,6 +64,7 @@ else
 multitextureComponents= vec3(grassComp,rockComp,snowComp);
 
 texToFrag=texture;
+gl_ClipDistance[0] = dot(modelPosition,clipP);
 
 absNormal = (model*vec4(normal,0)).xyz;
 toLight= lightPos-(modelPosition).xyz;

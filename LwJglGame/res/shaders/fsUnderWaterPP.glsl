@@ -52,7 +52,7 @@ newCoord.y+=blendpix*(tex.y);
 }
 
 #endif
-
+float gamma = 2.0;
 vec4 color= texture(textureSampler,newCoord);
 float intensity=(color.x+color.y+color.z)/3;
 color.z=intensity*0.7;
@@ -61,7 +61,7 @@ color.x=0.08*intensity;
 
 /*color.x-=0.2;
 color.y-=0.1;*/
-out_Color=color;
+out_Color=color*gamma;
 
 }
 
