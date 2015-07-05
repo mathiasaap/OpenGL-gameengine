@@ -9,6 +9,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -128,7 +129,11 @@ public abstract class AbstractShader {
 	{
 		GL20.glUniform1i(location, data);
 	}
-	
+
+	protected void uploadVec2f(int location, Vector2f data)
+	{
+		GL20.glUniform2f(location, data.x,data.y);
+	}
 	protected void uploadVec3f(int location, Vector3f data)
 	{
 		GL20.glUniform3f(location, data.x,data.y,data.z);

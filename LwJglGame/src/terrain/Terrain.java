@@ -13,7 +13,7 @@ import mesh.TexMesh;
 public class Terrain{
 
 	//private static final float SIZE = 2048;
-	public static final float SIZE = 1024;
+	public static final int SIZE = 1024;
 	//private static final int VERTICES = 1024;
 	//private static final int VERTICES = 32;
 	private static final int VERTICES = 16;

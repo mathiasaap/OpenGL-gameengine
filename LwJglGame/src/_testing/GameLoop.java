@@ -106,7 +106,8 @@ public class GameLoop {
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		for(int i=0;i <20; i++)
+		int noEnemies=0;
+		for(int i=0;i <noEnemies; i++)
 		{
 			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
 			enemies.add(new Shrek(new Vector3f(random.nextInt(4000),random.nextInt(600),random.nextInt(4000)),player,enIns));
@@ -212,6 +213,7 @@ public class GameLoop {
 			FPSCounterRefresh=System.currentTimeMillis();
 			}
 		}
+		mainRenderer.cleanup();
 		terrainHandler.cleanup();
 		meshShader.destroy();
 		waterShader.destroy();

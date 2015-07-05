@@ -17,6 +17,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import player.Controls;
 import player.Player;
+import shaders.AbstractShader;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import shaders.WaterShader;
@@ -36,11 +37,13 @@ public class RenderWater {
 	private List<Terrain> terrains;
 	private int FBOReflection,FBORefraction;
 	private final Player player;
+	private MeshShader meshShader;
+	private TerrainShader terrainShader;
 	
 	private final RenderTerrain renderTerrain;
 	private final RenderMesh renderMesh;
 	
-	public RenderWater(WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos,Water water,List<Terrain> terrains,Player player, RenderMesh renderMesh,RenderTerrain renderTerrain)
+	public RenderWater(WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos,Water water,List<Terrain> terrains,Player player, RenderMesh renderMesh,RenderTerrain renderTerrain,MeshShader meshShader,TerrainShader terrainShader)
 	{
 		reflection=new RenderTexture(Display.getWidth(),Display.getHeight());
 		refraction=new RenderTexture(Display.getWidth(),Display.getHeight());
@@ -51,11 +54,14 @@ public class RenderWater {
 		Matrix.uploadProjectionMatrix(waterShader);
 		shader=waterShader;
 		this.water=water;
+		//Water.makeDuDvMap(Terrain.SIZE, Terrain.SIZE);
 		this.playerPos=playerPos;
 		this.terrains=terrains;
 		this.player=player;
 		this.renderTerrain=renderTerrain;
 		this.renderMesh=renderMesh;
+		this.meshShader=meshShader;
+		this.terrainShader=terrainShader;
 		shader.useProgram();
 		shader.uploadSpecular(3,3);
 		shader.unbindShader();
@@ -79,7 +85,7 @@ public class RenderWater {
 	
 public boolean isUnderWater()
 {
-return underWater;	
+return playerPos.y<water.getWaterHeight();	
 }
 	
 
@@ -89,16 +95,17 @@ return underWater;
 		Camera cam = player.getCamera();
 		
 		Vector3f camPos=cam.getPosition();
-		float waterHeight=(float) water.getWaterHeight();
+		float waterHeight= water.getWaterHeight();
 		float dist=camPos.y-waterHeight;
-		
 		camPos.y-=2*dist;
 		cam.invertPitch();
+		cam.uploadViewMatrix(meshShader, terrainShader, shader);
 		renderTerrain.draw(clipPlane);
 		renderMesh.draw(clipPlane);
 		
 		cam.invertPitch();
 		camPos.y+=2*dist;
+		cam.uploadViewMatrix(meshShader, terrainShader, shader);
 		
 	}
 	
@@ -116,10 +123,12 @@ return underWater;
 		
 		clearBuffers();
 		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-		drawReflection(new Vector4f(0,1,0,(float) -water.getWaterHeight()));
+		drawReflection(new Vector4f(0,1,0,(float)-water.getWaterHeight()));
 		drawRefraction(new Vector4f(0,-1,0,(float) water.getWaterHeight()));
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 		shader.useProgram();
+		shader.uploadDudvOffset(water.getDudvOffset());
+		shader.uploadCamera(player.getCamera().getPosition());
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);
 		//GL11.glEnable(GL11.GL_BLEND);
 		GL30.glBindVertexArray(water.getMesh().getVAO());
@@ -132,28 +141,20 @@ return underWater;
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D,refraction.getId());
 		
+		GL13.glActiveTexture(GL13.GL_TEXTURE2);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D,water.getDuDvMap().getId());
+		
 		
 //		shader.uploadSpecular(3,3);
 		float wLevel =0;
 		float rotX=0;
 		
-		if(terrains.size()>0){
-		Terrain arbTerrain=terrains.get(0);
-	
-		wLevel = (float) (arbTerrain.getPosition().y-200+water.getWaterHeight());
-		if(playerPos.y<wLevel){
-			rotX=(float) 180;
-			underWater=true;
-		}
-		else{
-			underWater=false;
-		}}
-		
+
 		for(Terrain terrain: terrains){
 
-			Vector3f wPos=new Vector3f(terrain.getPosition().x,wLevel,terrain.getPosition().z);
+			Vector3f wPos=new Vector3f(terrain.getPosition().x,(float) water.getWaterHeight(),terrain.getPosition().z);
 			
-			Matrix4f transformation = Matrix.transformationMatrix(wPos, (float)rotX, (float)0.0f, (float)0.0f,(float)terrain.getSIZE()/2);
+			Matrix4f transformation = Matrix.transformationMatrix(wPos, (float)0, (float)0.0f, (float)0.0f,(float)terrain.getSIZE()/2);
 			shader.loadTranformationMatrix(transformation);	
 			
 		
@@ -187,4 +188,9 @@ return underWater;
 	{
 		return reflection;
 	}
+	public void cleanup()
+	{
+		water.cleanup();
+	}
+			
 }

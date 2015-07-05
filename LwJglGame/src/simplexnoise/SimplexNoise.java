@@ -48,6 +48,13 @@ public class SimplexNoise {
 	
 	public synchronized double getNoise(double x, double y)
 	{
+		double res=getNoiseOrd(x,y);
+		
+		return (res*res*res);
+	}
+	
+	public double getNoiseOrd(double x, double y)
+	{
 		double res=0.0;
 		
 		for(Octave octave: octaves)
@@ -55,7 +62,7 @@ public class SimplexNoise {
 			res+=octave.noise(x,y);
 		}
 		
-		return (res*res*res);
+		return res;
 	}
 	
 	

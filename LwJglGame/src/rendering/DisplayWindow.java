@@ -33,6 +33,7 @@ public class DisplayWindow {
 	         }
 
 			Display.setTitle("LWJGL");
+			Display.setVSyncEnabled(true);
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.create(new PixelFormat(),attributes);
 	        

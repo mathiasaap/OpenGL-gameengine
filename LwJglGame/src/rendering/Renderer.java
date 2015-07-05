@@ -78,14 +78,14 @@ public class Renderer {
 		shaders.add(underWaterPP);
 		shaders.add(fbShader);
 		
-		water=new Water(loadmesh);
+		water=new Water(loadmesh,Terrain.SIZE,Terrain.SIZE);
 		underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
 		fbShader.loadTranformationMatrix(Matrix.transformationMatrix());
 		
 		terrainShader.bindTexId();
 		renderMesh= new RenderMesh(meshShader,meshInstances);
 		renderTerrain= new RenderTerrain(terrainShader,loadmesh,terrains,control);
-		renderWater= new RenderWater(waterShader,loadmesh,playerPos,water,terrains,player,renderMesh,renderTerrain);
+		renderWater= new RenderWater(waterShader,loadmesh,playerPos,water,terrains,player,renderMesh,renderTerrain,meshShader,terrainShader);
 		renderOverlay=new RenderOverlay(loadmesh);
 		renderFramebuffer=new RenderFramebuffer(loadmesh);
 		FBO=GL30.glGenFramebuffers();
@@ -160,11 +160,13 @@ public class Renderer {
 			fbShader.setGamma(30);
 			lastF4=!lastF4;
 		}
+		
 		renderFramebuffer.draw(renderTexture);
-		//renderFramebuffer.draw(renderWater.getReflectionFBOTex());
+	    //renderFramebuffer.draw(renderWater.getReflectionFBOTex());
+		
 //		fbShader.unbindShader();
 		//FRAMEBUFFER TO SCREEN END
-		oTextures.add(new OverlayTexture(renderWater.getReflectionId(),new Vector2f(100f,100f),new Vector2f(0.1f,0.1f)));
+		//oTextures.add(new OverlayTexture(renderWater.getReflectionId(),new Vector2f(100f,100f),new Vector2f(0.1f,0.1f)));
 		
 		renderOverlay.draw(oTextures);
 
@@ -210,6 +212,11 @@ public class Renderer {
 	public void putOverlays(List<OverlayTexture> oTextures)
 	{
 		this.oTextures=oTextures;
+	}
+	
+	public void cleanup()
+	{
+		renderWater.cleanup();
 	}
 	
 }

@@ -139,14 +139,14 @@ public class LoadMesh {
 		
 	}
 	
-	private FloatBuffer floatToFloatBuffer(float[] bfr)
+	public static FloatBuffer floatToFloatBuffer(float[] bfr)
 	{
 		FloatBuffer fbfr = BufferUtils.createFloatBuffer(bfr.length);
 		fbfr.put(bfr);
 		fbfr.flip();
 		return fbfr;
 	}
-	private IntBuffer intToIntBuffer(int[] bfr)
+	private static IntBuffer intToIntBuffer(int[] bfr)
 	{
 		IntBuffer ibfr= BufferUtils.createIntBuffer(bfr.length);
 		ibfr.put(bfr);

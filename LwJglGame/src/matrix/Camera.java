@@ -71,6 +71,7 @@ public float getPitch() {
 }
 public void invertPitch()
 {
+	cameraIsChanged();
 pitch=-pitch;	
 }
 public float getYaw() {
