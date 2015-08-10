@@ -52,12 +52,14 @@ public class Sniper {
 	
 	public void shoot()
 	{
+		if(state!=STATE.RELOAD&&state!=STATE.SHOOT){
 		animationClock=System.currentTimeMillis();
 		state=STATE.SHOOT;
+		}
 	}
 	public void reload()
 	{
-		if(state!=STATE.RELOAD){
+		if(state!=STATE.RELOAD&&state!=STATE.SHOOT){
 		animationClock=System.currentTimeMillis();
 		state=STATE.RELOAD;
 		}

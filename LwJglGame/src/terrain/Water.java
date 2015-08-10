@@ -15,7 +15,7 @@ public class Water {
 	private long waterClock=System.currentTimeMillis();
 	private final double pi2SecondsPerPeriod=1.0;
 	private Vector2f dudvOffset= new Vector2f(0f,0f);
-	private final Vector2f deltaDudvOffset= new Vector2f(0.01f,0.003f);
+	private final Vector2f deltaDudvOffset= new Vector2f(0.007f,0.0015f);
 	private long time=System.currentTimeMillis();
 	private float waterHeight=-200;
 	

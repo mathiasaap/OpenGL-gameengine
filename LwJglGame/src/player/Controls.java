@@ -40,6 +40,7 @@ public class Controls {
 	private boolean F1=false,F1Int=false;
 	private boolean F2=false,F2Int=false;
 	private boolean F4=false,F4Int=false;
+	private boolean F5=false,F5Int=false;
 	private Light light;
 	
 	public boolean getF1()
@@ -54,6 +55,10 @@ public class Controls {
 	public boolean getF4()
 	{
 		return F4;
+	}
+	public boolean getF5()
+	{
+		return F5;
 	}
 	public Controls()
 	{
@@ -194,6 +199,20 @@ public class Controls {
 			F4Int=false;
 		}
 		
+		if(Keyboard.isKeyDown(Keyboard.KEY_F5))
+		{
+			if(!F5Int)
+			{
+				F5Int=true;
+				F5=!F5;
+				System.out.println("F5");
+			}
+		}
+		else
+		{
+			F5Int=false;
+		}
+		
 		if(Keyboard.isKeyDown(Keyboard.KEY_F3))
 		{
 			light.setPosition(new Vector3f(position.x,position.y,position.z));
@@ -237,14 +256,14 @@ public class Controls {
 		player.jump();
 	}
 	
-	if(Keyboard.isKeyDown(Keyboard.KEY_Z))
+	/*if(Keyboard.isKeyDown(Keyboard.KEY_Z))
 	{
 		position.y-=speed*deltaTime;
 	}
 	if(Keyboard.isKeyDown(Keyboard.KEY_X))
 	{
 		position.y+=speed*deltaTime;
-	}
+	}*/
 	if(Mouse.isButtonDown(0))
 	{
 		if(shot==0){

@@ -72,7 +72,7 @@ public class GameLoop {
 		List<Enemy> enemies = new ArrayList<>();
 		
 		Sniper sniper=new Sniper(loader);
-		Light light = new Light(new Vector3f(100,1000,-1000),new Vector3f(1,1,1));
+		Light light = new Light(new Vector3f(0,5000,0),new Vector3f(1,1,1));
 		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader,waterShader,light);
 		Renderer mainRenderer = new Renderer(meshShader , terrainShader, waterShader,loader,player.getPosition(), player,controls);
 		

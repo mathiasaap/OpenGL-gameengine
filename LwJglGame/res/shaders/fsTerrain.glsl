@@ -24,7 +24,7 @@ vec3 unitNormal= normalize(absNormal);
 vec3 unitToLight= normalize(toLight);
 vec3 unitCam = normalize(camVector);
 
-float dotprod = dot(unitNormal,unitToLight);
+float dotprod = abs(dot(unitNormal,unitToLight));
 float brightness = max(dotprod,0.2);
 vec3 diffuse=brightness*lightCol;
 vec3 reflectedDir=reflect(-unitCam,unitNormal);

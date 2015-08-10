@@ -18,6 +18,7 @@ uniform vec3 lightPos;
 uniform vec4 clipP;
 
 
+
 void main()
 {
 vec4 modelPosition = model * vec4(position, 1.0);

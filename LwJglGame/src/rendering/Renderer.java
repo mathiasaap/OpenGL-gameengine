@@ -132,7 +132,7 @@ public class Renderer {
 //		meshShader.unbindShader();
 		
 		
-		if(control.getF2()){
+		if(!control.getF2()){
 		waterShader.useProgram();
 		waterShader.uploadLight(light);
 		renderWater.draw(FBO);
@@ -167,9 +167,10 @@ public class Renderer {
 //		fbShader.unbindShader();
 		//FRAMEBUFFER TO SCREEN END
 		//oTextures.add(new OverlayTexture(renderWater.getReflectionId(),new Vector2f(100f,100f),new Vector2f(0.1f,0.1f)));
-		
+		if(control.getF5())
+		{
 		renderOverlay.draw(oTextures);
-
+		}
 		
 	}
 	

@@ -24,13 +24,12 @@ vec3 unitNormal= normalize(absNormal);
 vec3 unitToLight= normalize(toLight);
 vec3 unitCam = normalize(camVector);
 
-float dotprod = dot(unitNormal,unitToLight);
+float dotprod = abs(dot(unitNormal,unitToLight));
 float brightness = max(dotprod,0.3);
 vec3 diffuse=brightness*lightCol;
 vec3 reflectedDir=reflect(-unitCam,unitNormal);
 float specularity = max(dot(reflectedDir,unitNormal),0);
-float shineFactor = pow(specularity, shine);
-vec3 specularProduct = shineFactor*lightCol*reflectivity;
+
 vec3 normalizedToCamera=normalize(toCamera);
 
 
@@ -38,11 +37,18 @@ vec4 clipSpace2=clipSpace;
 vec2 coordsWithOffset=vec2(texToFrag);
 coordsWithOffset+=dudvOffset;
 
-clipSpace2.x+=texture(dudvTexture,coordsWithOffset).x;
-clipSpace2.y+=texture(dudvTexture,coordsWithOffset).x*2;
+float dudvValue = texture(dudvTexture,coordsWithOffset).x;
+float shineFactor = pow(specularity, 3);
+vec3 specularProduct = shineFactor*lightCol*max(dudvValue,0);
+
+clipSpace2.x+=dudvValue;
+clipSpace2.y+=dudvValue*2;
 vec2 ndc = (clipSpace2.xy/clipSpace2.w)/2.0f+0.5f;
 
 vec2 reflectedNdc=vec2(ndc.x,-ndc.y);
+ndc=clamp(ndc,0.001,0.999);
+reflectedNdc.x=clamp(reflectedNdc.x,0.001,0.999);
+reflectedNdc.y=clamp(reflectedNdc.y,-0.999,-0.001);
 
 
 
@@ -52,7 +58,7 @@ vec2 reflectedNdc=vec2(ndc.x,-ndc.y);
 //out_color=texture(texSampler,texToFrag);
 //out_color=vec4(0.9f,0.1f,0.2f,1.0f);
 
-out_color=vec4(diffuse,1)*mix(mix(texture(reflectionTexture,reflectedNdc),texture(refractionTexture,ndc),(dot(normalizedToCamera,vec3(0.0, 1.0, 0.0))) ),vec4(0, 0.2 , 0.8 , 1.0 ),0.06);
+out_color=vec4(diffuse,1)*mix(mix(texture(reflectionTexture,reflectedNdc),texture(refractionTexture,ndc),pow((dot(normalizedToCamera,vec3(0.0, 1.0, 0.0))),0.4) ),vec4(0, 0.2 , 0.8 , 1.0 ),0.06);
 //out_color=texture(reflectionTexture,reflectedNdc);
 }
 
