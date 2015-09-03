@@ -1,6 +1,6 @@
 # 3D game engine using modern OpenGL3.2+ 
 Written with the sole purpose of improving my skills in graphics programming.
-Java is used as my programming language. GLSL is used for shader programs.
+Java is used as the programming language. GLSL is used for shader programs.
 
 Credits for lots of my simplex noise code goes to http://webstaff.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf . It's an excellent resource to use if you want to learn.
 
