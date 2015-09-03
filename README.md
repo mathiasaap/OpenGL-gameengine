@@ -10,3 +10,6 @@ Lakes are rendered by drawing the scene two more times to two framebuffers, one 
 
 <img src="screenshots/screenshot_1.png" />
 <img src="screenshots/screenshot_2.png" />
+
+Get mad! Shoot bad guys!
+<img src="screenshots/screenshot_3.png" />
