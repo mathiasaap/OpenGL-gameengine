@@ -8,3 +8,5 @@ This game(engine) procedurally generates terrain from simplex noise. This makes 
 3D models are loaded using simple loading and parsing of .obj files. Texture mapping is not implemented very well.
 Lakes are rendered by drawing the scene two more times to two framebuffers, one for reflection and refraction. The two images are then blended together and rendered to the water surface. Underwater post-processing effects are also implemented, and looks quite nice.
 
+<img src="screenshots/screenshot_1.png" />
+<img src="screenshots/screenshot_2.png" />
