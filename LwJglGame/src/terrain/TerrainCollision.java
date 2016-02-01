@@ -6,6 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import enemies.Enemy;
 import player.Player;
+import terrain.Terrain;
 
 public class TerrainCollision {
 
@@ -27,19 +28,19 @@ public class TerrainCollision {
 		
 	}
 	
-	public void playerCollission(Terrain terrain, Player player)
+	public void playerCollission(/*Terrain terrain, */Player player)
 	{
 		Vector3f position=player.getPosition();
 		//System.out.println(position.y);
 			
-			float gridSize=getGridSize(terrain);
+		/*	float gridSize=getGridSize(terrain);
 			int zVertLoc= (int) Math.floor((position.x-terrain.getPosition().x)/gridSize);
 			int xVertLoc= (int) Math.floor((position.z-terrain.getPosition().z)/gridSize);
-
+*/
 			
 			
-				float terrainPositionHeight=process(terrain,xVertLoc,zVertLoc,gridSize,position);
-				
+				//float terrainPositionHeight=process(terrain,xVertLoc,zVertLoc,gridSize,position);
+			double terrainPositionHeight= getNewHeight(position);
 				
 				
 			//	if(xVertLoc>=0&&xVertLoc<terrain.getVertices()&&zVertLoc>=0&&zVertLoc<terrain.getVertices()){
@@ -117,6 +118,11 @@ public class TerrainCollision {
 		return res;
 		
 		
+	}
+	
+	private double getNewHeight(Vector3f position)
+	{
+		return Terrain.snoise.getNoise(((((position.z%Terrain.SIZE)/position.z+(position.z/Terrain.SIZE)*(Terrain.VERTICES-1))*Terrain.terrainDistConst)), (((position.x%Terrain.SIZE)/position.x+(position.x/Terrain.SIZE)*(Terrain.VERTICES-1))*Terrain.terrainDistConst))*Terrain.heightMultiplicator;
 	}
 	
 	

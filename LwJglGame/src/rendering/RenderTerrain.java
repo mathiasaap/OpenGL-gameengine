@@ -43,49 +43,54 @@ public class RenderTerrain {
 	{
 		shader.useProgram();
 
-		for(Terrain terrain: terrains){
-			GL30.glBindVertexArray(terrain.getMesh().getVAO());
-			GL20.glEnableVertexAttribArray(0);
-			GL20.glEnableVertexAttribArray(1);
-			GL20.glEnableVertexAttribArray(2);
-		
-			//shader.uploadSpecular(terrain.getTerrain().getMesh().getTex().getShine(),terrain.getTerrain().getMesh().getTex().getReflectivity());
-			shader.uploadSpecular(3,5);
-			/*GL13.glActiveTexture(GL13.GL_TEXTURE0);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getTerrain().getMesh().getTex().getTexId());*/
-			GL13.glActiveTexture(GL13.GL_TEXTURE0);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getGrass().getTexID());
-
-			GL13.glActiveTexture(GL13.GL_TEXTURE1);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getRock().getTexID());
-
-			GL13.glActiveTexture(GL13.GL_TEXTURE2);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getSnow().getTexID());
-		
-
+		try
+		{
+			for(Terrain terrain: terrains){
+				GL30.glBindVertexArray(terrain.getMesh().getVAO());
+				GL20.glEnableVertexAttribArray(0);
+				GL20.glEnableVertexAttribArray(1);
+				GL20.glEnableVertexAttribArray(2);
 			
-			//Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), terrain.getRotX(), terrain.getRotY(), terrain.getRotZ(), terrain.getScale());
-			Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), (float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
-			shader.loadTranformationMatrix(transformation);	
+				//shader.uploadSpecular(terrain.getTerrain().getMesh().getTex().getShine(),terrain.getTerrain().getMesh().getTex().getReflectivity());
+				shader.uploadSpecular(3,5);
+				/*GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getTerrain().getMesh().getTex().getTexId());*/
+				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getGrass().getTexID());
+	
+				GL13.glActiveTexture(GL13.GL_TEXTURE1);
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getRock().getTexID());
+	
+				GL13.glActiveTexture(GL13.GL_TEXTURE2);
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D,terrain.getMultiTex().getSnow().getTexID());
 			
-			if(control.getF1()){
-				GL11.glDrawElements(GL11.GL_LINE_STRIP,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+	
+				
+				//Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), terrain.getRotX(), terrain.getRotY(), terrain.getRotZ(), terrain.getScale());
+				Matrix4f transformation = Matrix.transformationMatrix(terrain.getPosition(), (float)0.0f, (float)0.0f, (float)0.0f, (float)1.0f);
+				shader.loadTranformationMatrix(transformation);	
+				
+				if(control.getF1()){
+					GL11.glDrawElements(GL11.GL_LINE_STRIP,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+				}
+				else{
+					GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+				}
+				//GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+				//GL11.glDrawElements(GL11.GL_LINES,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+				
+				//GL11.glDrawElements(GL11.GL_LINE_LOOP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
+	
+				
+				GL20.glDisableVertexAttribArray(0);
+				GL20.glDisableVertexAttribArray(2);
+				GL30.glBindVertexArray(0);
+				
 			}
-			else{
-				GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
-			}
-			//GL11.glDrawElements(GL11.GL_TRIANGLES,terrain.getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
-			//GL11.glDrawElements(GL11.GL_LINES,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
-			
-			//GL11.glDrawElements(GL11.GL_LINE_LOOP,terrain.getTerrain().getMesh().getMesh().getVertices(), GL11.GL_UNSIGNED_INT,0);
-
-			
-			GL20.glDisableVertexAttribArray(0);
-			GL20.glDisableVertexAttribArray(2);
-			GL30.glBindVertexArray(0);
-			
-			
-			
+		}
+		catch(Exception e)
+		{
+			System.out.println("Terrain couldn't be drawn. Skipping frame..");
 		}
 		
 	}

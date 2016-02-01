@@ -184,6 +184,16 @@ public class LoadMesh {
 		}
 		
 	}
+	
+	public void deleteVBO(int VBO)
+	{
+			if(VboList.contains(VBO))
+			{
+				VboList.remove((Object)VBO);
+				GL15.glDeleteBuffers(VBO);
+			}
+		
+	}
 	public void deleteVAO(int VAO)
 	{
 
@@ -191,9 +201,16 @@ public class LoadMesh {
 			{
 				VaoList.remove((Object)VAO);
 				GL30.glDeleteVertexArrays(VAO);
+				System.out.println("Deleted VAO "+VAO);
 			}
 		
 		
+	}
+	
+	public void deleteMesh(Mesh mesh)
+	{
+		deleteVBOs(mesh.getVBOs());
+		deleteVAO(mesh.getVAO());
 	}
 	
 	

@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import _testing.GameLoop;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import shaders.WaterShader;
@@ -88,6 +89,7 @@ public class Matrix {
 		meshShader.useProgram();
 		meshShader.loadProjectionMatrix(calcProjectionMatrix(FOV));
 		meshShader.unbindShader();
+		if(GameLoop.DEBUG)
 		System.out.println("Uploaded projection matrix to mesh shader");
 		
 	}
@@ -101,6 +103,7 @@ public class Matrix {
 		terrainShader.useProgram();
 		terrainShader.loadProjectionMatrix(calcProjectionMatrix(FOV));
 		terrainShader.unbindShader();
+		if(GameLoop.DEBUG)
 		System.out.println("Uploaded projection matrix to terrain shader");
 		
 	}
@@ -115,6 +118,7 @@ public class Matrix {
 		waterShader.useProgram();
 		waterShader.loadProjectionMatrix(calcProjectionMatrix(FOV));
 		waterShader.unbindShader();
+		if(GameLoop.DEBUG)
 		System.out.println("Uploaded projection matrix to water shader");
 		
 	}

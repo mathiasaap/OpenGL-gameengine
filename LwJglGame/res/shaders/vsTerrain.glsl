@@ -26,7 +26,55 @@ gl_Position= projection*view*modelPosition;
 height=modelPosition.y;
 
 float grassComp=0.0f,rockComp=0.0f, snowComp=0.0f;
-
+/*
+//1000,1300
+if(height>2500&&height<3000)
+{
+	snowComp=(height-2500.0f)/300.0f;
+	rockComp=1.0f-snowComp;
+}
+else if(height>50&&height<140)
+{
+	rockComp=(height-50.0f)/90.0f;
+	grassComp=1.0f-rockComp;
+}
+else if(height<-60&&height>-150)
+{
+	rockComp=(height+60.0f)/(-90.0f);
+	grassComp=1.0f-rockComp;
+}
+else
+{//1300
+	if(height>3000)
+	{
+		snowComp=1.0f;
+	}
+	else if(height>140)
+	{
+		rockComp=1.0f;
+	}
+	else if(height>-60)
+	{
+		grassComp=1.0f;
+	}
+	else
+	{
+		rockComp=1.0f;
+	}*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//1000,1300
 if(height>1000&&height<1300)
 {
 	snowComp=(height-1000.0f)/300.0f;
@@ -43,7 +91,7 @@ else if(height<-60&&height>-150)
 	grassComp=1.0f-rockComp;
 }
 else
-{
+{//1300
 	if(height>1300)
 	{
 		snowComp=1.0f;
@@ -60,6 +108,8 @@ else
 	{
 		rockComp=1.0f;
 	}
+	
+	
 }
 
 multitextureComponents= vec3(grassComp,rockComp,snowComp);

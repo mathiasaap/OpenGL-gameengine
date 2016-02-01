@@ -16,10 +16,11 @@ public class Terrain{
 	public static final int SIZE = 1024;
 	//private static final int VERTICES = 1024;
 	//private static final int VERTICES = 32;
-	private static final int VERTICES = 16;
+	public static final int VERTICES = 16;
 	
-	private float heightMultiplicator=12;
-	private final double terrainDistConst=(double)((SIZE)/(VERTICES*64.0));
+	//private float heightMultiplicator=5*12;
+	public static float heightMultiplicator=12;
+	public static final double terrainDistConst=(double)((SIZE)/(VERTICES*64.0));
 	private TerrainLOD[] terrainLevelOfDetail= new TerrainLOD[3];
 	private short currentLOD=0; //0 is highest res, 2 is lowest
 	
@@ -33,7 +34,7 @@ public class Terrain{
 
 	private TerrainMultiTexture multiTex;
 	
-	private static SimplexNoise snoise= new SimplexNoise(0.7,6);
+	public static SimplexNoise snoise= new SimplexNoise(0.7,6);
 	private double heightmap[][]=new double[VERTICES][VERTICES];;
 	//private float heightMultiplicator=8;
 	
@@ -67,12 +68,13 @@ public class Terrain{
 	public synchronized void generateHeightmap()
 	{
 
+		double utvid=1.0;
 	//	heightmap=new double[VERTICES][VERTICES];
 		for(int i=0;i <VERTICES; i++)
 		{
 			for(int j=0;j<VERTICES;j++)
 			{
-				heightmap[i][j]=snoise.getNoise(((i+terrainGridZ*(VERTICES-1))*terrainDistConst), (j+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator;
+				heightmap[i][j]=snoise.getNoise((((i+terrainGridZ*(VERTICES-1))*terrainDistConst)/utvid), ((j+terrainGridX*(VERTICES-1))*terrainDistConst)/utvid)*heightMultiplicator;
 			}
 			
 		}
@@ -98,13 +100,13 @@ public class Terrain{
 	
 	public void updateCurrentLOD(Vector3f position)
 	{
-		float distance= Vector3f.sub(position, this.position, null).length();
+		/*float distance= Vector3f.sub(position, this.position, null).length();
 		if(distance<3000)
 			currentLOD=0;
 		else if(distance<4000)
 			currentLOD=1;
 		else
-			currentLOD=2;
+			currentLOD=2;*/
 		
 	}
 
@@ -177,11 +179,17 @@ public class Terrain{
 		return multiTex;
 	}
 	
+	public boolean isReadyToDraw()
+	{
+		return terrainLevelOfDetail[0].isReadyToDraw();
+	}
+	
 	public void cleanup()
 	{
 		for(int i = 0; i<3;i++){}
 		//terrainLevelOfDetail[i].cleanup();
 		heightmap=null;
+		terrainLevelOfDetail[0].cleanup();
 	}
 
 

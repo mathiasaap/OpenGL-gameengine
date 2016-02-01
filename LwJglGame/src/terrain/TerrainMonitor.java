@@ -37,7 +37,8 @@ public class TerrainMonitor {
 	}
 
 	public synchronized boolean isReadyToDraw() {
-		return readyToDraw;
+		//return readyToDraw;
+		return terrain.isReadyToDraw();
 	}
 
 	public synchronized boolean isReadyToUpload() {
@@ -54,6 +55,11 @@ public class TerrainMonitor {
 
 	public synchronized void setReadyToUpload(boolean readyToUpload) {
 		this.readyToUpload = readyToUpload;
+	}
+	
+	public synchronized void clean()
+	{
+		terrain.cleanup();
 	}
 	
 	

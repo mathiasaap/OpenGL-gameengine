@@ -75,12 +75,12 @@ public class TerrainLOD {
 	
 	private Vector3f terrainNormal(int x, int y)
 	{
-		
+		double utvid=1.0;
 		//If point needed for calculation is outside heightmap, calculate it with simplex noise
-		float L = (float) ((float) x>0?heightmap[x-1][y]:   			snoise.getNoise((((x-1)+terrainGridZ*(VERTICES-1))*terrainDistConst), (y+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
-		float R = (float) ((float) x<(VERTICES-1)?heightmap[x+1][y]:    snoise.getNoise((((x+1)+terrainGridZ*(VERTICES-1))*terrainDistConst), (y+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
-		float D = (float) ((float) y>0?heightmap[x][y-1]:   			snoise.getNoise(((x+terrainGridZ*(VERTICES-1))*terrainDistConst), ((y-1)+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
-		float U = (float) ((float) y<(VERTICES-1)?heightmap[x][y+1]:    snoise.getNoise(((x+terrainGridZ*(VERTICES-1))*terrainDistConst), ((y+1)+terrainGridX*(VERTICES-1))*terrainDistConst)*heightMultiplicator);
+		float L = (float) ((float) x>0?heightmap[x-1][y]:   			snoise.getNoise( (((x-1)+terrainGridZ*(VERTICES-1))*terrainDistConst)/utvid, ((y+terrainGridX*(VERTICES-1))*terrainDistConst)/utvid) *heightMultiplicator);
+		float R = (float) ((float) x<(VERTICES-1)?heightmap[x+1][y]:    snoise.getNoise((((x+1)+terrainGridZ*(VERTICES-1))*terrainDistConst)/utvid, ((y+terrainGridX*(VERTICES-1))*terrainDistConst)/utvid) *heightMultiplicator);
+		float D = (float) ((float) y>0?heightmap[x][y-1]:   			snoise.getNoise(((x+terrainGridZ*(VERTICES-1))*terrainDistConst)/utvid, (((y-1)+terrainGridX*(VERTICES-1))*terrainDistConst)/utvid) *heightMultiplicator);
+		float U = (float) ((float) y<(VERTICES-1)?heightmap[x][y+1]:    snoise.getNoise(((x+terrainGridZ*(VERTICES-1))*terrainDistConst)/utvid, (((y+1)+terrainGridX*(VERTICES-1))*terrainDistConst)/utvid) *heightMultiplicator);
 		
 		return (Vector3f)(new Vector3f(L-R,2f,D-U)).normalise();
 		
@@ -156,16 +156,25 @@ public class TerrainLOD {
 		mesh=meshLdr.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
 		arrayVertices=arrayUV=arrayNormals=null;
 		arrayIndices=null;
+		readyToDraw=true;
 	}
-	public void deleteMesh()
+	public boolean isReadyToDraw()
 	{
-		
+		return readyToDraw;
 	}
+
 	
 	public void cleanup()
 	{
 		arrayVertices=arrayUV=arrayNormals=null;
 		arrayIndices=null;
+		//Will crash sometimes..
+		UnloadTerrains.VAOsToDelete.offer(mesh.getVAO());
+		for(int VBO : mesh.getVBOs())
+		{
+			UnloadTerrains.VBOsToDelete.offer(VBO);
+		}
 	}
+
 	
 }

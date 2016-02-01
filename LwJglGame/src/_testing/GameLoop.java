@@ -43,6 +43,7 @@ import terrain.Terrain;
 import terrain.TerrainCollision;
 import terrain.TerrainHandlingThread;
 import terrain.TerrainMonitor;
+import terrain.UnloadTerrains;
 import textures.MeshTexture;
 import textures.OverlayTexture;
 import textures.TerrainMultiTexture;
@@ -52,6 +53,7 @@ import textures.TerrainTexture;
 
 public class GameLoop {
 
+	public static boolean DEBUG = false;
 	
 	public static void main(String[] args) {
 		long timeClock= System.currentTimeMillis();
@@ -87,14 +89,15 @@ public class GameLoop {
 		TerrainTexture snow= new TerrainTexture(loader.loadTexture("snow"));
 		tex.setShine(3);
 		tex.setReflectivity(2);
-		TerrainHandlingThread terrainHandler= new TerrainHandlingThread();
+		Map<Key2D,TerrainMonitor> terrainMonitorList=new HashMap<>();
+		TerrainHandlingThread terrainHandler= new TerrainHandlingThread(player.getPosition(),terrainMonitorList);
 		
 		
 	//	Terrain terrain= new Terrain(new TerrainMultiTexture(grass,rock, snow),0,0,loader);		
 		//terrains.add(terrain);
 
 		//Map<Key2D,Terrain> terrainList=new HashMap<>();
-		Map<Key2D,TerrainMonitor> terrainMonitorList=new HashMap<>();
+		
 		//terrainList.put(new Key2D(0,0), terrain);
 		OBJLoader objloader = new OBJLoader();
 
@@ -151,9 +154,15 @@ public class GameLoop {
 			player.move();
 
 			mouseRay.update();
+			terrainCollision.playerCollission(player);
+			
+			
+			// Player collission is dependent on wheter or not a terrain is present if following code is used
+			/*
 			if(!terrainMonitorList.get(new Key2D(currentTerrainX,currentTerrainZ)).isLockedByGenThread())
-			terrainCollision.playerCollission(terrainMonitorList.get(new Key2D(currentTerrainX,currentTerrainZ)).getTerrain(), player);
-
+			//terrainCollision.playerCollission(terrainMonitorList.get(new Key2D(currentTerrainX,currentTerrainZ)).getTerrain(), player);
+			terrainCollision.playerCollission(player);
+*/
 			for(Iterator<Enemy> enemy=enemies.iterator();enemy.hasNext();)
 			{
 				Enemy enem =enemy.next();
@@ -183,8 +192,13 @@ public class GameLoop {
 
 			oTextures.add(sniper.getFrame());
 
-			for(Key2D terrainMonitorKey:terrainMonitorList.keySet())
+			//for(Key2D terrainMonitorKey:terrainMonitorList.keySet())
+			
+			//TRY/Catch må til. the show must go on..
+			for(Iterator<Key2D> it=terrainMonitorList.keySet().iterator();it.hasNext();)
 			{
+				Key2D terrainMonitorKey=it.next();
+				
 				if(!terrainMonitorList.get(terrainMonitorKey).isLockedByGenThread()){
 					if(terrainMonitorList.get(terrainMonitorKey).isReadyToUpload())
 					{
@@ -193,7 +207,7 @@ public class GameLoop {
 						
 					}
 				
-				if(Vector3f.sub(terrainMonitorList.get(terrainMonitorKey).getTerrain().getPosition(), player.getPosition(), null).length()<15000)
+				if(Vector3f.sub(terrainMonitorList.get(terrainMonitorKey).getTerrain().getPosition(), player.getPosition(), null).length()<15000 && terrainMonitorList.get(terrainMonitorKey).isReadyToDraw())
 				terrainMonitorList.get(terrainMonitorKey).getTerrain().updateCurrentLOD(player.getPosition());
 					mainRenderer.putTerrain(terrainMonitorList.get(terrainMonitorKey).getTerrain());
 				}
@@ -211,6 +225,16 @@ public class GameLoop {
 			if(deltaTime>0&&(System.currentTimeMillis()-FPSCounterRefresh)>400){
 			Display.setTitle(1000/deltaTime+ " FPS");
 			FPSCounterRefresh=System.currentTimeMillis();
+			
+			for(int VBO : UnloadTerrains.VBOsToDelete)
+			{
+				loader.deleteVBO(VBO);
+			}
+			
+			while(!UnloadTerrains.VAOsToDelete.isEmpty())
+			{
+				loader.deleteVAO(UnloadTerrains.VAOsToDelete.poll());
+			}
 			}
 		}
 		mainRenderer.cleanup();
