@@ -1,7 +1,6 @@
 package terrain;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -42,7 +41,7 @@ public class TerrainLOD {
 		return mesh;
 	}
 	
-	public TerrainLOD(int terrainGridX, int terrainGridZ, float heightMultiplicator,int VERTICES,float SIZE, double[][] heightmap, SimplexNoise snoise,LoadMesh meshLdr)
+	public TerrainLOD(int terrainGridX, int terrainGridZ, float heightMultiplicator,int VERTICES,float SIZE, double[][] heightmap, SimplexNoise snoise)
 	{
 		this.VERTICES=VERTICES;
 		this.heightmap=heightmap;
@@ -52,11 +51,10 @@ public class TerrainLOD {
 		this.heightMultiplicator=heightMultiplicator;
 		this.SIZE=SIZE;
 		this.terrainDistConst=(double)((SIZE)/(VERTICES*64.0));
-		this.meshLdr=meshLdr;
 		this.LOD=0;
 	}
 	
-	public TerrainLOD(int terrainGridX, int terrainGridZ, float heightMultiplicator,int VERTICES,float SIZE, int LOD, SimplexNoise snoise,LoadMesh meshLdr)
+	public TerrainLOD(int terrainGridX, int terrainGridZ, float heightMultiplicator,int VERTICES,float SIZE, int LOD, SimplexNoise snoise)
 	{
 		
 		this.VERTICES=(int)(VERTICES/(Math.pow(2, LOD)));
@@ -66,7 +64,6 @@ public class TerrainLOD {
 		this.heightMultiplicator=heightMultiplicator;
 		this.SIZE=SIZE;
 		this.terrainDistConst=(double)((SIZE)/(this.VERTICES*64.0));
-		this.meshLdr=meshLdr;
 		this.LOD=LOD;
 		this.LODFactor=(int) Math.pow(2, LOD);
 		this.heightmap=Terrain.generateHeightmapStatic(this.VERTICES, terrainGridX, terrainGridZ, terrainDistConst, heightMultiplicator,LOD);
@@ -153,7 +150,7 @@ public class TerrainLOD {
 	public void uploadMesh()
 	{
 		
-		mesh=meshLdr.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
+		mesh=LoadMesh.loadNewMesh(arrayVertices, arrayIndices, arrayUV, arrayNormals);
 		arrayVertices=arrayUV=arrayNormals=null;
 		arrayIndices=null;
 		readyToDraw=true;

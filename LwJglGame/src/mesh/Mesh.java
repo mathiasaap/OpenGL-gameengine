@@ -9,17 +9,16 @@ public class Mesh {
 	private int vertices;
 	private int VAO;
 	private List<Integer> VBOs;
-	private LoadMesh loader;
 	private boolean alive=true;
 	
 	public Mesh(){}
 	
-	public Mesh(int vertices, int VAO,List<Integer> VBOs,LoadMesh loader)
+	public Mesh(int vertices, int VAO,List<Integer> VBOs)
 	{
 		this.vertices=vertices;
 		this.VAO=VAO;
 		this.VBOs=VBOs;
-		this.loader=loader;
+		//this.loader=loader;
 	}
 
 	public int getVertices() {
@@ -35,8 +34,8 @@ public class Mesh {
 	}
 	public void deleteMe()
 	{
-		loader.deleteVAO(VAO);
-		loader.deleteVBOs(VBOs);
+		LoadMesh.deleteVAO(VAO);
+		LoadMesh.deleteVBOs(VBOs);
 		VBOs=null;
 		VAO=-1;
 		alive=false;

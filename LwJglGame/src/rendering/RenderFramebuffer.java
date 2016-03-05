@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.vector.Matrix4f;
 
 import textures.FBOTexture;
 
@@ -15,10 +14,10 @@ import textures.FBOTexture;
 public class RenderFramebuffer {
 private Rekt rekt;
 
-public RenderFramebuffer(LoadMesh loader)
+public RenderFramebuffer()
 {
 	
-	rekt=new Rekt(loader);
+	rekt=new Rekt();
 }
 
 public void draw(FBOTexture tex)

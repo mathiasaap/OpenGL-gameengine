@@ -9,15 +9,12 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import player.Controls;
 import player.Player;
-import shaders.AbstractShader;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import shaders.WaterShader;
@@ -43,7 +40,7 @@ public class RenderWater {
 	private final RenderTerrain renderTerrain;
 	private final RenderMesh renderMesh;
 	
-	public RenderWater(WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos,Water water,List<Terrain> terrains,Player player, RenderMesh renderMesh,RenderTerrain renderTerrain,MeshShader meshShader,TerrainShader terrainShader)
+	public RenderWater(WaterShader waterShader,Vector3f playerPos,Water water,List<Terrain> terrains,Player player, RenderMesh renderMesh,RenderTerrain renderTerrain,MeshShader meshShader,TerrainShader terrainShader)
 	{
 		reflection=new RenderTexture(Display.getWidth(),Display.getHeight());
 		refraction=new RenderTexture(Display.getWidth(),Display.getHeight());
@@ -146,8 +143,6 @@ return playerPos.y<water.getWaterHeight();
 		
 		
 //		shader.uploadSpecular(3,3);
-		float wLevel =0;
-		float rotX=0;
 		
 
 		for(Terrain terrain: terrains){

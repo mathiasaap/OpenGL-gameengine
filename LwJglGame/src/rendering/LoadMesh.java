@@ -7,7 +7,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+
 
 import mesh.Mesh;
 
@@ -21,14 +21,14 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 public class LoadMesh {
 
-	private List<Integer> VaoList= new ArrayList<>();
-	private List<Integer> VboList= new ArrayList<>();
-	private List<Integer> TexList= new ArrayList<>();
+	private static List<Integer> VaoList= new ArrayList<>();
+	private static List<Integer> VboList= new ArrayList<>();
+	private static List<Integer> TexList= new ArrayList<>();
 	
 	
 	
 	
-	private int createVAO()
+	private static int createVAO()
 	{
 		int VAO = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(VAO);
@@ -36,23 +36,23 @@ public class LoadMesh {
 		return VAO;
 	}
 	
-	private void unbind()
+	private static void unbind()
 	{
 	
 	GL30.glBindVertexArray(0);
 	}
 	
-	public Mesh loadNewMesh(float[] pos)
+	public static Mesh loadNewMesh(float[] pos)
 	{
 		int VAO = createVAO();
 		List<Integer> meshVBOs= new ArrayList<>();
 		meshVBOs.add(storeAttrib(0,pos,2));
 		
 		unbind();
-		return new Mesh(pos.length/2,VAO,meshVBOs,this);
+		return new Mesh(pos.length/2,VAO,meshVBOs);
 	}
 	
-	public Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV)
+	public static Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV)
 	{
 		int VAO = createVAO();
 
@@ -63,20 +63,20 @@ public class LoadMesh {
 		meshVBOs.add(storeAttrib(0,pos,3));
 		meshVBOs.add(storeAttrib(1,texUV,2));
 		unbind();
-		return new Mesh(indices.length,VAO,meshVBOs,this);
+		return new Mesh(indices.length,VAO,meshVBOs);
 	}
 	
-	public Mesh loadNewMesh(float[] pos, int v)
+	public static Mesh loadNewMesh(float[] pos, int v)
 	{
 		int VAO = createVAO();
 		List<Integer> meshVBOs= new ArrayList<>();
 		meshVBOs.add(storeAttrib(0,pos,v));
 		
 		unbind();
-		return new Mesh(pos.length/v,VAO,meshVBOs,this);
+		return new Mesh(pos.length/v,VAO,meshVBOs);
 	}
 	
-	public Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV, float[] normals)
+	public static Mesh loadNewMesh(float[] pos, int[] indices, float[] texUV, float[] normals)
 	{
 		int VAO = createVAO();
 
@@ -88,12 +88,12 @@ public class LoadMesh {
 		meshVBOs.add(storeAttrib(1,texUV,2));
 		meshVBOs.add(storeAttrib(2,normals,3));
 		unbind();
-		return new Mesh(indices.length,VAO,meshVBOs,this);
+		return new Mesh(indices.length,VAO,meshVBOs);
 	}
 	
 	
 	
-	private int storeAttrib(int attrib, float[] bfr,int cSze)
+	private static int storeAttrib(int attrib, float[] bfr,int cSze)
 	{
 		int VBO= GL15.glGenBuffers();
 		
@@ -108,7 +108,7 @@ public class LoadMesh {
 		
 	}
 	
-	public int loadTexture(String filename)
+	public static int loadTexture(String filename)
 	{
 		Texture tex= null;
 		try {
@@ -128,7 +128,7 @@ public class LoadMesh {
 		
 	}
 	
-	private void loadIndicesBuffer(int[] indices)
+	private static void loadIndicesBuffer(int[] indices)
 	{
 		int VBO =GL15.glGenBuffers();
 		VboList.add(VBO);
@@ -154,25 +154,28 @@ public class LoadMesh {
 		return ibfr;
 	}
 	
-	public void destroy()
+	public static void destroy()
 	{
 		for (int Vao : VaoList)
 		{
 			GL30.glDeleteVertexArrays(Vao);	
 		}
+		VaoList.clear();
 		for (int Vbo : VboList)
 		{
 			GL15.glDeleteBuffers(Vbo);	
 		}
+		VboList.clear();
 		for (int Tex : TexList)
 		{
 			GL11.glDeleteTextures(Tex);	
 		}
+		TexList.clear();
 		
 		
 	}
 	
-	public void deleteVBOs(List<Integer> VBOS)
+	public static void deleteVBOs(List<Integer> VBOS)
 	{
 		for(int VBO : VBOS)
 		{
@@ -185,7 +188,7 @@ public class LoadMesh {
 		
 	}
 	
-	public void deleteVBO(int VBO)
+	public static void deleteVBO(int VBO)
 	{
 			if(VboList.contains(VBO))
 			{
@@ -194,7 +197,7 @@ public class LoadMesh {
 			}
 		
 	}
-	public void deleteVAO(int VAO)
+	public static void deleteVAO(int VAO)
 	{
 
 			if(VaoList.contains(VAO))
@@ -207,7 +210,7 @@ public class LoadMesh {
 		
 	}
 	
-	public void deleteMesh(Mesh mesh)
+	public static void deleteMesh(Mesh mesh)
 	{
 		deleteVBOs(mesh.getVBOs());
 		deleteVAO(mesh.getVAO());

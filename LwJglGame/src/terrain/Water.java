@@ -49,11 +49,11 @@ public class Water {
 		};
 	
 	
-	public Water(LoadMesh loadmesh,int width, int height)
+	public Water(int width, int height)
 	{
 		makeDuDvMap(width*2,height*2);
 		System.out.println("water");
-		this.mesh = loadmesh.loadNewMesh(vertices, indices, UV, normals);
+		this.mesh = LoadMesh.loadNewMesh(vertices, indices, UV, normals);
 		//this.mesh=loadmesh.loadNewMesh(vertices, 3);
 		
 	}

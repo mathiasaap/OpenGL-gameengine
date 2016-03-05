@@ -1,8 +1,6 @@
 package mesh;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import rendering.LoadMesh;
 public class OBJLoader {
 	
 
-	public Mesh loadObj(String filename, LoadMesh loadmesh)
+	public static Mesh loadObj(String filename)
 	{
 		ArrayList<String> objData= new ArrayList<>();		
 			try {
@@ -128,7 +126,7 @@ public class OBJLoader {
 			System.out.println(cat);*/
 		System.out.println(filename+": "+indices.size()/3 + " polygons!");
 			
-		return loadmesh.loadNewMesh(fArrayVertices, iArrayIndices, fArrayUV,fArrayNormals);
+		return LoadMesh.loadNewMesh(fArrayVertices, iArrayIndices, fArrayUV,fArrayNormals);
 
 		
 	}
@@ -142,7 +140,7 @@ public class OBJLoader {
 		try{
 		Vector2f vertexUV = uv.get(Integer.parseInt(verts[1])-1);
 		fUv[cVert*2]= vertexUV.x;
-		fUv[cVert*2+1]= 1-vertexUV.y; // 1-vertexUV for å korrigere for forskjellig koordinatsystem
+		fUv[cVert*2+1]= 1-vertexUV.y; // 1-vertexUV for ï¿½ korrigere for forskjellig koordinatsystem
 		} catch(NumberFormatException e)
 		{
 			fUv[cVert*2]= fUv[cVert*2+1]=0;

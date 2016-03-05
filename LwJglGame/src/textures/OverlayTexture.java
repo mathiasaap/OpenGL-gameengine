@@ -1,6 +1,5 @@
 package textures;
 
-import matrix.Matrix;
 
 import org.lwjgl.util.vector.Vector2f;
 

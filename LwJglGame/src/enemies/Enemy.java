@@ -1,5 +1,7 @@
 package enemies;
 
+import java.util.ArrayList;
+
 import mesh.MeshInstance;
 
 import org.lwjgl.util.vector.Vector2f;
@@ -10,6 +12,8 @@ import terrain.TerrainCollision;
 
 public abstract class Enemy {
 
+	public static ArrayList<Enemy> enemies= new ArrayList<>();
+	
 	protected Vector3f position,velocity;
 	protected Player player;
 	protected boolean alive=true;

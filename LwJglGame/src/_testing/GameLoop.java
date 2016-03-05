@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 
 import lighting.Light;
-import matrix.Camera;
 import matrix.Matrix;
 import mesh.Mesh;
 import mesh.MeshInstance;
@@ -19,26 +18,22 @@ import misc.Key2D;
 import misc.Maths;
 import misc.RayCasting;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import overlays.Sniper;
+import overlays.Snoop;
 import enemies.Enemy;
 import enemies.Shrek;
 import player.Controls;
 import player.Player;
 import rendering.DisplayWindow;
 import rendering.LoadMesh;
-import rendering.RenderMesh;
 import rendering.RenderOverlay;
-import rendering.RenderTerrain;
 import rendering.Renderer;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import shaders.WaterShader;
-import simplexnoise.SimplexNoise;
 import terrain.Terrain;
 import terrain.TerrainCollision;
 import terrain.TerrainHandlingThread;
@@ -60,7 +55,6 @@ public class GameLoop {
 		long FPSCounterRefresh= System.currentTimeMillis();
 		
 		DisplayWindow.create();
-		LoadMesh loader= new LoadMesh();
 		Player player= new Player(new Vector3f(1687f,5000f,2459f));
 		MeshShader meshShader = new MeshShader("res/shaders/vsMesh.glsl","res/shaders/fsMesh.glsl");
 		TerrainShader terrainShader = new TerrainShader("res/shaders/vsTerrain.glsl","res/shaders/fsTerrain.glsl");
@@ -69,24 +63,26 @@ public class GameLoop {
 		//RenderTerrain terrainRenderer = new RenderTerrain(terrainShader);
 		TerrainCollision terrainCollision=new TerrainCollision();
 		
-		RenderOverlay renderOverlay = new RenderOverlay(loader);
+		RenderOverlay renderOverlay = new RenderOverlay();
 		
 		List<Enemy> enemies = new ArrayList<>();
 		
-		Sniper sniper=new Sniper(loader);
+		Sniper sniper=new Sniper();
+		Snoop snoop = new Snoop();
+		
 		Light light = new Light(new Vector3f(0,5000,0),new Vector3f(1,1,1));
 		Controls controls= new Controls(player,sniper,enemies, meshShader, terrainShader,waterShader,light);
-		Renderer mainRenderer = new Renderer(meshShader , terrainShader, waterShader,loader,player.getPosition(), player,controls);
+		Renderer mainRenderer = new Renderer(meshShader , terrainShader, waterShader,player.getPosition(), player,controls);
 		
 		RayCasting mouseRay= new RayCasting(player.getCamera(),Matrix.calcProjectionMatrix());
 		
 		List<OverlayTexture> oTextures= new ArrayList<>();
 		//oTextures.add(new OverlayTexture(loader.loadTexture("1"),new Vector2f(0.598f,-0.420f),new Vector2f(1.598f,1.420f)));
 		
-		MeshTexture tex= new MeshTexture(loader.loadTexture("sample_pic"));
-		TerrainTexture grass= new TerrainTexture(loader.loadTexture("grass"));
-		TerrainTexture rock= new TerrainTexture(loader.loadTexture("rock"));
-		TerrainTexture snow= new TerrainTexture(loader.loadTexture("snow"));
+		MeshTexture tex= new MeshTexture(LoadMesh.loadTexture("sample_pic"));
+		TerrainTexture grass= new TerrainTexture(LoadMesh.loadTexture("grass"));
+		TerrainTexture rock= new TerrainTexture(LoadMesh.loadTexture("rock"));
+		TerrainTexture snow= new TerrainTexture(LoadMesh.loadTexture("snow"));
 		tex.setShine(3);
 		tex.setReflectivity(2);
 		Map<Key2D,TerrainMonitor> terrainMonitorList=new HashMap<>();
@@ -99,17 +95,16 @@ public class GameLoop {
 		//Map<Key2D,Terrain> terrainList=new HashMap<>();
 		
 		//terrainList.put(new Key2D(0,0), terrain);
-		OBJLoader objloader = new OBJLoader();
 
 				
-		Mesh shrekmodel= objloader.loadObj("shrek", loader);
+		Mesh shrekmodel= OBJLoader.loadObj("shrek");
 		TexMesh shrekMesh = new TexMesh(shrekmodel,tex);
 		
 		//MeshInstance shrekMeshIns = new MeshInstance(shrekMesh, new Vector3f(0,0,0),0,0,0,1);
 		Random random= new Random();
 		//Enemy shrek = new Shrek(new Vector3f(150,0,150),player,shrekMeshIns);
 		
-		int noEnemies=0;
+		int noEnemies=50;
 		for(int i=0;i <noEnemies; i++)
 		{
 			MeshInstance enIns=new MeshInstance(shrekMesh,new Vector3f(0,0,0),0,0,0,1);
@@ -127,12 +122,12 @@ public class GameLoop {
 			int currentTerrainZ=(int) Maths.floor(playerPos.z/Terrain.SIZE);
 			//System.out.println(currentTerrainX +"   "+ currentTerrainZ);
 
-			int genRad=10;//10
+			int genRad=6;//10
 			for(int i=-genRad;i<genRad+1;i++)
 				for(int j=-genRad;j<genRad+1;j++)
 			if(!terrainMonitorList.containsKey(new Key2D(currentTerrainX+i,currentTerrainZ+j)))
 			{
-				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j,loader);
+				Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),currentTerrainX+i,currentTerrainZ+j);
 				TerrainMonitor monTer= new TerrainMonitor(ter);
 				
 				/*for(int l=0;l <1; l++)
@@ -172,7 +167,7 @@ public class GameLoop {
 
 				if(!terrainMonitorList.containsKey(new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ)))
 				{
-					Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),enemCurrentTerrainX,enemCurrentTerrainZ,loader);
+					Terrain ter= new Terrain(new TerrainMultiTexture(grass,rock, snow),enemCurrentTerrainX,enemCurrentTerrainZ);
 					TerrainMonitor monTer= new TerrainMonitor(ter);
 					monTer.setLockedByGenThread(true);
 					terrainMonitorList.put( new Key2D(enemCurrentTerrainX,enemCurrentTerrainZ),monTer);
@@ -191,26 +186,34 @@ public class GameLoop {
 			}
 
 			oTextures.add(sniper.getFrame());
+			oTextures.add(snoop.getFrame());
 
 			//for(Key2D terrainMonitorKey:terrainMonitorList.keySet())
 			
-			//TRY/Catch må til. the show must go on..
-			for(Iterator<Key2D> it=terrainMonitorList.keySet().iterator();it.hasNext();)
+			//TRY/Catch mï¿½ til. the show must go on..
+			try
 			{
-				Key2D terrainMonitorKey=it.next();
-				
-				if(!terrainMonitorList.get(terrainMonitorKey).isLockedByGenThread()){
-					if(terrainMonitorList.get(terrainMonitorKey).isReadyToUpload())
-					{
-						terrainMonitorList.get(terrainMonitorKey).getTerrain().uploadMesh();
-						terrainMonitorList.get(terrainMonitorKey).setReadyToUpload(false);
-						
+				for(Iterator<Key2D> it=terrainMonitorList.keySet().iterator();it.hasNext();)
+				{
+					Key2D terrainMonitorKey=it.next();
+					
+					if(!terrainMonitorList.get(terrainMonitorKey).isLockedByGenThread()){
+						if(terrainMonitorList.get(terrainMonitorKey).isReadyToUpload())
+						{
+							terrainMonitorList.get(terrainMonitorKey).getTerrain().uploadMesh();
+							terrainMonitorList.get(terrainMonitorKey).setReadyToUpload(false);
+							
+						}
+					
+					if(terrainMonitorList.get(terrainMonitorKey).isReadyToDraw())
+					terrainMonitorList.get(terrainMonitorKey).getTerrain().updateCurrentLOD(player.getPosition());
+						mainRenderer.putTerrain(terrainMonitorList.get(terrainMonitorKey).getTerrain());
 					}
-				
-				if(Vector3f.sub(terrainMonitorList.get(terrainMonitorKey).getTerrain().getPosition(), player.getPosition(), null).length()<15000 && terrainMonitorList.get(terrainMonitorKey).isReadyToDraw())
-				terrainMonitorList.get(terrainMonitorKey).getTerrain().updateCurrentLOD(player.getPosition());
-					mainRenderer.putTerrain(terrainMonitorList.get(terrainMonitorKey).getTerrain());
 				}
+			}
+			catch(Exception e)
+			{
+				System.out.println("Not able to process terrain this frame.");
 			}
 			//mainRenderer.putTerrain(terrain);
 
@@ -222,19 +225,11 @@ public class GameLoop {
 			DisplayWindow.update();
 
 			long deltaTime=System.currentTimeMillis()-timeClock;
-			if(deltaTime>0&&(System.currentTimeMillis()-FPSCounterRefresh)>400){
+			if(System.currentTimeMillis()-FPSCounterRefresh>400){
 			Display.setTitle(1000/deltaTime+ " FPS");
 			FPSCounterRefresh=System.currentTimeMillis();
 			
-			for(int VBO : UnloadTerrains.VBOsToDelete)
-			{
-				loader.deleteVBO(VBO);
-			}
-			
-			while(!UnloadTerrains.VAOsToDelete.isEmpty())
-			{
-				loader.deleteVAO(UnloadTerrains.VAOsToDelete.poll());
-			}
+			UnloadTerrains.emptyQueues();
 			}
 		}
 		mainRenderer.cleanup();
@@ -242,8 +237,9 @@ public class GameLoop {
 		meshShader.destroy();
 		waterShader.destroy();
 		renderOverlay.cleanup();
-		loader.destroy();
+		LoadMesh.destroy();
 		DisplayWindow.destroy();
+		
 	}
 	
 }

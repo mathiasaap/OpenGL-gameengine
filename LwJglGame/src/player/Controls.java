@@ -6,8 +6,6 @@ import lighting.Light;
 import matrix.Matrix;
 import misc.RayCasting;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
@@ -15,7 +13,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 import enemies.Enemy;
 import overlays.Sniper;
-import rendering.DisplayWindow;
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import shaders.WaterShader;

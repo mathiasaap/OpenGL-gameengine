@@ -7,23 +7,19 @@ import matrix.Matrix;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import player.Controls;
-import shaders.MeshShader;
 import shaders.TerrainShader;
 import terrain.Terrain;
-import terrain.Water;
 
 public class RenderTerrain {
 	private TerrainShader shader;
 	private List<Terrain> terrains;
 	private Controls control;
-	public RenderTerrain(TerrainShader terrainShader, LoadMesh loadmesh,List<Terrain> terrains,Controls control)
+	public RenderTerrain(TerrainShader terrainShader,List<Terrain> terrains,Controls control)
 	{
 		Matrix.uploadProjectionMatrix(terrainShader);
 		shader=terrainShader;

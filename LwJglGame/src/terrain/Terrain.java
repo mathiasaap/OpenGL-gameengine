@@ -2,20 +2,16 @@ package terrain;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import rendering.LoadMesh;
 import simplexnoise.SimplexNoise;
-import textures.MeshTexture;
 import textures.TerrainMultiTexture;
 import mesh.Mesh;
-import mesh.MeshInstance;
-import mesh.TexMesh;
 
 public class Terrain{
 
 	//private static final float SIZE = 2048;
 	public static final int SIZE = 1024;
 	//private static final int VERTICES = 1024;
-	//private static final int VERTICES = 32;
+	//public static final int VERTICES = 64;
 	public static final int VERTICES = 16;
 	
 	//private float heightMultiplicator=5*12;
@@ -23,8 +19,6 @@ public class Terrain{
 	public static final double terrainDistConst=(double)((SIZE)/(VERTICES*64.0));
 	private TerrainLOD[] terrainLevelOfDetail= new TerrainLOD[3];
 	private short currentLOD=0; //0 is highest res, 2 is lowest
-	
-	LoadMesh meshLdr;
 	
 	private Mesh mesh;
 	private Vector3f position;
@@ -39,7 +33,7 @@ public class Terrain{
 	//private float heightMultiplicator=8;
 	
 	
-	public Terrain(TerrainMultiTexture tex, int x, int z, LoadMesh meshLdr)
+	public Terrain(TerrainMultiTexture tex, int x, int z)
 	{
 
 		this.multiTex=tex;
@@ -47,13 +41,12 @@ public class Terrain{
 		//this.rotX=this.rotY=this.rotZ=this.scale=0;
 		terrainGridX= x;
 		terrainGridZ= z;
-		this.meshLdr=meshLdr;
 		
-		terrainLevelOfDetail[0] = new TerrainLOD(terrainGridX, terrainGridZ, heightMultiplicator, VERTICES, SIZE, heightmap, snoise,meshLdr);
+		terrainLevelOfDetail[0] = new TerrainLOD(terrainGridX, terrainGridZ, heightMultiplicator, VERTICES, SIZE, heightmap, snoise);
 		
 		for(int i= 1; i < terrainLevelOfDetail.length;i++)
 		{
-			terrainLevelOfDetail[i] = new TerrainLOD(terrainGridX, terrainGridZ, heightMultiplicator, VERTICES, SIZE,i, snoise,meshLdr);
+			terrainLevelOfDetail[i] = new TerrainLOD(terrainGridX, terrainGridZ, heightMultiplicator, VERTICES, SIZE,i, snoise);
 			
 		}
 		
@@ -101,12 +94,13 @@ public class Terrain{
 	public void updateCurrentLOD(Vector3f position)
 	{
 		/*float distance= Vector3f.sub(position, this.position, null).length();
-		if(distance<3000)
+		if(distance<5000)
 			currentLOD=0;
-		else if(distance<4000)
+		else if(distance<8000)
 			currentLOD=1;
 		else
 			currentLOD=2;*/
+		currentLOD=0;
 		
 	}
 
@@ -172,8 +166,8 @@ public class Terrain{
 	}
 	public Mesh getMesh() {
 		//return mesh;
-		//return terrainLevelOfDetail[currentLOD].getMesh();
-		return terrainLevelOfDetail[0].getMesh();
+		return terrainLevelOfDetail[currentLOD].getMesh();
+		//return terrainLevelOfDetail[0].getMesh();
 	}
 	public TerrainMultiTexture getMultiTex() {
 		return multiTex;
@@ -186,10 +180,11 @@ public class Terrain{
 	
 	public void cleanup()
 	{
-		for(int i = 0; i<3;i++){}
+		//for(int i = 0; i<3;i++)
 		//terrainLevelOfDetail[i].cleanup();
-		heightmap=null;
 		terrainLevelOfDetail[0].cleanup();
+		heightmap=null;
+		//terrainLevelOfDetail[0].cleanup();
 	}
 
 

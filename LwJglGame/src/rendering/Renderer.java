@@ -5,12 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import player.Controls;
@@ -54,14 +51,14 @@ public class Renderer {
 	private boolean lastF4=false;
 	
 	private Controls control;
-	private final Player player;
+	//private final Player player;
 	private FBOTexture renderTexture,depthBufferTexture;
 	
 	private Map<TexMesh, List<MeshInstance>> meshInstances = new HashMap<>();
 	private List<Terrain> terrains = new ArrayList<>();
 	private ArrayList<AbstractShader> shaders=new ArrayList<>();
 	
-	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader, LoadMesh loadmesh,Vector3f playerPos,Player player,Controls control)
+	public Renderer(MeshShader meshShader,TerrainShader terrainShader, WaterShader waterShader,Vector3f playerPos,Player player,Controls control)
 	{
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		this.meshShader=meshShader;
@@ -69,7 +66,7 @@ public class Renderer {
 		this.waterShader=waterShader;
 		underWaterPP=new UnderWaterPP();
 		fbShader=new FramebufferShader();
-		this.player=player;
+		//this.player=player;
 		this.control=control;
 		
 		shaders.add(this.meshShader);
@@ -78,16 +75,16 @@ public class Renderer {
 		shaders.add(underWaterPP);
 		shaders.add(fbShader);
 		
-		water=new Water(loadmesh,Terrain.SIZE,Terrain.SIZE);
+		water=new Water(Terrain.SIZE,Terrain.SIZE);
 		underWaterPP.loadTranformationMatrix(Matrix.transformationMatrix());
 		fbShader.loadTranformationMatrix(Matrix.transformationMatrix());
 		
 		terrainShader.bindTexId();
 		renderMesh= new RenderMesh(meshShader,meshInstances);
-		renderTerrain= new RenderTerrain(terrainShader,loadmesh,terrains,control);
-		renderWater= new RenderWater(waterShader,loadmesh,playerPos,water,terrains,player,renderMesh,renderTerrain,meshShader,terrainShader);
-		renderOverlay=new RenderOverlay(loadmesh);
-		renderFramebuffer=new RenderFramebuffer(loadmesh);
+		renderTerrain= new RenderTerrain(terrainShader,terrains,control);
+		renderWater= new RenderWater(waterShader,playerPos,water,terrains,player,renderMesh,renderTerrain,meshShader,terrainShader);
+		renderOverlay=new RenderOverlay();
+		renderFramebuffer=new RenderFramebuffer();
 		FBO=GL30.glGenFramebuffers();
 		
 //		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, FBO);

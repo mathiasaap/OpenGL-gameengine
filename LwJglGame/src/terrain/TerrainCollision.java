@@ -1,6 +1,5 @@
 package terrain;
 
-import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -60,7 +59,7 @@ public class TerrainCollision {
 	
 	
 
-	
+	//Need to remove terrain parameter
 	public void enemyCollission(Terrain terrain, Enemy enemy)
 	{
 		Vector3f position=enemy.getPosition();
@@ -70,8 +69,9 @@ public class TerrainCollision {
 			int xVertLoc= (int) Math.floor((position.z-terrain.getPosition().z)/gridSize);
 
 			
-			float terrainPositionHeight=process(terrain,xVertLoc,zVertLoc,gridSize,position);
+			//float terrainPositionHeight=process(terrain,xVertLoc,zVertLoc,gridSize,position);
 			
+			double terrainPositionHeight = getNewHeight(position);
 			
 			//if(xVertLoc>=0&&xVertLoc<terrain.getVertices()-1&&zVertLoc>=0&&zVertLoc<terrain.getVertices()-1){
 			if(position.y-enemy.getHeadHeight()<terrainPositionHeight)

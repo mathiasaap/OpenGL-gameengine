@@ -13,10 +13,10 @@ public class Rekt {
 	};
 
 	
-	public Rekt(LoadMesh loader)
+	public Rekt()
 	{
 
-		mesh = loader.loadNewMesh(rektPos);
+		mesh = LoadMesh.loadNewMesh(rektPos);
 
 	}
 	

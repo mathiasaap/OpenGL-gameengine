@@ -7,13 +7,10 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector2f;
 
 import shaders.OverlayShader;
-import textures.FBOTexture;
 import textures.OverlayTexture;
 import matrix.Matrix;
-import mesh.Mesh;
 import mesh.Rekt;
 
 public class RenderOverlay {
@@ -24,10 +21,10 @@ public class RenderOverlay {
 	private Matrix matrix=new Matrix();
 
 	
-	public RenderOverlay(LoadMesh loader)
+	public RenderOverlay()
 	{
 
-		rekt=new Rekt(loader);
+		rekt=new Rekt();
 	
 		
 	}

@@ -13,7 +13,7 @@ public class Sniper {
 	private List<OverlayTexture> shootFrames= new ArrayList<>();
 	private List<OverlayTexture> walkFrames= new ArrayList<>();
 	private List<OverlayTexture> reloadFrames= new ArrayList<>();
-	private LoadMesh loader;
+	//private LoadMesh loader;
 	private Vector2f pos= new Vector2f(0.598f,-0.420f);
 	private Vector2f scale= new Vector2f(1.598f,1.420f);
 	private long animationClock=System.currentTimeMillis();
@@ -22,9 +22,9 @@ public class Sniper {
 	private enum STATE {STILL, WALKING, SHOOT, RELOAD};
 	private STATE state= STATE.STILL;
 	
-	public Sniper(LoadMesh loader)
+	public Sniper()
 	{
-		this.loader=loader;
+		//this.loader=loader;
 		loadTextures();
 	}
 	public int getFrameTime()
@@ -36,17 +36,17 @@ public class Sniper {
 	{
 		for(int i=1;i<18;i++)
 		{
-			shootFrames.add(new OverlayTexture(loader.loadTexture("/sniper/shoot/"+i),pos,scale));
+			shootFrames.add(new OverlayTexture(LoadMesh.loadTexture("/sniper/shoot/"+i),pos,scale));
 		}
 		
 		for(int i=1;i<19;i++)
 		{
-			walkFrames.add(new OverlayTexture(loader.loadTexture("/sniper/walk/"+i),pos,scale));
+			walkFrames.add(new OverlayTexture(LoadMesh.loadTexture("/sniper/walk/"+i),pos,scale));
 		}
 		
 		for(int i=1;i<26;i++)
 		{
-			reloadFrames.add(new OverlayTexture(loader.loadTexture("/sniper/reload/"+i),pos,scale));
+			reloadFrames.add(new OverlayTexture(LoadMesh.loadTexture("/sniper/reload/"+i),pos,scale));
 		}
 	}
 	

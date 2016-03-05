@@ -1,14 +1,12 @@
 package player;
 
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import shaders.MeshShader;
 import shaders.TerrainShader;
 import shaders.WaterShader;
-import terrain.TerrainCollision;
 import matrix.Camera;
 
 public class Player {
